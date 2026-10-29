@@ -200,7 +200,7 @@ export default function App() {
   // Media Assets attached by user
   const MAIN_IMAGE_SRC = "/assets/aistudio/main_image_2f557015.jpg";
   const MAIN_VIDEO_SRC = "/assets/main_video.mp4";
-  const KAKAO_CHANNEL_URL = "https://pf.kakao.com/_gIJQG";
+  const KAKAO_CHAT_URL = "https://pf.kakao.com/_gIJQG/chat";
   const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner.webp";
 
   // 메인 영상: 화면 밖으로 나가면 일시정지, 다시 보이면 재생
@@ -1020,15 +1020,16 @@ export default function App() {
           <span className="font-en-cond font-bold text-xs text-[#03C75A] mb-0.5">BLOG</span>
           <span className="text-[11px] font-medium text-zinc-700">원장칼럼</span>
         </button>
-        <a
-          href={KAKAO_CHANNEL_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          onClick={() => {
+            handleOpenBooking('카카오톡 채널 상담 문의');
+            showToast("카카오톡 실시간 상담 신청 창으로 연결되었습니다.");
+          }}
           className="py-3.5 px-2 hover:bg-[#FEE500]/20 transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
           <MessageCircle className="w-5 h-5 text-[#3C1E1E] fill-[#FEE500] mb-1" />
           <span className="text-[11px] font-medium text-zinc-700">카톡상담</span>
-        </a>
+        </button>
         <button
           onClick={() => scrollToSection('sec-ba')}
           className="py-3.5 px-2 hover:bg-[#F7F7F8] transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
@@ -2058,7 +2059,7 @@ export default function App() {
           <span>실시간예약</span>
         </button>
         <a
-          href={KAKAO_CHANNEL_URL}
+          href={KAKAO_CHAT_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
