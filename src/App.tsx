@@ -200,7 +200,7 @@ export default function App() {
   // Media Assets attached by user
   const MAIN_IMAGE_SRC = "/assets/aistudio/main_image_2f557015.jpg";
   const MAIN_VIDEO_SRC = "/assets/aistudio/Main_video_67fdbcc8.mp4";
-  const EXCELWAVE_DEVICE_SRC = "/assets/aistudio/_________42345710.png";
+  const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner.webp";
 
   // 메인 영상: 화면 밖으로 나가면 일시정지, 다시 보이면 재생
   const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -1083,70 +1083,49 @@ export default function App() {
           </div>
         )}
 
-        {/* TAB 2: Original Content + Excelwave Machine Image on the Right */}
+        {/* TAB 2: 엑셀웨이브 신규 도입 배너 이미지 + 상담/이벤트 버튼 */}
         {heroTab === 'excelwave' && (
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-16 sm:py-24 animate-in fade-in duration-500">
-            <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-              {/* Left Column: Text Content */}
-              <div className="lg:col-span-7 space-y-5">
-                <div className="inline-flex items-center gap-2 border border-[#C5A880]/50 bg-[#0F2B22]/90 backdrop-blur-md px-3.5 py-1.5 rounded-full shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-[#C5A880] animate-ping"></span>
-                  <span className="font-en-cond text-xs tracking-[0.2em] text-[#C5A880] font-bold">
-                    NEW LAUNCH · 2.45GHz EXCELWAVE
-                  </span>
-                </div>
-                <div>
-                  <p className="font-en-serif italic text-[#C5A880] text-lg sm:text-xl mb-1.5 tracking-wide">
-                    “꽃을 보듯, 당신의 가장 자연스러운 아름다움을 피워냅니다”
-                  </p>
-                  <h1 className="text-3xl sm:text-5xl lg:text-[50px] font-bold leading-[1.18] tracking-tight">
-                    2.45GHz 극초단파 리프팅<br />
-                    <span className="text-[#C5A880]">엑셀웨이브(Excelwave)</span> 신규 도입
-                  </h1>
-                </div>
-                <p className="text-zinc-200 text-sm sm:text-base max-w-xl leading-relaxed font-light">
-                  강력한 쿨링으로 피부 표면은 안전하게 보호하고, 2.45GHz 마이크로웨이브로 깊은 층을 따뜻하게 자극합니다. 처진 탄력과 무너진 윤곽, 거친 피부결을 한 번에 매끄럽게 정돈해 주는 비수술 리프팅 솔루션입니다.
-                </p>
-                <div className="pt-3 flex flex-wrap gap-3">
-                  <button
-                    onClick={() => handleOpenBooking('엑셀웨이브 런칭 특가 상담')}
-                    className="bg-[#C5A880] hover:bg-[#A6895E] text-[#111111] font-bold px-7 py-3.5 rounded-lg text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
-                  >
-                    <CalendarCheck className="w-4 h-4 text-[#111111]" />
-                    <span>엑셀웨이브 런칭 특가 상담</span>
-                  </button>
-                  <button
-                    onClick={() => navigateTo('event')}
-                    className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-6 py-3.5 rounded-lg text-sm transition-all backdrop-blur-xs cursor-pointer flex items-center gap-2"
-                  >
-                    <Sparkles className="w-4 h-4 text-[#C5A880]" />
-                    <span>이달의 이벤트 전용 페이지로 이동</span>
-                  </button>
-                </div>
+          <div className="absolute inset-0 z-10 bg-[#F3DFD0] flex flex-col items-center justify-center pb-20 md:pb-0 animate-in fade-in duration-500">
+            <div className="relative w-full aspect-[2000/729]">
+              <img
+                src={EXCELWAVE_BANNER_SRC}
+                alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규 도입"
+                className="w-full h-full object-contain [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
+              />
+              {/* 데스크톱: 배너 문구 아래에 버튼 배치 */}
+              <div className="hidden md:flex absolute left-[17.5%] top-[71%] flex-wrap gap-3">
+                <button
+                  onClick={() => handleOpenBooking('엑셀웨이브 런칭 특가 상담')}
+                  className="bg-[#4A2E24] hover:bg-[#2E1C16] text-white font-bold px-6 py-3 rounded-lg text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+                >
+                  <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
+                  <span>엑셀웨이브 런칭 특가 상담</span>
+                </button>
+                <button
+                  onClick={() => navigateTo('event')}
+                  className="bg-white/70 hover:bg-white text-[#4A2E24] border border-[#4A2E24]/25 px-5 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4 text-[#9C6B52]" />
+                  <span>이달의 이벤트 전용 페이지로 이동</span>
+                </button>
               </div>
-
-              {/* Right Column: Excelwave Device Image */}
-              <div className="lg:col-span-5 flex justify-center items-center relative">
-                <div className="relative group max-w-xs sm:max-w-sm">
-                  {/* Subtle radial aura behind the machine */}
-                  <div className="absolute inset-0 bg-radial from-[#C5A880]/30 via-[#0F2B22]/20 to-transparent blur-xl rounded-full scale-110 pointer-events-none"></div>
-                  
-                  <img
-                    src={EXCELWAVE_DEVICE_SRC}
-                    alt="2.45GHz 엑셀웨이브(Excelwave) 장비"
-                    className="relative z-10 max-h-[380px] sm:max-h-[460px] w-auto object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:scale-105"
-                  />
-
-                  {/* High-end badge overlaid */}
-                  <div className="absolute -bottom-2 right-2 z-20 bg-[#0F2B22]/95 border border-[#C5A880]/60 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-md flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#C5A880]"></span>
-                    <div>
-                      <p className="text-[10px] font-en-cond text-[#C5A880] font-bold tracking-wider">OFFICIAL LAUNCH</p>
-                      <p className="text-xs font-bold text-white">Excelwave 2.45GHz</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            </div>
+            {/* 모바일: 배너 아래에 버튼 배치 */}
+            <div className="md:hidden w-full px-6 mt-6 flex flex-col gap-2.5">
+              <button
+                onClick={() => handleOpenBooking('엑셀웨이브 런칭 특가 상담')}
+                className="bg-[#4A2E24] text-white font-bold px-5 py-3.5 rounded-lg text-sm shadow-md cursor-pointer flex items-center justify-center gap-2"
+              >
+                <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
+                <span>엑셀웨이브 런칭 특가 상담</span>
+              </button>
+              <button
+                onClick={() => navigateTo('event')}
+                className="bg-white/70 text-[#4A2E24] border border-[#4A2E24]/25 px-5 py-3.5 rounded-lg text-sm font-semibold cursor-pointer flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4 text-[#9C6B52]" />
+                <span>이달의 이벤트 전용 페이지로 이동</span>
+              </button>
             </div>
           </div>
         )}
