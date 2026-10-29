@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sv-black: #111111;
+  --color-sv-dark: #1A1A1A;
+  --color-sv-gray: #F7F7F8;
+  --color-sv-border: #E5E5E8;
+  --color-sv-muted: #767676;
+  --color-sv-green: #0F2B22;
+  --color-sv-greenLight: #173F32;
+  --color-sv-gold: #C5A880;
+  --color-sv-goldDark: #A6895E;
+  --color-sv-cream: #FAF8F5;
+
+  --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: 'Oswald', 'Pretendard', sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color: #111111;
+  background-color: #FFFFFF;
+  overflow-x: hidden;
+}
+
+.font-en-cond {
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.font-en-serif {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5a880;
+  border-radius: 4px;
+}
+
+/* Dropdown hover animation */
+.nav-item:hover .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.nav-dropdown {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.ba-locked {
+  filter: blur(14px);
+  transition: filter 0.4s ease;
+}
+.ba-unlocked {
+  filter: blur(0);
+}
+
+/* Subtle cinematic image movement */
+@keyframes kenburns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate(-1.5%, -1%);
+  }
+  100% {
+    transform: scale(1.02) translate(1%, 0.5%);
+  }
+}
+
+.animate-kenburns {
+  animation: kenburns 24s ease-in-out infinite alternate;
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: floatGentle 6s ease-in-out infinite;
+}
+
+/* Soft breathing fade in/out animation */
+@keyframes softFadePulse {
+  0%, 100% {
+    opacity: 0.92;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.025);
+  }
+}
+
+.animate-soft-pulse {
+  animation: softFadePulse 7s ease-in-out infinite;
+}
+
+/* 화면 밖 애니메이션 일시정지 (pauseOffscreenAnimations.ts) */
+.anim-paused {
+  animation-play-state: paused !important;
+}
+
+/* Image hover zoom wrapper */
+.image-zoom-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.image-zoom-target {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease, opacity 0.8s ease;
+}
+
+.image-zoom-container:hover .image-zoom-target {
+  transform: scale(1.05);
+  filter: brightness(1.03);
+}
+

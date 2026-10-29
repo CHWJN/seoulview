@@ -1,0 +1,6 @@
+{
+  "name": "서울뷰의원 당진점",
+  "description": "꽃을보듯너를 서울뷰의원 당진점 공식 홈페이지 - 젠틀맥스프로플러스, 피코슈어, 울쎄라, 리쥬란, 비급여 수가 투명 공개 및 실시간 예약",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
