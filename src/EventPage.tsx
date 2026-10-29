@@ -538,16 +538,15 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
           <Calendar className="w-5 h-5 text-[#BFA980] mb-1 group-hover:scale-110 transition" />
           <span className="text-[11px] font-bold">진료예약</span>
         </button>
-        <button
-          onClick={() => {
-            handleOpenBooking('카카오톡 상담 문의');
-            showToast("카카오톡 상담 신청 창으로 연결되었습니다.");
-          }}
+        <a
+          href="https://pf.kakao.com/_gIJQG"
+          target="_blank"
+          rel="noopener noreferrer"
           className="py-3.5 px-2 hover:bg-[#FEE500]/20 transition flex flex-col items-center justify-center text-[#151515] cursor-pointer"
         >
           <MessageCircle className="w-5 h-5 text-[#3C1E1E] fill-[#FEE500] mb-1" />
           <span className="text-[11px] font-medium text-zinc-700">카톡상담</span>
-        </button>
+        </a>
         <button
           onClick={scrollToPrice}
           className="py-3.5 px-2 hover:bg-[#F8F8F9] transition flex flex-col items-center justify-center text-[#151515] cursor-pointer"
