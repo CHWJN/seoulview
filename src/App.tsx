@@ -21,7 +21,6 @@ import {
   MapPin,
   ShieldCheck,
   Award,
-  FileSpreadsheet,
   Phone,
   Clock,
   Copy,
@@ -2090,11 +2089,11 @@ export default function App() {
           <span>카톡상담</span>
         </button>
         <button
-          onClick={() => scrollToSection('sec-prices')}
+          onClick={() => navigateTo('event')}
           className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
         >
-          <FileSpreadsheet className="w-4 h-4 text-[#0F2B22] mb-0.5" />
-          <span>비급여수가</span>
+          <Sparkles className="w-4 h-4 text-[#C5A880] mb-0.5" />
+          <span>이벤트</span>
         </button>
         <button
           onClick={() => scrollToSection('sec-location')}
