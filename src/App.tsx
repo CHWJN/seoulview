@@ -199,7 +199,7 @@ export default function App() {
 
   // Media Assets attached by user
   const MAIN_IMAGE_SRC = "/assets/aistudio/main_image_2f557015.jpg";
-  const MAIN_VIDEO_SRC = "/assets/aistudio/Main_video_67fdbcc8.mp4";
+  const MAIN_VIDEO_SRC = "/assets/main_video.mp4";
   const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner.webp";
 
   // 메인 영상: 화면 밖으로 나가면 일시정지, 다시 보이면 재생
