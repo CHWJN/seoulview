@@ -12,7 +12,6 @@ import {
   ChevronRight,
   CalendarCheck,
   Calendar,
-  SlidersHorizontal,
   Menu,
   X,
   CheckCircle2,
@@ -859,14 +858,6 @@ export default function App() {
             >
               <CalendarCheck className="w-3.5 h-3.5 text-[#C5A880]" />
               <span>실시간 예약</span>
-            </button>
-            <button
-              onClick={() => setAdminModalOpen(true)}
-              title="구글시트 연동 및 수가표 관리"
-              className="hidden md:inline-flex items-center gap-1.5 border border-[#E5E5E8] hover:border-[#C5A880] text-zinc-700 text-xs font-medium px-3 py-2.5 rounded transition cursor-pointer"
-            >
-              <SlidersHorizontal className="w-3.5 h-3.5 text-[#A6895E]" />
-              <span>수가표 관리</span>
             </button>
             {/* Mobile Hamburger Button */}
             <button
@@ -2069,13 +2060,6 @@ export default function App() {
                 className="hover:text-[#C5A880] cursor-pointer"
               >
                 시술 후 주의사항
-              </button>
-              <span>|</span>
-              <button
-                onClick={() => setAdminModalOpen(true)}
-                className="hover:text-[#C5A880] cursor-pointer"
-              >
-                수가표 데이터 관리(CSV)
               </button>
             </div>
           </div>
