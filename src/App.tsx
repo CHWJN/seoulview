@@ -262,7 +262,7 @@ export default function App() {
   // 홈에 보여 줄 최신 칼럼 3편 (날짜 "2026. 10. 29" 형식이라 글자 순 정렬 = 날짜 순)
   const latestColumns = [...COLUMNS_DATA].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
 
-  // 모바일 칼럼 카드 자동 넘기기: 칼럼 칸이 화면에 들어오자마자 다음 카드로 1.2초 동안 천천히 이동하고,
+  // 모바일 칼럼 카드 자동 넘기기: 칼럼 칸이 화면에 들어오고 1초 뒤 다음 카드로 2초 동안 천천히 이동하고,
   // 이후 3.5초마다 한 장씩 넘김. 마지막 '더 많은 칼럼' 카드에서 멈춤.
   // 손으로 옆으로 밀 때만 자동 이동을 멈춘다 (페이지를 위아래로 스크롤하다 카드를 스친 것은 무시).
   const columnScrollRef = useRef<HTMLDivElement>(null);
@@ -280,7 +280,7 @@ export default function App() {
       const t0 = performance.now();
       el.style.scrollSnapType = 'none'; // 스냅이 애니메이션을 끊지 않도록 잠시 끔
       const step = (now: number) => {
-        const p = Math.min(1, (now - t0) / 1200);
+        const p = Math.min(1, (now - t0) / 2000);
         const ease = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
         el.scrollLeft = start + (target - start) * ease;
         if (p < 1 && !stopped) raf = requestAnimationFrame(step);
@@ -303,7 +303,7 @@ export default function App() {
     const io = new IntersectionObserver(([entry]) => {
       const wasVisible = visible;
       visible = entry.isIntersecting;
-      if (visible && !wasVisible) { window.clearTimeout(timer); timer = window.setTimeout(next, 400); }
+      if (visible && !wasVisible) { window.clearTimeout(timer); timer = window.setTimeout(next, 1000); }
       if (!visible) window.clearTimeout(timer);
     }, { threshold: 0.3 });
     io.observe(el);
@@ -1027,7 +1027,7 @@ export default function App() {
           </div>
 
           {/* 최신 칼럼 3편: 모바일은 옆으로 넘겨 보기(자동으로 천천히 넘어감) + 마지막에 '더 많은 칼럼' 카드, PC는 3열(마우스를 올리면 살짝 떠오름) */}
-          <div ref={columnScrollRef} className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 md:mx-0 md:px-0 py-2 md:py-0">
+          <div ref={columnScrollRef} className="flex md:grid md:grid-cols-[1fr_1fr_1fr_auto] gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 md:mx-0 md:px-0 py-2 md:py-0">
             {latestColumns.map((col) => (
               <article
                 key={col.id}
@@ -1046,20 +1046,20 @@ export default function App() {
                     {col.preview}
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-[#E5E5E8] flex items-center justify-between text-xs font-semibold text-[#A6895E]">
-                  <span>대표원장 직접 집필</span>
-                  <span className="group-hover:translate-x-1 transition flex items-center gap-1">
+                <div className="mt-6 pt-4 border-t border-[#E5E5E8] flex items-center justify-between gap-2 text-xs font-semibold text-[#A6895E] whitespace-nowrap">
+                  <span className="lg:hidden xl:inline">대표원장 직접 집필</span>
+                  <span className="group-hover:translate-x-1 transition flex items-center gap-1 ml-auto">
                     칼럼 전문 읽기 →
                   </span>
                 </div>
               </article>
             ))}
-            {/* 모바일 전용: 마지막에 나오는 '더 많은 칼럼 보러가기' 카드 */}
+            {/* 마지막 '더 많은 칼럼 보러가기' 화살표 (모바일은 넘김 끝, PC는 카드 3개 오른쪽) */}
             <button
               onClick={() => navigateTo('column')}
-              className="md:hidden w-[42%] shrink-0 snap-start flex flex-col items-center justify-center gap-3 rounded-xl text-[#0F2B22] cursor-pointer"
+              className="w-[42%] md:w-28 shrink-0 snap-start flex flex-col items-center justify-center gap-3 rounded-xl text-[#0F2B22] cursor-pointer group/more"
             >
-              <span className="w-14 h-14 rounded-full bg-[#0F2B22] text-white flex items-center justify-center shadow-md">
+              <span className="w-14 h-14 rounded-full bg-[#0F2B22] text-white flex items-center justify-center shadow-md transition md:group-hover/more:translate-x-1 md:group-hover/more:bg-[#173F32]">
                 <ChevronRight className="w-6 h-6" />
               </span>
               <span className="text-sm font-bold text-center leading-snug break-keep">더 많은 칼럼<br />보러가기</span>
