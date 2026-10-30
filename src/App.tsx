@@ -278,6 +278,74 @@ export default function App() {
     { cat: "skincare", group: "미백 / 진정", name: "크라이오 냉각이온침투 / 비타민 이온자임 관리", once: "40,000원", multi: "10회 300,000원" }
   ]);
 
+  // 보유 장비 소개
+  const DEVICES: { badge: string; area: string; name: string; sub: string; desc: string; link: 'event' | 'prices' }[] = [
+    {
+      badge: "NEW · MICROWAVE",
+      area: "리프팅 · 윤곽 · 바디",
+      name: "엑셀웨이브 (Excelwave)",
+      sub: "2.45GHz 극초단파 리프팅",
+      desc: "강력한 쿨링으로 피부 표면은 보호하고, 2.45GHz 마이크로웨이브로 깊은 층을 따뜻하게 자극하는 비수술 리프팅입니다. 얼굴과 바디 모두 시술합니다.",
+      link: 'event'
+    },
+    {
+      badge: "RF LIFTING",
+      area: "탄력 · 리프팅",
+      name: "볼뉴머 (Volnewmer)",
+      sub: "고주파(RF) 리프팅",
+      desc: "고주파 에너지로 피부 탄력과 리프팅을 돕는 장비입니다. 슈링크와 함께 받는 볼링크 이벤트로도 진행합니다.",
+      link: 'event'
+    },
+    {
+      badge: "PICO LASER",
+      area: "기미 · 잡티 · 색소",
+      name: "피코케어 마제스티",
+      sub: "피코초 레이저",
+      desc: "피코초(1조분의 1초) 단위의 짧은 펄스로 색소를 잘게 분해하는 피코 레이저입니다. 기미·잡티 등 색소 치료와 피부톤 개선에 사용합니다.",
+      link: 'prices'
+    },
+    {
+      badge: "LASER",
+      area: "색소 · 피부톤",
+      name: "루카스 (LUCAS)",
+      sub: "레이저 토닝",
+      desc: "피부 상태에 맞춰 색소와 피부톤 개선에 활용하는 레이저 장비입니다.",
+      link: 'prices'
+    },
+    {
+      badge: "LASER",
+      area: "점 · 사마귀 · 혈관종",
+      name: "브이레이저 (V-Laser)",
+      sub: "점·사마귀·쥐젖 제거",
+      desc: "점, 사마귀, 쥐젖, 검버섯, 혈관종 제거에 사용하는 레이저입니다. 크기별 수가는 상세 비급여 수가표에서 확인하실 수 있습니다.",
+      link: 'prices'
+    },
+    {
+      badge: "RF MICRONEEDLE",
+      area: "모공 · 흉터 · 피부결",
+      name: "시크릿 (Secret RF)",
+      sub: "고주파 마이크로니들",
+      desc: "미세한 바늘(마이크로니들)로 진피층에 고주파 열에너지를 전달하는 장비로, 모공·흉터·피부결 개선에 사용합니다.",
+      link: 'prices'
+    },
+    {
+      badge: "INMODE & SHRINK",
+      area: "타이트닝 · 윤곽",
+      name: "인모드 & 슈링크 유니버스",
+      sub: "지방 감소 + 콜라겐 리모델링",
+      desc: "HVP 에너지로 이중턱과 심부볼 지방세포를 사멸시키는 인모드(FX+FORMA)와, 2가지 초음파 모드(MP/Normal)로 빈틈없이 탄력을 채우는 슈링크 유니버스를 보유하고 있습니다.",
+      link: 'prices'
+    },
+    {
+      badge: "DIAGNOSIS & CARE",
+      area: "정밀진단 · 메디컬케어",
+      name: "마크뷰 & LDM 물방울 리프팅",
+      sub: "4가지 광원 피부진단기 & 고밀도 초음파",
+      desc: "시술 전 정확한 피부 분석을 위한 마크뷰(Mark-Vu) 시스템과, 레이저 및 스킨부스터 시술 후 즉각적인 진정·보습·장벽 재생을 돕는 LDM, 크라이오, 아쿠아필 장비를 완비했습니다.",
+      link: 'prices'
+    }
+  ];
+
   // Before & After Data
   const BA_DATA: Record<string, BaItem[]> = {
     melasma: [
@@ -533,6 +601,102 @@ export default function App() {
     setMobileMenuOpen(false);
   };
 
+  // 예약 신청 창과 알림은 홈·수가표·칼럼 페이지에서 함께 사용
+  const sharedOverlays = (
+    <>
+      {/* ================= MODAL 1: RESERVATION ================= */}
+      {bookingModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-lg border border-[#C5A880]/40 animate-in fade-in zoom-in-95">
+            <button
+              onClick={() => setBookingModalOpen(false)}
+              className="absolute top-5 right-5 text-zinc-400 hover:text-[#111111] cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <span className="font-en-cond text-xs tracking-widest text-[#A6895E] font-bold uppercase">
+              ONLINE RESERVATION
+            </span>
+            <h3 className="text-2xl font-bold text-[#111111] mt-1">서울뷰의원 당진점 빠른 예약</h3>
+            <p className="text-xs text-zinc-500 mt-1 mb-6">원하시는 시술 또는 고민 부위를 남겨주시면 확인 후 신속히 안내해 드립니다.</p>
+
+            <form onSubmit={handleBookingSubmit} className="space-y-4 text-xs sm:text-sm">
+              <div>
+                <label className="block font-semibold text-zinc-700 mb-1">환자분 성함 *</label>
+                <input
+                  type="text"
+                  required
+                  value={bookingForm.name}
+                  onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
+                  placeholder="성함을 입력해주세요"
+                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
+                />
+              </div>
+              <div>
+                <label className="block font-semibold text-zinc-700 mb-1">연락처 *</label>
+                <input
+                  type="tel"
+                  required
+                  value={bookingForm.phone}
+                  onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
+                  placeholder="010-0000-0000"
+                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
+                />
+              </div>
+              <div>
+                <label className="block font-semibold text-zinc-700 mb-1">관심 시술 / 이벤트 항목</label>
+                <input
+                  type="text"
+                  value={selectedBookingItem}
+                  onChange={(e) => setSelectedBookingItem(e.target.value)}
+                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg bg-[#F7F7F8] font-medium text-[#0F2B22] focus:outline-none"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-zinc-700 mb-1">희망 날짜 *</label>
+                  <input
+                    type="date"
+                    required
+                    value={bookingForm.date}
+                    onChange={(e) => setBookingForm({ ...bookingForm, date: e.target.value })}
+                    className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-zinc-700 mb-1">희망 시간대</label>
+                  <select
+                    value={bookingForm.time}
+                    onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
+                    className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg bg-white focus:outline-none focus:border-[#0F2B22]"
+                  >
+                    <option>오전 (10:00 ~ 12:30)</option>
+                    <option>오후 (14:00 ~ 18:00)</option>
+                    <option>야간진료 (화·금 18:00~20:30)</option>
+                    <option>토요일 진료 (09:30~16:00)</option>
+                  </select>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-[#0F2B22] hover:bg-[#173F32] text-white font-bold py-3.5 rounded-lg text-sm transition mt-2 cursor-pointer"
+              >
+                예약 신청 완료하기
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* ================= TOAST NOTIFICATION ================= */}
+      {toastMessage && (
+        <div className="fixed bottom-20 md:bottom-8 right-6 z-50 bg-[#0F2B22] text-white px-5 py-3.5 rounded-xl shadow-lg border border-[#C5A880] flex items-center gap-3 text-xs sm:text-sm animate-in slide-in-from-bottom duration-300">
+          <CheckCircle2 className="w-5 h-5 text-[#C5A880] shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+    </>
+  );
+
   if (currentPage === 'event') {
     return (
       <EventPage
@@ -545,24 +709,30 @@ export default function App() {
 
   if (currentPage === 'prices') {
     return (
-      <PricePage
-        onNavigateHome={(sec) => navigateTo('home', sec)}
-        onNavigateEvent={() => navigateTo('event')}
-        onNavigateColumn={() => navigateTo('column')}
-        onOpenBooking={handleOpenBooking}
-      />
+      <>
+        <PricePage
+          onNavigateHome={(sec) => navigateTo('home', sec)}
+          onNavigateEvent={() => navigateTo('event')}
+          onNavigateColumn={() => navigateTo('column')}
+          onOpenBooking={handleOpenBooking}
+        />
+        {sharedOverlays}
+      </>
     );
   }
 
   if (currentPage === 'column') {
     return (
-      <ColumnPage
-        initialArticleId={selectedColumnArticleId}
-        onNavigateHome={(sec) => navigateTo('home', sec)}
-        onNavigateToPrices={() => navigateTo('prices')}
-        onNavigateToEvent={() => navigateTo('event')}
-        onOpenBooking={handleOpenBooking}
-      />
+      <>
+        <ColumnPage
+          initialArticleId={selectedColumnArticleId}
+          onNavigateHome={(sec) => navigateTo('home', sec)}
+          onNavigateToPrices={() => navigateTo('prices')}
+          onNavigateToEvent={() => navigateTo('event')}
+          onOpenBooking={handleOpenBooking}
+        />
+        {sharedOverlays}
+      </>
     );
   }
 
@@ -1354,144 +1524,33 @@ export default function App() {
 
         {/* 1-2. Devices */}
         {aboutTab === 'devices' && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in">
-            <div className="border border-[#E5E5E8] rounded-xl p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-en-cond tracking-wider bg-[#0F2B22] text-[#C5A880] px-2.5 py-0.5 rounded font-bold">CANDELA USA</span>
-                  <span className="text-xs font-semibold text-zinc-400">제모 · 탄력 · 색소</span>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:pr-24 2xl:pr-0 animate-in fade-in">
+            {DEVICES.map((device) => (
+              <div
+                key={device.name}
+                className="border border-[#E5E5E8] rounded-xl p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[11px] font-en-cond tracking-wider bg-[#0F2B22] text-[#C5A880] px-2.5 py-0.5 rounded font-bold">
+                      {device.badge}
+                    </span>
+                    <span className="text-xs font-semibold text-zinc-400">{device.area}</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-[#111111]">{device.name}</h3>
+                  <p className="text-xs text-[#A6895E] font-medium mb-3">{device.sub}</p>
+                  <p className="text-xs text-zinc-600 leading-relaxed">{device.desc}</p>
                 </div>
-                <h3 className="text-lg font-bold text-[#111111]">젠틀맥스 프로 플러스</h3>
-                <p className="text-xs text-[#A6895E] font-medium mb-3">GentleMax Pro Plus (755nm & 1064nm)</p>
-                <p className="text-xs text-zinc-600 leading-relaxed">
-                  미국 칸델라사의 최신 플래그십 모델. 기존 대비 38% 강력해진 에너지와 26mm 대구경 스팟, 2ms 초단파 펄스로 굵은 남성 수염부터 얇은 솜털까지 빠르고 통증 적게 반영구 제모합니다.
-                </p>
-              </div>
-              <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-between items-center text-xs">
-                <span className="text-zinc-500">FDA / KFDA 정식 승인</span>
-                <button
-                  onClick={() => navigateTo('prices')}
-                  className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
-                >
-                  제모 수가표 보기 →
-                </button>
-              </div>
-            </div>
-
-            <div className="border border-[#E5E5E8] rounded-xl p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-en-cond tracking-wider bg-[#0F2B22] text-[#C5A880] px-2.5 py-0.5 rounded font-bold">CYNOSURE USA</span>
-                  <span className="text-xs font-semibold text-zinc-400">기미 · 흑자 · 모공 · 문신</span>
+                <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-end items-center text-xs">
+                  <button
+                    onClick={() => navigateTo(device.link)}
+                    className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
+                  >
+                    {device.link === 'event' ? '이벤트 보기 →' : '수가표 보기 →'}
+                  </button>
                 </div>
-                <h3 className="text-lg font-bold text-[#111111]">피코슈어 (PicoSure)</h3>
-                <p className="text-xs text-[#A6895E] font-medium mb-3">세계 최초 755nm 알렉산드라이트 피코레이저</p>
-                <p className="text-xs text-zinc-600 leading-relaxed">
-                  일반 1064nm 레이저보다 멜라닌 흡수율이 3배 높은 755nm 파장과 포커스 렌즈(피코프락셀)를 통해 표피 손상 없이 난치성 기미, 흑자, 오타모반, 넓은 모공을 정교하게 치료합니다.
-                </p>
               </div>
-              <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-between items-center text-xs">
-                <span className="text-zinc-500">멜라닌 선택적 파괴</span>
-                <button
-                  onClick={() => scrollToSection('sec-events')}
-                  className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
-                >
-                  이벤트 보기 →
-                </button>
-              </div>
-            </div>
-
-            <div className="border border-[#E5E5E8] rounded-xl p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-en-cond tracking-wider bg-[#0F2B22] text-[#C5A880] px-2.5 py-0.5 rounded font-bold">MERZ GERMANY</span>
-                  <span className="text-xs font-semibold text-zinc-400">프리미엄 초음파 리프팅</span>
-                </div>
-                <h3 className="text-lg font-bold text-[#111111]">울쎄라 (Ultherapy)</h3>
-                <p className="text-xs text-[#A6895E] font-medium mb-3">실시간 DeepSee 초음파 영상 리프팅</p>
-                <p className="text-xs text-zinc-600 leading-relaxed">
-                  실시간 초음파 화면으로 환자 개개인의 피부 두께와 근막층(SMAS) 위치를 눈으로 직접 보며 정밀하게 에너지를 전달하여 처진 심부볼과 이중턱 라인을 강력하게 끌어올립니다.
-                </p>
-              </div>
-              <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-between items-center text-xs">
-                <span className="text-zinc-500">정품 팁 인증서 발급</span>
-                <button
-                  onClick={() => scrollToSection('sec-events')}
-                  className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
-                >
-                  이벤트 보기 →
-                </button>
-              </div>
-            </div>
-
-            <div className="border border-[#E5E5E8] rounded-xl p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-en-cond tracking-wider bg-zinc-800 text-white px-2.5 py-0.5 rounded font-bold">CYNOSURE USA</span>
-                  <span className="text-xs font-semibold text-zinc-400">색소 · 화이트닝</span>
-                </div>
-                <h3 className="text-lg font-bold text-[#111111]">레블라이트 SI & 포텐자</h3>
-                <p className="text-xs text-[#A6895E] font-medium mb-3">PTP 방식 명품 토닝 & 고주파 마이크로니들</p>
-                <p className="text-xs text-zinc-600 leading-relaxed">
-                  균일한 빔 프로파일로 자극 없이 맑은 피부톤을 만드는 레블라이트 SI와, 14종 팁으로 모공·여드름 흉터·홍조·쥬베룩 펌핑을 완성하는 포텐자 레이저를 함께 운용합니다.
-                </p>
-              </div>
-              <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-between items-center text-xs">
-                <span className="text-zinc-500">맞춤형 복합 레이저</span>
-                <button
-                  onClick={() => navigateTo('prices')}
-                  className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
-                >
-                  수가표 보기 →
-                </button>
-              </div>
-            </div>
-
-            <div className="border border-[#E5E5E8] rounded-xl p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-en-cond tracking-wider bg-zinc-800 text-white px-2.5 py-0.5 rounded font-bold">INMODE & SHRINK</span>
-                  <span className="text-xs font-semibold text-zinc-400">타이트닝 · 윤곽</span>
-                </div>
-                <h3 className="text-lg font-bold text-[#111111]">인모드 & 슈링크 유니버스</h3>
-                <p className="text-xs text-[#A6895E] font-medium mb-3">지방 감소 + 콜라겐 리모델링</p>
-                <p className="text-xs text-zinc-600 leading-relaxed">
-                  HVP 에너지로 이중턱과 심부볼 지방세포를 사멸시키는 인모드(FX+FORMA)와, 2가지 초음파 모드(MP/Normal)로 빈틈없이 탄력을 채우는 슈링크 유니버스를 보유하고 있습니다.
-                </p>
-              </div>
-              <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-between items-center text-xs">
-                <span className="text-zinc-500">통증 최소화 리프팅</span>
-                <button
-                  onClick={() => navigateTo('prices')}
-                  className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
-                >
-                  수가표 보기 →
-                </button>
-              </div>
-            </div>
-
-            <div className="border border-[#E5E5E8] rounded-xl p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-en-cond tracking-wider bg-zinc-800 text-white px-2.5 py-0.5 rounded font-bold">DIAGNOSIS & CARE</span>
-                  <span className="text-xs font-semibold text-zinc-400">정밀진단 · 메디컬케어</span>
-                </div>
-                <h3 className="text-lg font-bold text-[#111111]">마크뷰 & LDM 물방울 리프팅</h3>
-                <p className="text-xs text-[#A6895E] font-medium mb-3">4가지 광원 피부진단기 & 고밀도 초음파</p>
-                <p className="text-xs text-zinc-600 leading-relaxed">
-                  시술 전 정확한 피부 분석을 위한 마크뷰(Mark-Vu) 시스템과, 레이저 및 스킨부스터 시술 후 즉각적인 진정·보습·장벽 재생을 돕는 LDM, 크라이오, 아쿠아필 장비를 완비했습니다.
-                </p>
-              </div>
-              <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-between items-center text-xs">
-                <span className="text-zinc-500">시술 전후 체계적 관리</span>
-                <button
-                  onClick={() => navigateTo('prices')}
-                  className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
-                >
-                  수가표 보기 →
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         )}
 
@@ -1973,90 +2032,6 @@ export default function App() {
         </button>
       </div>
 
-      {/* ================= MODAL 1: RESERVATION ================= */}
-      {bookingModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-lg border border-[#C5A880]/40 animate-in fade-in zoom-in-95">
-            <button
-              onClick={() => setBookingModalOpen(false)}
-              className="absolute top-5 right-5 text-zinc-400 hover:text-[#111111] cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <span className="font-en-cond text-xs tracking-widest text-[#A6895E] font-bold uppercase">
-              ONLINE RESERVATION
-            </span>
-            <h3 className="text-2xl font-bold text-[#111111] mt-1">서울뷰의원 당진점 빠른 예약</h3>
-            <p className="text-xs text-zinc-500 mt-1 mb-6">원하시는 시술 또는 고민 부위를 남겨주시면 확인 후 신속히 안내해 드립니다.</p>
-
-            <form onSubmit={handleBookingSubmit} className="space-y-4 text-xs sm:text-sm">
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">환자분 성함 *</label>
-                <input
-                  type="text"
-                  required
-                  value={bookingForm.name}
-                  onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
-                  placeholder="성함을 입력해주세요"
-                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                />
-              </div>
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">연락처 *</label>
-                <input
-                  type="tel"
-                  required
-                  value={bookingForm.phone}
-                  onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                  placeholder="010-0000-0000"
-                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                />
-              </div>
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">관심 시술 / 이벤트 항목</label>
-                <input
-                  type="text"
-                  value={selectedBookingItem}
-                  onChange={(e) => setSelectedBookingItem(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg bg-[#F7F7F8] font-medium text-[#0F2B22] focus:outline-none"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-zinc-700 mb-1">희망 날짜 *</label>
-                  <input
-                    type="date"
-                    required
-                    value={bookingForm.date}
-                    onChange={(e) => setBookingForm({ ...bookingForm, date: e.target.value })}
-                    className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-zinc-700 mb-1">희망 시간대</label>
-                  <select
-                    value={bookingForm.time}
-                    onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
-                    className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg bg-white focus:outline-none focus:border-[#0F2B22]"
-                  >
-                    <option>오전 (10:00 ~ 12:30)</option>
-                    <option>오후 (14:00 ~ 18:00)</option>
-                    <option>야간진료 (화·금 18:00~20:30)</option>
-                    <option>토요일 진료 (09:30~16:00)</option>
-                  </select>
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-[#0F2B22] hover:bg-[#173F32] text-white font-bold py-3.5 rounded-lg text-sm transition mt-2 cursor-pointer"
-              >
-                예약 신청 완료하기
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
       {/* ================= MODAL 2: COLUMN READER ================= */}
       {columnModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
@@ -2152,13 +2127,7 @@ export default function App() {
         </div>
       )}
 
-      {/* ================= TOAST NOTIFICATION ================= */}
-      {toastMessage && (
-        <div className="fixed bottom-20 md:bottom-8 right-6 z-50 bg-[#0F2B22] text-white px-5 py-3.5 rounded-xl shadow-lg border border-[#C5A880] flex items-center gap-3 text-xs sm:text-sm animate-in slide-in-from-bottom duration-300">
-          <CheckCircle2 className="w-5 h-5 text-[#C5A880] shrink-0" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      {sharedOverlays}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useMemo } from 'react';
 import { COLUMNS_DATA, ColumnBlock } from './data/columnsData.ts';
+import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
 import {
   ArrowLeft,
   Calendar,
@@ -249,7 +250,7 @@ export default function ColumnPage({
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] text-[#111111] selection:bg-[#0F2B22] selection:text-white font-sans">
+    <div className="min-h-screen bg-[#FDFDFD] text-[#111111] selection:bg-[#0F2B22] selection:text-white font-sans pb-14 md:pb-0">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-[#0F2B22] text-[#C5A880] px-6 py-3 rounded-xl shadow-lg border border-[#C5A880]/30 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-top-4 flex items-center gap-2">
@@ -829,6 +830,18 @@ export default function ColumnPage({
           </div>
         </div>
       </footer>
+
+      {/* 모바일 메뉴 · 하단 메뉴바 */}
+      <MobileDrawer
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        onNavigateHome={onNavigateHome}
+        onNavigateEvent={onNavigateToEvent}
+        onNavigatePrices={onNavigateToPrices}
+        onNavigateColumn={backToList}
+        onBook={onOpenBooking}
+      />
+      <MobileBottomBar onNavigateHome={onNavigateHome} onNavigateEvent={onNavigateToEvent} onBook={onOpenBooking} />
     </div>
   );
 }

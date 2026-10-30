@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { PRICE_CATEGORIES, formatWon } from './data/pricingData.ts';
+import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
 import {
   Calendar,
   CalendarCheck,
@@ -107,7 +108,7 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F6] text-[#111111] selection:bg-[#0F2B22] selection:text-white flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FBF9F6] text-[#111111] selection:bg-[#0F2B22] selection:text-white flex flex-col justify-between pb-14 md:pb-0">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-[#0F2B22] text-white px-5 py-3.5 rounded-lg shadow-lg border border-[#C5A880]/50 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-3 duration-300">
@@ -714,6 +715,18 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
           </p>
         </div>
       </footer>
+
+      {/* 모바일 메뉴 · 하단 메뉴바 */}
+      <MobileDrawer
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        onNavigateHome={onNavigateHome}
+        onNavigateEvent={onNavigateEvent}
+        onNavigatePrices={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onNavigateColumn={() => (onNavigateColumn ? onNavigateColumn() : onNavigateHome('sec-column'))}
+        onBook={handleBooking}
+      />
+      <MobileBottomBar onNavigateHome={onNavigateHome} onNavigateEvent={onNavigateEvent} onBook={handleBooking} />
     </div>
   );
 }
