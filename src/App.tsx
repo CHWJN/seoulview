@@ -144,14 +144,13 @@ export default function App() {
 
   // Hero Multi-Tab State
   const [heroTab, setHeroTab] = useState<'video' | 'excelwave'>('video');
-  const [heroPaused, setHeroPaused] = useState<boolean>(false);
 
   // 메인 배너: 10초마다 영상 ↔ 엑셀웨이브 자동 전환 (화살표·막대를 누르면 그때부터 다시 10초)
   useEffect(() => {
-    if (currentPage !== 'home' || heroPaused) return;
+    if (currentPage !== 'home') return;
     const timer = setTimeout(() => setHeroTab(prev => prev === 'video' ? 'excelwave' : 'video'), 10000);
     return () => clearTimeout(timer);
-  }, [heroTab, heroPaused, currentPage]);
+  }, [heroTab, currentPage]);
 
   // Media Assets attached by user
   const MAIN_VIDEO_SRC = "/assets/main_video.mp4";
@@ -417,8 +416,6 @@ export default function App() {
 
       {/* ================= MAIN HERO (멀티탭: 1번 영상 단독 뷰, 2번 엑셀웨이브 런칭 소개) ================= */}
       <section
-        onMouseEnter={() => setHeroPaused(true)}
-        onMouseLeave={() => setHeroPaused(false)}
         className="relative bg-[#071510] text-white overflow-hidden min-h-[580px] sm:min-h-[640px] lg:min-h-[700px] flex items-center"
       >
         {/* Background Video Element */}
