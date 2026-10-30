@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GUIDE_DATA } from './data/guideData.ts';
 import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
 import SiteHeader from './SiteHeader.tsx';
 import { openNaverBooking, LOGO_SRC } from './clinicLinks.ts';
-import { ShieldCheck, Info } from 'lucide-react';
+import { ShieldCheck, Info, Search, X } from 'lucide-react';
 
 interface GuidePageProps {
   guideId: string | null; // 주소 /guide/<id>의 id (없으면 첫 번째 시술)
@@ -35,6 +35,27 @@ export default function GuidePage({ guideId, onNavigateHome, onNavigateEvent, on
 
   // 탭을 바꾸면 주소도 /guide/<id>로 바뀐다 (특정 시술 안내를 링크로 보낼 수 있게)
   const selectTab = (id: string) => navigate(`/guide/${id}`, { replace: true });
+
+  // 시술 검색: 탭 이름·검색용 시술명(keywords)·안내 문구에서 찾는다 (띄어쓰기·대소문자 무시)
+  const [query, setQuery] = useState<string>('');
+  const contentRef = useRef<HTMLDivElement>(null);
+  const results = useMemo(() => {
+    const norm = (t: string) => t.toLowerCase().replace(/\s+/g, '');
+    const q = norm(query);
+    if (!q) return [];
+    return GUIDE_DATA.flatMap((g) => {
+      const nameHit = [g.label, g.short, g.subtitle, ...g.keywords].some((t) => norm(t).includes(q));
+      // 안내 문구 검색은 두 글자 이상일 때만 (한 글자는 너무 많이 걸림)
+      const line = q.length >= 2 ? [g.downtime, ...g.precautions].find((t) => norm(t).includes(q)) : undefined;
+      return nameHit || line ? [{ guide: g, line: nameHit ? undefined : line }] : [];
+    });
+  }, [query]);
+
+  const openFromSearch = (id: string) => {
+    selectTab(id);
+    setQuery('');
+    setTimeout(() => contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  };
 
   return (
     <div className="min-h-screen bg-[#FBF9F6] text-[#111111] selection:bg-[#0F2B22] selection:text-white flex flex-col justify-between pb-14 lg:pb-0">
@@ -72,26 +93,75 @@ export default function GuidePage({ guideId, onNavigateHome, onNavigateEvent, on
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 sm:py-16">
-        {/* 시술별 탭 */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        {/* 시술 검색 */}
+        <div className="relative mb-3">
+          <Search className="w-5 h-5 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="시술명·고민 검색 (예: 리쥬란, 기미, 보톡스)"
+            aria-label="시술 주의사항 검색"
+            className="w-full pl-12 pr-11 py-3.5 rounded-xl border border-[#E5E5E8] bg-white text-sm placeholder:text-zinc-400 focus:outline-none focus:border-[#0F2B22] shadow-xs [&::-webkit-search-cancel-button]:hidden"
+          />
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              aria-label="검색어 지우기"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* 검색 결과: 누르면 해당 시술 안내로 이동 */}
+        {query.trim() && (
+          <div className="mb-6 bg-white border border-[#E5E5E8] rounded-xl overflow-hidden divide-y divide-[#E5E5E8] shadow-xs">
+            {results.length > 0 ? (
+              results.map(({ guide: g, line }) => (
+                <button
+                  key={g.id}
+                  onClick={() => openFromSearch(g.id)}
+                  className="w-full text-left px-4 sm:px-5 py-3.5 hover:bg-[#FAF8F5] transition cursor-pointer flex items-center justify-between gap-3"
+                >
+                  <span className="min-w-0">
+                    <span className="block text-sm font-bold text-[#111111]">{g.label}</span>
+                    <span className="block text-xs text-zinc-500 mt-0.5 truncate">{line ?? g.subtitle}</span>
+                  </span>
+                  <span className="shrink-0 text-xs font-semibold text-[#A6895E]">주의사항 보기 →</span>
+                </button>
+              ))
+            ) : (
+              <p className="px-4 sm:px-5 py-4 text-sm text-zinc-500">
+                '{query.trim()}'에 대한 안내를 찾지 못했습니다. 궁금하신 점은 041-352-3994로 문의해 주세요.
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* 시술별 탭: 모바일은 짧은 이름으로 4개씩 두 줄, 태블릿·PC는 번호와 함께 한 줄로 */}
+        <div className="grid grid-cols-4 gap-1.5 sm:flex sm:flex-wrap sm:gap-2 mt-5 mb-8">
           {GUIDE_DATA.map((g, idx) => (
             <button
               key={g.id}
               onClick={() => selectTab(g.id)}
               aria-current={guide.id === g.id}
-              className={`px-4 py-2.5 rounded-lg text-xs transition cursor-pointer ${
+              aria-label={g.label}
+              className={`px-0.5 sm:px-4 py-2.5 rounded-lg text-xs whitespace-nowrap transition cursor-pointer ${
                 guide.id === g.id
-                  ? 'font-bold bg-[#0F2B22] text-white'
+                  ? 'font-bold bg-[#0F2B22] text-white border border-[#0F2B22]'
                   : 'font-medium bg-white border border-[#E5E5E8] text-zinc-700 hover:bg-zinc-100'
               }`}
             >
-              {String(idx + 1).padStart(2, '0')}. {g.label}
+              <span className="sm:hidden">{g.short}</span>
+              <span className="hidden sm:inline">{String(idx + 1).padStart(2, '0')}. {g.label}</span>
             </button>
           ))}
         </div>
 
         {/* 선택한 시술 안내 */}
-        <div key={guide.id} className="bg-[#FAF8F5] border border-[#C5A880]/40 rounded-2xl p-6 sm:p-10 animate-in fade-in">
+        <div ref={contentRef} key={guide.id} className="scroll-mt-24 bg-[#FAF8F5] border border-[#C5A880]/40 rounded-2xl p-6 sm:p-10 animate-in fade-in">
           <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#C5A880]/30 pb-6 mb-6 gap-4">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-[#111111] break-keep">{guide.subtitle}</h2>

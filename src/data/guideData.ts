@@ -4,6 +4,8 @@
 export interface GuideItem {
   id: string;
   label: string; // 탭·메뉴에 보이는 이름
+  short: string; // 모바일 탭에 보이는 짧은 이름
+  keywords: string[]; // 검색용 시술명·고민 (화면에는 안 보임)
   subtitle: string; // 시술 내용 안에 제목으로 표시
   time: string;
   anesthesia: string;
@@ -16,6 +18,8 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "toning",
     label: "레이저토닝 / 잡티제거",
+    short: "토닝·잡티",
+    keywords: ["기미", "잡티", "색소", "토닝", "피코", "피코토닝", "흑자", "검버섯", "주근깨", "루카스", "피코케어", "레이저토닝", "미백"],
     subtitle: "피코토닝 · 레이저토닝 · 흑자/잡티 레이저",
     time: "약 15~20분",
     anesthesia: "무마취 또는 연고마취",
@@ -31,6 +35,8 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "lifting",
     label: "리프팅",
+    short: "리프팅",
+    keywords: ["리프팅", "인모드", "슈링크", "슈링크유니버스", "아이슈링크", "볼뉴머", "볼링크", "엑셀웨이브", "탄력", "처짐", "FX", "FORMA", "포마", "LDM"],
     subtitle: "초음파(HIFU) 및 고주파(RF) 안티에이징 리프팅",
     time: "약 30~50분",
     anesthesia: "마취크림 도포",
@@ -46,6 +52,8 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "hair",
     label: "제모",
+    short: "제모",
+    keywords: ["제모", "레이저제모", "겨드랑이", "브라질리언", "수염", "인중", "종아리", "털"],
     subtitle: "레이저 제모",
     time: "약 5~20분",
     anesthesia: "부위별 마취크림 (남성수염 등)",
@@ -61,6 +69,8 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "booster",
     label: "스킨부스터",
+    short: "스킨부스터",
+    keywords: ["스킨부스터", "리쥬란", "리쥬란힐러", "리제반", "쥬베룩", "물광", "물광주사", "리투오", "셀르디엠", "PDRN", "히알루론산", "더마샤인", "재생주사"],
     subtitle: "진피층 직접 주사 스킨부스터",
     time: "약 30~40분",
     anesthesia: "마취크림 + 통증완화 시스템",
@@ -75,6 +85,8 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "botox",
     label: "보톡스 / 윤곽주사",
+    short: "보톡스·윤곽",
+    keywords: ["보톡스", "윤곽주사", "사각턱", "턱보톡스", "뉴비주", "이중턱", "침샘", "다한증", "제오민", "코어톡스", "스킨보톡스", "지방파괴"],
     subtitle: "주름·사각턱·바디 보톡스 및 이중턱 지방파괴술",
     time: "약 5~15분",
     anesthesia: "아이스 쿨링 또는 연고마취",
@@ -89,6 +101,8 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "filler",
     label: "필러 / 실리프팅 / 쥬베룩 볼륨",
+    short: "필러",
+    keywords: ["필러", "실리프팅", "쥬베룩볼륨", "히알리제", "필러녹이기", "팔자", "입술", "앞볼", "아띠에르", "이마필러", "코필러"],
     subtitle: "자연스러운 볼륨 채움 및 윤곽 고정 시술",
     time: "약 20~40분",
     anesthesia: "국소마취 및 연고마취",
@@ -104,6 +118,8 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "mole",
     label: "점 / 사마귀 / 쥐젖제거",
+    short: "점·사마귀",
+    keywords: ["점", "점빼기", "사마귀", "편평사마귀", "쥐젖", "비립종", "혈관종", "브이레이저", "CO2"],
     subtitle: "레이저 정밀 제거술",
     time: "약 10~20분",
     anesthesia: "마취크림 도포",
@@ -118,6 +134,8 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "diet",
     label: "다이어트",
+    short: "다이어트",
+    keywords: ["다이어트", "위고비", "마운자로", "비만", "비만약", "지방분해", "체형", "바디", "바디주사"],
     subtitle: "위고비 · 바디 인모드 · 지방분해주사",
     time: "약 15~30분",
     anesthesia: "아이스 쿨링",
