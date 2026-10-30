@@ -4,6 +4,7 @@ import EventPage from './EventPage.tsx';
 import PricePage from './PricePage.tsx';
 import ColumnPage from './ColumnPage.tsx';
 import EventBoard from './EventBoard.tsx';
+import { MobileDrawer } from './MobileNav.tsx';
 import { NAVER_BOOKING_URL, NAVER_MAP_URL } from './clinicLinks.ts';
 import { COLUMNS_DATA } from './data/columnsData.ts';
 import {
@@ -988,131 +989,16 @@ export default function App() {
         </div>
       </header>
 
-      {/* ================= MOBILE DRAWER ================= */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex">
-          <div
-            onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-          />
-          <div className="relative ml-auto w-80 max-w-[85vw] bg-white shadow-lg flex flex-col justify-between overflow-y-auto z-10">
-            <div>
-              <div className="p-5 bg-[#0F2B22] text-white flex items-center justify-between">
-                <div>
-                  <img
-                    src={LOGO_SRC}
-                    alt="꽃을보듯너를 서울뷰의원 당진"
-                    className="h-9 w-auto object-contain mb-1 filter drop-shadow-sm"
-                  />
-                  <p className="text-xs text-zinc-300">서울뷰의원 당진점 모바일 메뉴</p>
-                </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-white/80 hover:text-white p-1 cursor-pointer"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              <div className="divide-y divide-[#E5E5E8] text-sm">
-                <div className="p-4">
-                  <p className="font-bold text-[#0F2B22] mb-2">01. 서울뷰의원</p>
-                  <div className="grid grid-cols-2 gap-1.5 text-xs text-zinc-600">
-                    <button
-                      onClick={() => { scrollToSection('sec-about'); setAboutTab('brand'); }}
-                      className="text-left py-1.5 px-2 rounded bg-[#F7F7F8]"
-                    >
-                      서울뷰의원 당진
-                    </button>
-                    <button
-                      onClick={() => { scrollToSection('sec-about'); setAboutTab('devices'); }}
-                      className="text-left py-1.5 px-2 rounded bg-[#F7F7F8]"
-                    >
-                      장비 소개
-                    </button>
-                    <button
-                      onClick={() => { scrollToSection('sec-about'); setAboutTab('facility'); }}
-                      className="text-left py-1.5 px-2 rounded bg-[#F7F7F8]"
-                    >
-                      시설 소개
-                    </button>
-                  </div>
-                </div>
-
-                <div className="p-4">
-                  <p className="font-bold text-[#0F2B22] mb-2 flex items-center justify-between">
-                    <span>02. 이벤트 & 비급여 수가 안내</span>
-                    <span className="text-[10px] bg-[#0F2B22] text-[#C5A880] px-2 py-0.5 rounded font-bold">PAGE</span>
-                  </p>
-                  <div className="grid grid-cols-1 gap-2 text-xs text-zinc-600">
-                    <button
-                      onClick={() => { navigateTo('event'); setMobileMenuOpen(false); }}
-                      className="text-left py-2.5 px-3 rounded-lg bg-[#0F2B22] font-semibold text-[#C5A880] flex items-center justify-between shadow-xs"
-                    >
-                      <span>★ 이벤트 전용 페이지 바로가기</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => { navigateTo('prices'); setMobileMenuOpen(false); }}
-                      className="text-left py-2.5 px-3 rounded-lg bg-[#FAF8F5] border border-[#C5A880]/50 font-semibold text-[#0F2B22] flex items-center justify-between hover:bg-[#F2ECE4]"
-                    >
-                      <span>★ 상세 비급여 수가표 전용 페이지</span>
-                      <ChevronRight className="w-3.5 h-3.5 text-[#C5A880]" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="p-4 space-y-2">
-                  <button
-                    onClick={() => scrollToSection('sec-ba')}
-                    className="w-full text-left font-bold text-[#111111] py-1 flex justify-between items-center"
-                  >
-                    <span>04. 시술 전후사진</span>
-                    <ChevronRight className="w-4 h-4 text-zinc-400" />
-                  </button>
-                  <button
-                    onClick={() => scrollToSection('sec-guide')}
-                    className="w-full text-left font-bold text-[#111111] py-1 flex justify-between items-center"
-                  >
-                    <span>05. 시술안내 및 주의사항</span>
-                    <ChevronRight className="w-4 h-4 text-zinc-400" />
-                  </button>
-                  <div className="py-1">
-                    <button
-                      onClick={() => { navigateTo('column'); setMobileMenuOpen(false); }}
-                      className="w-full text-left py-2 px-3 rounded-lg bg-[#FAF8F5] border border-[#C5A880]/40 font-bold text-[#0F2B22] flex items-center justify-between hover:bg-[#F2ECE4]"
-                    >
-                      <span>06. 원장칼럼 전용 페이지</span>
-                      <span className="text-[10px] bg-[#0F2B22] text-[#C5A880] px-1.5 py-0.5 rounded font-bold">PAGE</span>
-                    </button>
-                  </div>
-                  <button
-                    onClick={() => scrollToSection('sec-location')}
-                    className="w-full text-left font-bold text-[#111111] py-1 flex justify-between items-center"
-                  >
-                    <span>07. 오시는 길 & 진료시간</span>
-                    <ChevronRight className="w-4 h-4 text-zinc-400" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 bg-[#F7F7F8] border-t border-[#E5E5E8]">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleOpenBooking('모바일 빠른 예약 신청');
-                }}
-                className="w-full bg-[#0F2B22] text-white py-3 rounded font-semibold text-xs tracking-wider"
-              >
-                네이버 / 원내 빠른 예약 신청
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-
+      {/* ================= MOBILE DRAWER (이벤트·수가표·칼럼 페이지와 같은 메뉴) ================= */}
+      <MobileDrawer
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        onNavigateHome={(sec) => navigateTo('home', sec)}
+        onNavigateEvent={() => navigateTo('event')}
+        onNavigatePrices={() => navigateTo('prices')}
+        onNavigateColumn={() => navigateTo('column')}
+        onBook={handleOpenBooking}
+      />
 
       {/* ================= RIGHT FLOATING QUICK BAR ================= */}
       <aside className="hidden md:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E5E5E8] rounded-xl shadow-md overflow-hidden divide-y divide-[#E5E5E8] w-20 text-center">
