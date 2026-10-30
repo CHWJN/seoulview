@@ -703,10 +703,7 @@ export default function App() {
       <section id="sec-about" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-[#E5E5E8] pb-6">
           <div>
-            <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-              01 / ABOUT SEOUL VIEW DANGJIN
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">서울뷰의원 당진점 소개</h2>
+            <h2 className="text-2xl sm:text-4xl font-bold text-[#111111]">서울뷰의원 당진점 소개</h2>
           </div>
           {/* 하위 탭 4개: 모바일은 짧은 이름으로 한 줄에 4개, PC는 제목 오른쪽에 한 줄 */}
           <div className="grid grid-cols-4 gap-1.5 mt-5 md:mt-0 md:flex md:gap-2">
@@ -948,10 +945,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-                02 / DOCTOR'S COLUMN
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">대표원장 진료 칼럼</h2>
+              <h2 className="text-2xl sm:text-4xl font-bold text-[#111111]">대표원장 진료 칼럼</h2>
               <p className="text-xs sm:text-sm text-zinc-600 mt-1">시술을 결정하시기 전 꼭 한 번 읽어보시면 도움 되는 대표원장의 솔직한 의학 칼럼입니다.</p>
             </div>
             <button
@@ -999,10 +993,7 @@ export default function App() {
       {/* lg:pr-28 — 오른쪽에 온 진료시간 안내가 고정 퀵메뉴에 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
       <section id="sec-location" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
         <div className="mb-10">
-          <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-            03 / LOCATION & HOURS
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">오시는 길 및 진료안내</h2>
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#111111]">오시는 길 및 진료안내</h2>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-8 items-stretch">

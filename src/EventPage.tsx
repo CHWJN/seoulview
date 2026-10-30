@@ -102,12 +102,6 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#A6895E_1px,transparent_1px)] [background-size:24px_24px]"></div>
         <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 border border-[#A6895E]/50 bg-[#A6895E]/15 px-3.5 py-1 rounded-full">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
-              <span className="font-en-cond text-xs tracking-widest text-[#C5A880] uppercase">
-                SPECIAL EVENT
-              </span>
-            </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
               서울뷰의원 당진점<br />
               <span className="text-[#C5A880]">진행 중인 이벤트</span>
@@ -132,10 +126,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
             <div>
-              <span className="font-en-cond text-xs tracking-widest text-[#A6895E] font-bold uppercase">
-                SPECIAL EVENT
-              </span>
-              <h2 className="text-2xl font-bold text-[#111111] mt-0.5">서울뷰의원 당진점 이벤트 {EVENTS.length}종</h2>
+              <h2 className="text-2xl font-bold text-[#111111]">서울뷰의원 당진점 이벤트 {EVENTS.length}종</h2>
             </div>
             <p className="text-xs text-zinc-500">※ 이벤트가는 부가세(VAT) 별도입니다.</p>
           </div>

@@ -4,7 +4,7 @@ import { GUIDE_DATA } from './data/guideData.ts';
 import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
 import SiteHeader from './SiteHeader.tsx';
 import { LOGO_SRC } from './clinicLinks.ts';
-import { ShieldCheck, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 interface GuidePageProps {
   guideId: string | null; // 주소 /guide/<id>의 id (없으면 첫 번째 시술)
@@ -53,12 +53,6 @@ export default function GuidePage({ guideId, onNavigateHome, onNavigateEvent, on
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#A6895E_1px,transparent_1px)] [background-size:24px_24px]"></div>
         <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 border border-[#A6895E]/50 bg-[#A6895E]/15 px-3.5 py-1 rounded-full">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
-              <span className="font-en-cond text-xs tracking-widest text-[#C5A880] uppercase">
-                PROCEDURE GUIDE & PRECAUTIONS
-              </span>
-            </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
               서울뷰의원 당진점<br />
               <span className="text-[#C5A880]">시술안내 및 주의사항</span>
