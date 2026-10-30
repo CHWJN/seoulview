@@ -278,12 +278,6 @@ export default function App() {
     }, 3500);
   };
 
-  const copyAddress = () => {
-    const addr = "충청남도 당진시 시청2로 49-30, 7층 서울뷰의원 당진점";
-    navigator.clipboard?.writeText(addr);
-    showToast("병원 주소가 클립보드에 복사되었습니다.");
-  };
-
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -973,7 +967,8 @@ export default function App() {
       </section>
 
       {/* ================= SECTION 3: LOCATION & HOURS ================= */}
-      <section id="sec-location" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8">
+      {/* lg:pr-28 — 오른쪽에 온 진료시간 안내가 고정 퀵메뉴에 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
+      <section id="sec-location" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
         <div className="mb-10">
           <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
             03 / LOCATION & HOURS
@@ -982,50 +977,6 @@ export default function App() {
         </div>
 
         <div className="grid lg:grid-cols-12 gap-8 items-stretch">
-          {/* Timetable & Info */}
-          <div className="lg:col-span-5 bg-[#0F2B22] text-white rounded-2xl p-8 flex flex-col justify-between">
-            <div className="space-y-6">
-              <div>
-                <span className="text-xs font-en-cond tracking-widest text-[#C5A880]">CUSTOMER CENTER</span>
-                <a href="tel:041-352-3994" className="block font-en-cond text-3xl sm:text-4xl font-bold text-white mt-1 hover:text-[#C5A880] transition">041-352-3994</a>
-                <p className="text-xs text-zinc-300 mt-1">충청남도 당진시 시청2로 49-30, 7층</p>
-              </div>
-
-              <div className="border-t border-white/15 pt-5 space-y-2.5 text-xs sm:text-sm">
-                <h3 className="font-bold text-[#C5A880] mb-3">진료시간 안내</h3>
-                <div className="flex justify-between">
-                  <span className="text-zinc-300">평 일</span>
-                  <span className="font-semibold">AM 10:00 ~ PM 08:00</span>
-                </div>
-                <div className="flex justify-between text-zinc-400">
-                  <span>평일 점심시간</span>
-                  <span>PM 01:00 ~ PM 02:00</span>
-                </div>
-                <div className="flex justify-between text-[#C5A880] font-bold">
-                  <span>주 말</span>
-                  <span>AM 10:00 ~ PM 08:00</span>
-                </div>
-                <p className="text-[11px] text-zinc-400 pt-1 text-right">주말은 점심시간 없이 진료합니다.</p>
-                <p className="text-xs text-[#C5A880] font-semibold pt-2">※ 추석·설날 연휴를 제외하고 연중무휴로 진료합니다.</p>
-              </div>
-            </div>
-
-            <div className="pt-6 mt-6 border-t border-white/15 grid grid-cols-2 gap-3">
-              <button
-                onClick={openNaverBooking}
-                className="bg-[#C5A880] text-[#111111] font-bold py-3 rounded text-xs hover:opacity-95 transition cursor-pointer"
-              >
-                온라인 예약 신청
-              </button>
-              <button
-                onClick={copyAddress}
-                className="border border-white/30 text-white hover:border-[#C5A880] py-3 rounded text-xs transition cursor-pointer"
-              >
-                병원 주소 복사하기
-              </button>
-            </div>
-          </div>
-
           {/* Interactive Map Graphic */}
           <div className="lg:col-span-7 bg-[#F7F7F8] border border-[#E5E5E8] rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
             <div>
@@ -1065,6 +1016,34 @@ export default function App() {
               <div className="bg-white p-4 rounded-lg border border-[#E5E5E8]">
                 <p className="font-bold text-[#111111] mb-1">자가용 및 주차 안내</p>
                 <p className="text-zinc-600">건물 지하 1~2층 주차장 또는 건물 바로 옆 옥외 주차장을 이용하실 수 있으며, 진료시간 동안 무료로 주차하실 수 있습니다.</p>
+              </div>
+            </div>
+          </div>
+          {/* Timetable & Info */}
+          <div className="lg:col-span-5 bg-[#0F2B22] text-white rounded-2xl p-8 flex flex-col justify-between">
+            <div className="space-y-6">
+              <div>
+                <span className="text-xs font-en-cond tracking-widest text-[#C5A880]">CUSTOMER CENTER</span>
+                <a href="tel:041-352-3994" className="block font-en-cond text-3xl sm:text-4xl font-bold text-white mt-1 hover:text-[#C5A880] transition">041-352-3994</a>
+                <p className="text-xs text-zinc-300 mt-1">충청남도 당진시 시청2로 49-30, 7층</p>
+              </div>
+
+              <div className="border-t border-white/15 pt-5 space-y-2.5 text-xs sm:text-sm">
+                <h3 className="font-bold text-[#C5A880] mb-3">진료시간 안내</h3>
+                <div className="flex justify-between">
+                  <span className="text-zinc-300">평 일</span>
+                  <span className="font-semibold">AM 10:00 ~ PM 08:00</span>
+                </div>
+                <div className="flex justify-between text-zinc-400">
+                  <span>평일 점심시간</span>
+                  <span>PM 01:00 ~ PM 02:00</span>
+                </div>
+                <div className="flex justify-between text-[#C5A880] font-bold">
+                  <span>주 말</span>
+                  <span>AM 10:00 ~ PM 08:00</span>
+                </div>
+                <p className="text-[11px] text-zinc-400 pt-1 text-right">주말은 점심시간 없이 진료합니다.</p>
+                <p className="text-xs text-[#C5A880] font-semibold pt-2">※ 추석·설날 연휴를 제외하고 연중무휴로 진료합니다.</p>
               </div>
             </div>
           </div>
