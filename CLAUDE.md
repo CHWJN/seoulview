@@ -58,6 +58,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 | `src/data/baData.ts` | 시술 전후사진 분류(`BA_CATEGORIES`)와 사례(`BA_DATA`, AI 예시 문구). 홈은 `ALL_BA_ITEMS`로 전체 사례를 한 줄로 보여 준다 |
 | `src/data/columnsData.ts` | 칼럼 5편. 최신 글이 맨 앞. 본문은 문단 블록(p / quote / item / list / match) |
 | `src/clinicLinks.ts` | 네이버 예약·지도, 카카오톡 채팅, 구글 지도 링크, 로고 경로. 모든 예약 버튼은 `openNaverBooking()`으로 네이버 예약을 연다 |
+| `public/og-image.jpg` | 카톡 등 링크 미리보기 썸네일(1200×630, 메인 영상 첫 화면). `index.html`의 `og:image`. 바꾼 뒤에는 카카오 공유 디버거(developers.kakao.com/tool/debugger/sharing)에서 캐시 초기화 필요 |
 | `public/assets/` | 메인 영상(`main_video.mp4`), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형), 대표원장 사진(`doctor_park.webp`), 소개 문장 옆 원장 누끼 사진(`about_doctor_cutout.webp`, 흰 배경을 투명하게 따내고 셔츠 위 별 모양 표시는 지움) |
 | `.claude/skills/ui-ux-pro-max/` | 디자인 참고 스킬 (외부 MIT 자료, 출처는 `SOURCE.md`) |
 
@@ -78,6 +79,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 - [ ] **시술 전후사진 (사용자 보류 중):** 사례 사진·문구가 AI Studio 예시다(`src/data/baData.ts`). 근거 없는 수치(62% 감소, 90% 이상, 1회 만에)는 2026-10 삭제했다.
 - [ ] **예시 문구 남아 있음:** 시술안내 및 주의사항(`guideData.ts`)에 AI Studio 예시 문구가 남아 있다.
 - [ ] **PC 엑셀웨이브 배너 화질:** 사용자가 준 배너(1024×374px)를 2000px로 키워 써서 조금 흐릿하다. 이미지 속 설명 글씨가 깨져 있어("강력현 플팅" 등) 이미지에서 지우고 원래 문구를 HTML 글자로 얹었다(`App.tsx`, `cqw` 단위로 배너 크기에 맞춤). "엑셀웨이브(Excelwave)" 글씨는 이미지 처리로 모바일과 같은 로즈골드로 칠함. 고해상도 원본(설명 글씨 없는 버전이면 더 좋음)을 받으면 교체한다.
+- [ ] **개인정보 처리방침 페이지:** 사용자 요청 — 홈 푸터 '대표원장 칼럼' 링크를 '개인정보 처리방침'으로 바꾸고 별도 페이지로. 참고 페이지 https://cheongju.seoulview.kr/privacy-policy/ 가 이 클라우드 세션에서 막혀 있어(네트워크 허용 필요) 원문을 받지 못함. 사용자에게 내용 붙여넣기 또는 도메인 허용을 요청함.
 - [ ] **칼럼 검색엔진 정보:** `ColumnPage.tsx`의 구조화 데이터(JSON-LD)에 실제와 다른 주소 `seoulview-dangjin.com`이 들어 있다. 실제 도메인이 정해지면 고친다.
 
 ### 완료 (2026-10)
