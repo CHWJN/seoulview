@@ -42,14 +42,16 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 
 | 파일 | 내용 |
 |---|---|
-| `src/App.tsx` | 메인 페이지 전체 + 페이지 라우팅 (`/`, `/event`, `/prices`, `/column`, `/column/:slug`). 이벤트·수가표·칼럼 페이지는 `lazy`로 들어갈 때 따로 불러온다 |
+| `src/App.tsx` | 메인 페이지 전체 + 페이지 라우팅 (`/`, `/event`, `/prices`, `/column`, `/column/:slug`, `/guide`, `/guide/:id`). 이벤트·수가표·칼럼·시술안내 페이지는 `lazy`로 들어갈 때 따로 불러온다 |
 | `src/SiteHeader.tsx` | 모든 페이지 공용 상단 메뉴(PC 드롭다운). 메뉴 항목을 고칠 때는 이 파일만 고치면 된다 |
 | `src/EventPage.tsx` | 이벤트 페이지 |
 | `src/PricePage.tsx` | 상세 비급여 수가표 페이지 |
 | `src/ColumnPage.tsx` | 대표원장 의학 칼럼 목록·본문 |
+| `src/GuidePage.tsx` | 시술안내 및 주의사항 페이지. 탭을 바꾸면 주소가 `/guide/lifting`처럼 바뀐다 |
 | `src/EventBoard.tsx` | 이벤트 카드 (홈은 이벤트당 3개 미리보기, 이벤트 페이지는 전체) |
 | `src/MobileNav.tsx` | 모든 페이지 공용 모바일 메뉴(햄버거)와 모바일 하단바 (이벤트 페이지 하단바만 구성이 다르다) |
 | `src/data/pricingData.ts` | 이벤트(10종·39항목)와 상세 비급여 수가(15개 분류·164개 가격). 원본은 사용자가 준 가격표 엑셀 |
+| `src/data/guideData.ts` | 시술안내 8종 (탭·메뉴 이름, 소요시간, 주의사항 등). 순서대로 탭에 나온다 |
 | `src/data/columnsData.ts` | 칼럼 5편. 최신 글이 맨 앞. 본문은 문단 블록(p / quote / item / list / match) |
 | `src/clinicLinks.ts` | 네이버 예약·지도, 카카오톡 채팅, 구글 지도 링크, 로고 경로. 모든 예약 버튼은 `openNaverBooking()`으로 네이버 예약을 연다 |
 | `public/assets/` | 메인 영상(`main_video.mp4`), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형) |
@@ -70,7 +72,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 
 - [ ] **네이버 지도 전환 (사용자 보류 중):** 사용자가 네이버 클라우드(NCP) Maps에서 Dynamic Map Client ID를 받아오면, 구글 지도를 네이버 지도로 교체한다. 웹 서비스 URL로 `https://seoulview.vercel.app` 등록이 필요하다.
 - [ ] **시술 전후사진 (사용자 보류 중):** 사례 사진·문구가 AI Studio 예시이고 "멜라닌 지수 62% 감소" 같은 근거 없는 수치가 있다. 사용자가 보류를 결정했다.
-- [ ] **예시 문구 남아 있음:** 시술안내 및 주의사항, 원내 시설 소개에 AI Studio 예시 문구가 남아 있다.
+- [ ] **예시 문구 남아 있음:** 시술안내 및 주의사항(`guideData.ts`), 원내 시설 소개에 AI Studio 예시 문구가 남아 있다.
 - [ ] **원내 공간 사진 깨짐:** 홈 "서울뷰의원" 소개의 원내 공간 사진(`MAIN_IMAGE_SRC`)이 없는 파일(`main_image_2f557015.jpg`)을 가리켜 이미지가 안 나온다. 사진을 받으면 교체한다.
 - [ ] **칼럼 검색엔진 정보:** `ColumnPage.tsx`의 구조화 데이터(JSON-LD)에 실제와 다른 주소 `seoulview-dangjin.com`이 들어 있다. 실제 도메인이 정해지면 고친다.
 
@@ -85,6 +87,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 - 셀르디엠 런칭 이벤트 추가 (리투오 이벤트와 가격·옵션 동일, 사용자 확인).
 - 큰 태블릿: 모바일 하단바·퀵메뉴 기준을 `lg`(1024px)로 바꿔 아이패드 세로에서도 하단바가 나온다.
 - PC 메인 배너 오른쪽 화살표를 퀵메뉴 왼쪽으로 옮김.
+- 시술안내 및 주의사항을 홈에서 빼서 `/guide` 별도 페이지로 분리. 홈 섹션 번호는 칼럼 05, 오시는 길 06으로 당김.
 - 메인 배너: 영상 ↔ 엑셀웨이브 배너가 10초마다 자동 전환, 1초 크로스페이드. PC에서 배너 위에 마우스를 올리면 멈춤 (`App.tsx`의 `heroTab`, `heroPaused`).
 
 ## 알려진 정리 대상 (기능에는 영향 없음)

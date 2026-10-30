@@ -28,33 +28,26 @@ interface BaItem {
   afterMetric: string;
 }
 
-interface GuideItem {
-  title: string;
-  subtitle: string;
-  time: string;
-  anesthesia: string;
-  cycle: string;
-  downtime: string;
-  precautions: string[];
-}
-
-// 이벤트·수가표·칼럼 페이지는 들어갈 때 따로 불러온다 (홈 첫 화면을 가볍게)
+// 이벤트·수가표·칼럼·시술안내 페이지는 들어갈 때 따로 불러온다 (홈 첫 화면을 가볍게)
 const EventPage = lazy(() => import('./EventPage.tsx'));
 const PricePage = lazy(() => import('./PricePage.tsx'));
 const ColumnPage = lazy(() => import('./ColumnPage.tsx'));
+const GuidePage = lazy(() => import('./GuidePage.tsx'));
 
 export default function App() {
   // Brand Logo Path from user attachment
 
   // ===== 페이지 라우팅 (react-router: 정식 경로 방식) =====
   // /  /event  /prices  /column  /column/:slug
-  type PageName = 'home' | 'event' | 'prices' | 'column';
+  type PageName = 'home' | 'event' | 'prices' | 'column' | 'guide';
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname.replace(/\/+$/, '') || '/';
 
   const currentPage: PageName = pathname.startsWith('/column')
     ? 'column'
+    : pathname === '/guide' || pathname.startsWith('/guide/')
+    ? 'guide'
     : pathname === '/event'
     ? 'event'
     : pathname === '/prices'
@@ -84,6 +77,9 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (page === 'event') {
       navigate('/event');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (page === 'guide') {
+      navigate(targetId ? `/guide/${targetId}` : '/guide');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (page === 'prices') {
       navigate('/prices');
@@ -120,7 +116,7 @@ export default function App() {
 
   // 알 수 없는 경로는 홈으로
   useEffect(() => {
-    const known = pathname === '/' || pathname === '/event' || pathname === '/prices' || pathname.startsWith('/column');
+    const known = pathname === '/' || pathname === '/event' || pathname === '/prices' || pathname.startsWith('/column') || pathname === '/guide' || pathname.startsWith('/guide/');
     if (!known) navigate('/', { replace: true });
   }, [pathname]);
 
@@ -142,7 +138,6 @@ export default function App() {
   const [aboutTab, setAboutTab] = useState<'brand' | 'devices' | 'facility'>('brand');
   const [baCat, setBaCat] = useState<'melasma' | 'filler' | 'acne' | 'hair' | 'tattoo'>('melasma');
   const [isBaUnlocked, setIsBaUnlocked] = useState<boolean>(false);
-  const [guideCat, setGuideCat] = useState<string>('toning');
 
   // Notifications
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -273,117 +268,6 @@ export default function App() {
     ]
   };
 
-  // Guide Data
-  const GUIDE_DATA: Record<string, GuideItem> = {
-    toning: {
-      title: "01. 레이저토닝 / 잡티제거 시술안내 및 주의사항",
-      subtitle: "피코토닝 · 레이저토닝 · 흑자/잡티 레이저",
-      time: "약 15~20분",
-      anesthesia: "무마취 또는 연고마취",
-      cycle: "1~2주 간격 5~10회 권장",
-      downtime: "일상생활 즉시 가능 (잡티제거 시 7~10일 딱지/듀오덤)",
-      precautions: [
-        "시술 당일 세안과 가벼운 화장은 가능하나, 스크럽제나 필링 제품 사용은 1주일간 피해 주세요.",
-        "기미·색소 치료 중에는 외출 시 자외선 차단제(SPF 50+)를 3~4시간 간격으로 꼼꼼히 덧발라 주셔야 색소 침착을 예방할 수 있습니다.",
-        "흑자나 잡티 제거 후 생긴 얇은 딱지는 억지로 떼어내지 마시고 자연 탈락될 때까지 보습제나 재생테이프(듀오덤)를 유지해 주세요.",
-        "시술 후 약 1주일간 사우나, 찜질방, 격한 운동, 음주 등 피부에 열감을 주는 활동은 삼가 주세요."
-      ]
-    },
-    lifting: {
-      title: "02. 리프팅 (인모드 / 슈링크) 주의사항",
-      subtitle: "초음파(HIFU) 및 고주파(RF) 안티에이징 리프팅",
-      time: "약 30~50분",
-      anesthesia: "마취크림 도포",
-      cycle: "인모드·슈링크 1~3개월",
-      downtime: "즉시 일상 복귀 (인모드 FX는 3~7일 부항 자국 발생 가능)",
-      precautions: [
-        "리프팅 시술 후 진피 내 콜라겐 재생을 위해 차가운 얼음찜질은 피해주시고, 미온수로 세안해 주세요.",
-        "슈링크 시술 후 턱선이나 광대 부위에 뻐근함, 욱신거림, 미세한 부기가 1~2주간 느껴질 수 있으며 이는 정상적인 근막 수축 과정입니다.",
-        "인모드 FX 모드는 음압으로 지방층을 당겨 고주파를 조사하므로 붉은 멍(부항 자국)이 3~7일 정도 남을 수 있습니다.",
-        "시술 후 2주간은 경락 마사지나 얼굴을 강하게 문지르는 행동을 피해 주세요."
-      ]
-    },
-    hair: {
-      title: "03. 레이저 제모 주의사항",
-      subtitle: "레이저 제모",
-      time: "약 5~20분",
-      anesthesia: "부위별 마취크림 (남성수염 등)",
-      cycle: "4~5주 간격 5회 이상 권장",
-      downtime: "모낭 주위 일시적 붉은기 (1~2일 내 소실)",
-      precautions: [
-        "시술 1~2일 전 제모할 부위의 털을 면도기로 깔끔하게 면도하고 내원해 주세요. (족집게로 뽑거나 왁싱을 하시면 레이저 타깃인 모근이 사라져 시술이 불가합니다.)",
-        "선탠을 하셨거나 피부가 검게 탄 경우 화상 위험이 있으므로 시술 전후 자외선 노출을 피해주세요.",
-        "시술 직후 모낭 주변이 모기 물린 것처럼 살짝 붉게 올라올 수 있으며(모낭염 예방 연고 처방 가능), 1~2일 내 자연 소실됩니다.",
-        "시술 후 1~2주 동안 죽은 털이 서서히 밀려 나오며 빠지게 됩니다."
-      ]
-    },
-    booster: {
-      title: "04. 스킨부스터 (리쥬란 힐러 / 쥬베룩 / 물광) 주의사항",
-      subtitle: "진피층 직접 주사 스킨부스터",
-      time: "약 30~40분",
-      anesthesia: "마취크림 + 통증완화 시스템",
-      cycle: "3~4주 간격 3회 이상 권장",
-      downtime: "엠보싱(올록볼록한 자국) 1~3일, 미세 바늘멍 가능",
-      precautions: [
-        "주사 시술 특성상 피부 표면에 올록볼록한 엠보싱 자국이 생기며, 24~72시간 내에 진피로 흡수되면서 사라집니다.",
-        "시술 당일 세안과 메이크업은 감염 예방을 위해 피해주시고, 다음 날 아침부터 가벼운 세안과 화장이 가능합니다.",
-        "엠보싱 부위를 손으로 누르거나 문지르지 마시고, 시술 후 1주일간 금주·금연 및 사우나를 피해 주세요."
-      ]
-    },
-    botox: {
-      title: "05. 보톡스 / 윤곽주사 주의사항",
-      subtitle: "주름·사각턱·바디 보톡스 및 이중턱 지방파괴술",
-      time: "약 5~15분",
-      anesthesia: "아이스 쿨링 또는 연고마취",
-      cycle: "보톡스 3~6개월",
-      downtime: "일상생활 즉시 가능",
-      precautions: [
-        "보톡스 시술 후 약물이 주변 근육으로 퍼지지 않도록 시술 후 4시간 동안은 눕지 마시고, 주사 부위를 문지르지 마세요.",
-        "사각턱 보톡스 후 딱딱하거나 질긴 음식(오징어, 껌 등)을 자주 씹으시면 근육이 다시 발달할 수 있으니 줄여주세요.",
-        "이중턱 지방파괴 주사는 지방세포가 분해되는 과정에서 붓기와 뻐근함, 멍울 느낌이 1~2주간 지속된 후 턱선이 서서히 갸름해집니다."
-      ]
-    },
-    filler: {
-      title: "06. 필러 / 실리프팅 / 쥬베룩 볼륨 주의사항",
-      subtitle: "자연스러운 볼륨 채움 및 윤곽 고정 시술",
-      time: "약 20~40분",
-      anesthesia: "국소마취 및 연고마취",
-      cycle: "유지기간 1년~2년 내외",
-      downtime: "부기 및 멍 3~7일 가능",
-      precautions: [
-        "필러 및 실리프팅 후 모양이 안정적으로 자리 잡을 때까지 2주간은 시술 부위를 강하게 압박하거나 엎드려 주무시는 것을 피해 주세요.",
-        "쥬베룩 볼륨은 시술 직후 수분이 흡수되며 일시적으로 볼륨이 빠져 보이다가, 4~6주 후부터 자가 콜라겐이 차오르며 자연스러운 볼륨이 완성됩니다.",
-        "시술 후 처방해 드리는 항생제·소염제가 있을 경우 안내된 복용법에 맞춰 규칙적으로 복용해 주세요.",
-        "만약 시술 부위가 심하게 창백해지거나 통증이 점점 심해지고 열감이 느껴질 경우 즉시 병원으로 연락해 주시기 바랍니다."
-      ]
-    },
-    mole: {
-      title: "07. 점 / 사마귀 / 쥐젖 / 비립종 / 편평사마귀 제거 주의사항",
-      subtitle: "레이저 정밀 제거술",
-      time: "약 10~20분",
-      anesthesia: "마취크림 도포",
-      cycle: "깊은 점은 4~6주 후 2차 리터치 권장",
-      downtime: "재생테이프(듀오덤) 7~10일간 부착",
-      precautions: [
-        "흉터를 남기지 않기 위해 뿌리가 깊은 점은 한 번에 무리하게 파내지 않고 1~2달 간격으로 나누어 제거하는 것이 안전합니다.",
-        "시술 부위에 붙여드린 재생테이프(듀오덤)는 진물이 하얗게 부풀어 올라 테이프 밖으로 새어 나올 때만 교체해 주시고, 최소 7~10일간 유지해 주세요.",
-        "새살이 붉게 차오른 후에는 자외선 차단제를 꼭 발라주셔야 색소 침착을 막을 수 있습니다."
-      ]
-    },
-    diet: {
-      title: "08. 다이어트 / 체형관리 주사 및 처방 주의사항",
-      subtitle: "위고비 · 바디 인모드 · 지방분해주사",
-      time: "약 15~30분",
-      anesthesia: "아이스 쿨링",
-      cycle: "주 1~2회 또는 개인별 맞춤 프로그램",
-      downtime: "일상생활 즉시 가능",
-      precautions: [
-        "지방분해주사 및 바디 리프팅 시술 후에는 분해된 지방산이 림프관을 통해 원활히 배출되도록 하루 1.5~2L 이상의 충분한 수분을 섭취해 주세요.",
-        "가벼운 유산소 운동과 식단 조절을 병행하시면 시술 시너지가 극대화됩니다.",
-        "비만 치료제 처방 및 자가 주사제의 경우 대표원장님과 상의한 용량 스케줄을 정확히 지켜 투여해 주세요."
-      ]
-    }
-  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -423,6 +307,15 @@ export default function App() {
             onNavigateColumn={() => navigateTo('column')}
           />
         )}
+        {currentPage === 'guide' && (
+          <GuidePage
+            guideId={pathname.startsWith('/guide/') ? pathname.slice('/guide/'.length) : null}
+            onNavigateHome={(sec) => navigateTo('home', sec)}
+            onNavigateEvent={() => navigateTo('event')}
+            onNavigatePrices={() => navigateTo('prices')}
+            onNavigateColumn={() => navigateTo('column')}
+          />
+        )}
         {currentPage === 'column' && (
           <ColumnPage
             initialArticleId={selectedColumnArticleId}
@@ -444,7 +337,6 @@ export default function App() {
           scrollToSection(id);
           if (sub?.tab === 'about') setAboutTab(sub.id as typeof aboutTab);
           if (sub?.tab === 'ba') setBaCat(sub.id as typeof baCat);
-          if (sub?.tab === 'guide') setGuideCat(sub.id);
         }}
         onEvent={() => navigateTo('event')}
         onPrices={() => navigateTo('prices')}
@@ -1057,101 +949,13 @@ export default function App() {
         </div>
       </section>
 
-      {/* ================= SECTION 5: PROCEDURE GUIDE & PRECAUTIONS ================= */}
-      <section id="sec-guide" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8">
-        <div className="mb-10">
-          <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-            05 / PROCEDURE GUIDE & PRECAUTIONS
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">시술안내 및 주의사항</h2>
-          <p className="text-xs sm:text-sm text-zinc-600 mt-1">안전하고 만족스러운 결과를 위해 시술 전·후 꼭 확인하셔야 할 안내사항입니다.</p>
-        </div>
-
-        {/* 8 Procedure Guide Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {[
-            { id: 'toning', label: '01. 레이저토닝 / 잡티제거' },
-            { id: 'lifting', label: '02. 리프팅' },
-            { id: 'hair', label: '03. 제모' },
-            { id: 'booster', label: '04. 스킨부스터' },
-            { id: 'botox', label: '05. 보톡스 / 윤곽주사' },
-            { id: 'filler', label: '06. 필러 / 실리프팅 / 쥬베룩 볼륨' },
-            { id: 'mole', label: '07. 점 / 사마귀 / 쥐젖제거' },
-            { id: 'diet', label: '08. 다이어트' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setGuideCat(tab.id)}
-              className={`px-4 py-2.5 rounded-lg text-xs transition cursor-pointer ${
-                guideCat === tab.id
-                  ? 'font-bold bg-[#0F2B22] text-white'
-                  : 'font-medium bg-[#F7F7F8] text-zinc-700 hover:bg-zinc-200'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Guide Content Panel */}
-        {GUIDE_DATA[guideCat] && (
-          <div className="bg-[#FAF8F5] border border-[#C5A880]/40 rounded-2xl p-6 sm:p-10 animate-in fade-in">
-            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#C5A880]/30 pb-6 mb-6 gap-4">
-              <div>
-                <span className="text-xs font-bold text-[#0F2B22]">{GUIDE_DATA[guideCat].subtitle}</span>
-                <h3 className="text-xl sm:text-2xl font-bold text-[#111111] mt-1">{GUIDE_DATA[guideCat].title}</h3>
-              </div>
-              <button
-                onClick={openNaverBooking}
-                className="bg-[#0F2B22] text-white text-xs font-bold px-5 py-3 rounded-lg shrink-0 hover:bg-[#173F32] transition cursor-pointer"
-              >
-                해당 시술 상담 예약하기
-              </button>
-            </div>
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 text-xs">
-              <div className="bg-white p-4 rounded-xl border border-[#E5E5E8]">
-                <span className="text-zinc-400 block mb-1">시술 소요시간</span>
-                <strong className="text-sm text-[#111111]">{GUIDE_DATA[guideCat].time}</strong>
-              </div>
-              <div className="bg-white p-4 rounded-xl border border-[#E5E5E8]">
-                <span className="text-zinc-400 block mb-1">마취 방법</span>
-                <strong className="text-sm text-[#111111]">{GUIDE_DATA[guideCat].anesthesia}</strong>
-              </div>
-              <div className="bg-white p-4 rounded-xl border border-[#E5E5E8]">
-                <span className="text-zinc-400 block mb-1">권장 주기</span>
-                <strong className="text-sm text-[#111111]">{GUIDE_DATA[guideCat].cycle}</strong>
-              </div>
-              <div className="bg-white p-4 rounded-xl border border-[#E5E5E8]">
-                <span className="text-zinc-400 block mb-1">회복 기간 (다운타임)</span>
-                <strong className="text-sm text-[#0F2B22]">{GUIDE_DATA[guideCat].downtime}</strong>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 border border-[#E5E5E8]">
-              <h4 className="text-sm font-bold text-[#111111] mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#C5A880]"></span> 시술 후 필수 주의사항 안내
-              </h4>
-              <ul className="space-y-3 text-xs sm:text-sm text-zinc-700 leading-relaxed">
-                {GUIDE_DATA[guideCat].precautions.map((line, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5">
-                    <span className="font-en-cond font-bold text-[#A6895E]">0{idx + 1}.</span>
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* ================= SECTION 6: DR. COLUMN ================= */}
+      {/* ================= SECTION 5: DR. COLUMN ================= */}
       <section id="sec-column" className="py-20 md:py-28 bg-[#F7F7F8] border-t border-[#E5E5E8]">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-                06 / DOCTOR'S COLUMN
+                05 / DOCTOR'S COLUMN
               </span>
               <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">대표원장 진료 칼럼</h2>
               <p className="text-xs sm:text-sm text-zinc-600 mt-1">시술을 결정하시기 전 꼭 한 번 읽어보시면 도움 되는 대표원장의 솔직한 의학 칼럼입니다.</p>
@@ -1200,7 +1004,7 @@ export default function App() {
       <section id="sec-location" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8">
         <div className="mb-10">
           <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-            07 / LOCATION & HOURS
+            06 / LOCATION & HOURS
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">오시는 길 및 진료안내</h2>
         </div>
@@ -1328,7 +1132,7 @@ export default function App() {
               </button>
               <span>|</span>
               <button
-                onClick={() => scrollToSection('sec-guide')}
+                onClick={() => navigateTo('guide')}
                 className="hover:text-[#C5A880] cursor-pointer"
               >
                 시술 후 주의사항

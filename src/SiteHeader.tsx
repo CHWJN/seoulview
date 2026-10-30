@@ -1,8 +1,10 @@
 import { CalendarCheck, ChevronDown, Menu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { LOGO_SRC, openNaverBooking } from './clinicLinks.ts';
+import { GUIDE_DATA } from './data/guideData.ts';
 
-// 홈 화면 섹션 안의 탭 (서울뷰의원 소개 / 전후사진 / 시술안내)
-export type HomeTab = { tab: 'about' | 'ba' | 'guide'; id: string };
+// 홈 화면 섹션 안의 탭 (서울뷰의원 소개 / 전후사진)
+export type HomeTab = { tab: 'about' | 'ba'; id: string };
 
 interface SiteHeaderProps {
   onLogo: () => void;
@@ -27,16 +29,6 @@ const BA_ITEMS = [
   ['문신제거', 'tattoo']
 ] as const;
 
-const GUIDE_ITEMS = [
-  ['레이저토닝 / 잡티제거', 'toning'],
-  ['리프팅', 'lifting'],
-  ['제모', 'hair'],
-  ['스킨부스터', 'booster'],
-  ['보톡스 / 윤곽주사', 'botox'],
-  ['필러 / 실리프팅 / 쥬베룩 볼륨', 'filler'],
-  ['점 / 사마귀 / 쥐젖제거', 'mole'],
-  ['다이어트', 'diet']
-] as const;
 
 const TOP_CLASS = 'text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer';
 const DROPDOWN_CLASS = 'nav-dropdown absolute left-0 top-full bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50';
@@ -45,6 +37,13 @@ const PAGE_ITEM_CLASS = 'w-full text-left px-4 py-2.5 text-xs hover:bg-[#F7F7F8]
 
 // 모든 페이지 공용 상단 메뉴 (PC는 드롭다운 메뉴, 1280px 미만은 햄버거 버튼)
 export default function SiteHeader({ onLogo, onSection, onEvent, onPrices, onColumn, onOpenMenu }: SiteHeaderProps) {
+  const navigate = useNavigate();
+  // 시술안내 및 주의사항은 별도 페이지 (/guide, /guide/<id>)
+  const goGuide = (id?: string) => {
+    navigate(id ? `/guide/${id}` : '/guide');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const subMenu = (
     sectionId: string,
     tab: HomeTab['tab'],
@@ -106,10 +105,16 @@ export default function SiteHeader({ onLogo, onSection, onEvent, onPrices, onCol
 
           {/* 5. 시술안내 및 주의사항 */}
           <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-            <button onClick={() => onSection('sec-guide')} className={TOP_CLASS}>
+            <button onClick={() => goGuide()} className={TOP_CLASS}>
               시술안내 및 주의사항 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
             </button>
-            <div className={`${DROPDOWN_CLASS} w-64`}>{subMenu('sec-guide', 'guide', GUIDE_ITEMS, 'py-2')}</div>
+            <div className={`${DROPDOWN_CLASS} w-64`}>
+              {GUIDE_DATA.map((g) => (
+                <button key={g.id} onClick={() => goGuide(g.id)} className={`${ITEM_CLASS} py-2`}>
+                  {g.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* 6. 원장 칼럼 */}

@@ -6,6 +6,7 @@ import {
   Sparkles,
   MapPin
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { NAVER_BOOKING_URL, KAKAO_CHAT_URL, LOGO_SRC, openNaverBooking } from './clinicLinks.ts';
 
 
@@ -25,6 +26,7 @@ export function MobileDrawer({
   onNavigatePrices,
   onNavigateColumn
 }: MobileNavProps & { open: boolean; onClose: () => void }) {
+  const navigate = useNavigate();
   if (!open) return null;
 
   const go = (fn: () => void) => () => {
@@ -37,7 +39,7 @@ export function MobileDrawer({
     { label: '02. 이벤트', onClick: go(onNavigateEvent) },
     { label: '03. 상세 비급여 수가표', onClick: go(onNavigatePrices) },
     { label: '04. 시술 전후사진', onClick: go(() => onNavigateHome('sec-ba')) },
-    { label: '05. 시술안내 및 주의사항', onClick: go(() => onNavigateHome('sec-guide')) },
+    { label: '05. 시술안내 및 주의사항', onClick: go(() => { navigate('/guide'); window.scrollTo({ top: 0, behavior: 'smooth' }); }) },
     { label: '06. 원장 칼럼', onClick: go(onNavigateColumn) },
     { label: '07. 오시는 길 & 진료시간', onClick: go(() => onNavigateHome('sec-location')) }
   ];
