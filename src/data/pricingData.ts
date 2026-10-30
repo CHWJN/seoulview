@@ -1431,7 +1431,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
           },
           {
             "option": "3회",
-            "price": 300000,
+            "price": 600000,
             "type": "정가"
           }
         ]
