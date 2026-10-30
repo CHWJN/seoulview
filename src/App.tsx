@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import EventPage from './EventPage.tsx';
 import PricePage from './PricePage.tsx';
 import ColumnPage from './ColumnPage.tsx';
+import EventBoard from './EventBoard.tsx';
 import { COLUMNS_DATA } from './data/columnsData.ts';
 import {
   Sparkles,
@@ -29,14 +30,6 @@ import {
 } from 'lucide-react';
 
 // Data Types
-interface EventItem {
-  badge: string;
-  title: string;
-  desc: string;
-  orig: string;
-  price: string;
-}
-
 interface PriceItem {
   cat: string;
   group: string;
@@ -168,7 +161,6 @@ export default function App() {
 
   // Section Tabs
   const [aboutTab, setAboutTab] = useState<'brand' | 'devices' | 'facility'>('brand');
-  const [eventCat, setEventCat] = useState<'booster' | 'laser' | 'lifting' | 'petit'>('booster');
   const [priceCat, setPriceCat] = useState<string>('pigment');
   const [priceSearch, setPriceSearch] = useState<string>('');
   const [baCat, setBaCat] = useState<'lifting' | 'melasma' | 'filler' | 'acne' | 'hair' | 'tattoo'>('lifting');
@@ -285,42 +277,6 @@ export default function App() {
     { cat: "skincare", group: "필링 / 광채", name: "라라필 (LHA 4세대 저자극 필링) + 진정관리", once: "80,000원", multi: "3회 210,000원" },
     { cat: "skincare", group: "미백 / 진정", name: "크라이오 냉각이온침투 / 비타민 이온자임 관리", once: "40,000원", multi: "10회 300,000원" }
   ]);
-
-  // Event Data
-  const EVENT_DATA: Record<string, EventItem[]> = {
-    booster: [
-      { badge: "정품 시리얼 확인", title: "리쥬란 힐러 2cc", desc: "연어 PN 성분으로 얇아진 진피 두께 복원 및 유수분 밸런스 개선", orig: "300,000원", price: "199,000원" },
-      { badge: "진피 유래 스킨부스터", title: "리투오 1시린지 + 물광 2cc", desc: "피부의 뼈대이자 집이 되어주는 실제 진피 구조(ECM) 자체를 직접 채워 넣습니다.", orig: "590,000원", price: "390,000원" },
-      { badge: "모공·결 개선", title: "쥬베룩 스킨 (PDLLA) 4cc", desc: "자가 콜라겐 생성을 유도해 잔주름, 넓은 모공, 여드름 흉터 개선", orig: "350,000원", price: "220,000원" },
-      { badge: "자연스러운 볼륨", title: "쥬베룩 볼륨 1병 (8cc 풀케어)", desc: "꺼진 앞볼, 팔자주름, 옆볼에 이물감 없이 차오르는 자가 콜라겐 볼륨", orig: "650,000원", price: "450,000원" },
-      { badge: "풀페이스 올인원", title: "리쥬란 힐러 4cc + 물광주사 2cc", desc: "얼굴 전체 속건조 해결 및 맑은 광채 부스팅 패키지", orig: "580,000원", price: "390,000원" },
-      { badge: "줄기세포 배양액", title: "하이엔드 엑소좀 (ASCE+) 스킨부스터", desc: "손상된 피부 장벽 회복, 홍조 및 트러블성 피부 항염 재생", orig: "350,000원", price: "230,000원" }
-    ],
-    laser: [
-      { badge: "첫방문 체험가", title: "피코슈어 토닝 + 비타민 진정관리 1회", desc: "오리지널 755nm 피코슈어로 정상조직 손상 없이 멜라닌 색소만 타깃", orig: "120,000원", price: "49,000원" },
-      { badge: "흑자/검버섯 특화", title: "피코케어 흑자 원데이 제거 (크기별)", desc: "재발하기 쉬운 얼굴 흑자·검버섯을 532nm 줌 패스로 깔끔하게 제거", orig: "150,000원", price: "100,000원~" },
-      { badge: "기미 집중 10회", title: "듀얼 색소 올인원 10회 패키지", desc: "피코슈어 + 레블라이트SI + 제네시스 + 진정케어 10회 맞춤 구성", orig: "1,300,000원", price: "790,000원" },
-      { badge: "모공·흉터 타깃", title: "피코슈어 프락셀 + 포텐자 모공 3회", desc: "포커스 렌즈 LIOB 효과와 고주파 마이크로니들로 모공·요철 집중 축소", orig: "750,000원", price: "490,000원" },
-      { badge: "시크릿 RF", title: "시크릿 RF + 압출 얼굴전체 1회", desc: "면포와 염증을 먼저 깨끗하게 비워낸 뒤, Micro-needle을 통해 진피층으로 고주파(RF) 열에너지를 직접 전달하는 여드름·모공·흉터 집중 복합 케어", orig: "300,000원", price: "220,000원" },
-      { badge: "문신제거", title: "피코슈어 눈썹/바디 문신제거 1회", desc: "컬러 문신과 오래된 잔흔까지 755nm 피코 펄스로 안전하게 파쇄", orig: "150,000원", price: "79,000원~" }
-    ],
-    lifting: [
-      { badge: "정품팁 인증서", title: "울쎄라 리프팅 300샷", desc: "실시간 초음파 영상으로 근막층(SMAS)을 직접 보며 시술하는 프리미엄 리프팅", orig: "1,100,000원", price: "750,000원" },
-      { badge: "베스트 조합", title: "울쎄라 400샷 + 인모드 FX", desc: "불필요한 심부볼·이중턱 지방은 줄이고 처진 윤곽선은 강력하게 고정", orig: "1,500,000원", price: "990,000원" },
-      { badge: "가성비 리프팅", title: "인모드 FX + FORMA 풀페이스", desc: "지방세포 사멸(FX)과 진피 콜라겐 타이트닝(FORMA) 2단계 동시 시술", orig: "250,000원", price: "129,000원" },
-      { badge: "빈틈없는 탄력", title: "슈링크 유니버스 300샷 (울트라+부스터)", desc: "펜 타입 부스터 팁과 닷/리니어 모드로 굴곡진 눈가·팔자까지 밀착 리프팅", orig: "220,000원", price: "119,000원" },
-      { badge: "고주파 타이트닝", title: " 볼뉴머 400샷", desc: "한국인 피부에 맞춘 RF 고주파로 잔주름 개선 및 쫀쫀한 피부 밀도 완성", orig: "800,000원", price: "590,000원" },
-      { badge: "효과가 바로 나타나는 리프팅", title: "엑셀웨이브 풀페이스 8만줄", desc: "2.45GHz 극초단파 리프팅", orig: "450,000원", price: "290,000원" }
-    ],
-    petit: [
-      { badge: "내성 걱정 ZERO", title: "독일 제오민 주름/사각턱 보톡스", desc: "복합단백질을 제거하여 반복 시술에도 내성 우려가 적은 프리미엄 톡신", orig: "120,000원", price: "69,000원" },
-      { badge: "정량 보톡스", title: "국산 정품 사각턱 보톡스 50U", desc: "정품 개봉 및 정량 희석 원칙 준수 · 갸름한 V라인 턱선 정리", orig: "50,000원", price: "25,000원" },
-      { badge: "이중턱 지방파괴", title: "브이올렛 (V-Olet) 이중턱 주사 1병", desc: "식약처 허가 데옥시콜산 성분으로 지방세포막을 직접 파괴하는 반영구 윤곽술", orig: "350,000원", price: "230,000원" },
-      { badge: "커스텀 볼륨", title: "수입 벨로테로 / 레스틸렌 필러 1cc", desc: "이물감과 형광 현상 없이 피부 조직에 자연스럽게 밀착되는 하이엔드 필러", orig: "350,000원", price: "240,000원" },
-      { badge: "바디 보톡스", title: "승모근 / 종아리 바디 보톡스 100U", desc: "결리고 뭉친 승모근 통증 완화와 매끈한 목·어깨·다리 라인 완성", orig: "150,000원", price: "79,000원" },
-      { badge: "얼굴 소멸", title: "스테로이드 없는 조각 윤곽주사 3회", desc: "부정출혈이나 볼패임 걱정 없는 안전한 성분 배합으로 심부볼·이중턱 정리", orig: "180,000원", price: "99,000원" }
-    ]
-  };
 
   // Before & After Data
   const BA_DATA: Record<string, BaItem[]> = {
@@ -1184,66 +1140,15 @@ export default function App() {
               SPECIAL PROMOTIONS
             </span>
             <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">서울뷰의원 당진점 이벤트</h2>
-            <p className="text-xs sm:text-sm text-zinc-600 mt-2">합리적인 가격과 정품·정량 시술로 보답하는 카테고리별 프로모션입니다. (VAT 10% 별도)</p>
+            <p className="text-xs sm:text-sm text-zinc-600 mt-2">현재 진행 중인 이벤트입니다. (이벤트가 VAT 10% 별도)</p>
           </div>
 
-          {/* 4 Event Category Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-10">
-            {[
-              { id: 'booster', label: '스킨부스터' },
-              { id: 'laser', label: '기미/흑자/모공 레이저' },
-              { id: 'lifting', label: '리프팅' },
-              { id: 'petit', label: '보톡스 / 필러 / 윤곽' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setEventCat(tab.id as any)}
-                className={`px-5 py-3 rounded-full text-xs sm:text-sm transition cursor-pointer ${
-                  eventCat === tab.id
-                    ? 'font-bold bg-[#0F2B22] text-white shadow-sm'
-                    : 'font-medium bg-white text-zinc-700 border border-[#E5E5E8] hover:border-[#0F2B22]'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Event Cards Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(EVENT_DATA[eventCat] || []).map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-xl border border-[#E5E5E8] p-6 hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="bg-[#0F2B22]/10 text-[#0F2B22] text-[11px] font-bold px-2.5 py-0.5 rounded">
-                      {item.badge}
-                    </span>
-                    <span className="text-[11px] text-zinc-400">VAT 별도</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-[#111111] leading-snug">{item.title}</h3>
-                  <p className="text-xs text-zinc-500 mt-2 leading-relaxed">{item.desc}</p>
-                </div>
-                <div className="mt-6 pt-4 border-t border-[#E5E5E8]">
-                  <div className="flex items-baseline justify-between mb-4">
-                    <span className="text-xs text-zinc-400 line-through">정상가 {item.orig}</span>
-                    <div className="text-right">
-                      <span className="text-[11px] text-[#A6895E] font-bold mr-1">이벤트가</span>
-                      <span className="font-en-cond text-2xl font-bold text-[#0F2B22]">{item.price}</span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleOpenBooking(`${item.title} (${item.price})`)}
-                    className="w-full bg-[#111111] hover:bg-[#0F2B22] text-white font-semibold py-2.5 rounded text-xs transition cursor-pointer"
-                  >
-                    이 이벤트로 예약/상담 신청
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* 이벤트 목록 (이벤트마다 대표 항목 3개, 나머지는 이벤트 페이지에서) */}
+          <EventBoard
+            onBook={(name) => handleOpenBooking(name)}
+            previewCount={3}
+            onMore={() => navigateTo('event')}
+          />
 
           {/* Link to Full Event Page Banner */}
           <div className="mt-12 p-6 sm:p-8 bg-gradient-to-r from-[#0F2B22] to-[#173F32] rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-md border border-[#C5A880]/30">
@@ -1498,7 +1403,7 @@ export default function App() {
               <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-between items-center text-xs">
                 <span className="text-zinc-500">멜라닌 선택적 파괴</span>
                 <button
-                  onClick={() => { scrollToSection('sec-events'); setEventCat('laser'); }}
+                  onClick={() => scrollToSection('sec-events')}
                   className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
                 >
                   이벤트 보기 →
@@ -1521,7 +1426,7 @@ export default function App() {
               <div className="mt-5 pt-3 border-t border-[#E5E5E8] flex justify-between items-center text-xs">
                 <span className="text-zinc-500">정품 팁 인증서 발급</span>
                 <button
-                  onClick={() => { scrollToSection('sec-events'); setEventCat('lifting'); }}
+                  onClick={() => scrollToSection('sec-events')}
                   className="font-bold text-[#0F2B22] hover:underline cursor-pointer"
                 >
                   이벤트 보기 →
