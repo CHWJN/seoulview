@@ -196,6 +196,7 @@ export default function App() {
   const MAIN_VIDEO_SRC = "/assets/main_video.mp4";
   const KAKAO_CHAT_URL = "https://pf.kakao.com/_gIJQG/chat";
   const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner.webp";
+  const EXCELWAVE_BANNER_MOBILE_SRC = "/assets/excelwave_banner_mobile.webp";
 
   // 메인 영상: 화면 밖으로 나가면 일시정지, 다시 보이면 재생
   const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -1089,47 +1090,58 @@ export default function App() {
 
         {/* TAB 2: 엑셀웨이브 신규 도입 배너 이미지 + 상담/이벤트 버튼 */}
         {heroTab === 'excelwave' && (
-          <div className="absolute inset-0 z-10 bg-[#F3DFD0] flex flex-col items-center justify-center pb-20 md:pb-0 animate-in fade-in duration-500">
-            <div className="relative w-full aspect-[2000/729]">
+          <div className="absolute inset-0 z-10 bg-[#F3DFD0] animate-in fade-in duration-500">
+            {/* PC·태블릿: 가로 배너 */}
+            <div className="hidden md:flex h-full items-center justify-center">
+              <div className="relative w-full aspect-[2000/729]">
+                <img
+                  src={EXCELWAVE_BANNER_SRC}
+                  alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규 도입"
+                  className="w-full h-full object-contain [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
+                />
+                {/* 데스크톱: 배너 문구 아래에 버튼 배치 */}
+                <div className="hidden md:flex absolute left-[17.5%] top-[71%] flex-wrap gap-3">
+                  <button
+                    onClick={() => handleOpenBooking('엑셀웨이브 런칭 특가 상담')}
+                    className="bg-[#4A2E24] hover:bg-[#2E1C16] text-white font-bold px-6 py-3 rounded-lg text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+                  >
+                    <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
+                    <span>엑셀웨이브 런칭 특가 상담</span>
+                  </button>
+                  <button
+                    onClick={() => navigateTo('event')}
+                    className="bg-white/70 hover:bg-white text-[#4A2E24] border border-[#4A2E24]/25 px-5 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
+                  >
+                    <Sparkles className="w-4 h-4 text-[#9C6B52]" />
+                    <span>이달의 이벤트 전용 페이지로 이동</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 모바일: 세로 배너, 버튼은 장비 왼쪽 빈 공간에 */}
+            <div className="md:hidden relative h-full">
               <img
-                src={EXCELWAVE_BANNER_SRC}
-                alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규 도입"
-                className="w-full h-full object-contain [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
+                src={EXCELWAVE_BANNER_MOBILE_SRC}
+                alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규도입"
+                className="w-full h-full object-cover object-center"
               />
-              {/* 데스크톱: 배너 문구 아래에 버튼 배치 */}
-              <div className="hidden md:flex absolute left-[17.5%] top-[71%] flex-wrap gap-3">
+              <div className="absolute left-4 bottom-[13%] w-[52%] flex flex-col gap-2">
                 <button
                   onClick={() => handleOpenBooking('엑셀웨이브 런칭 특가 상담')}
-                  className="bg-[#4A2E24] hover:bg-[#2E1C16] text-white font-bold px-6 py-3 rounded-lg text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+                  className="bg-[#4A2E24] text-white font-bold px-3 py-2.5 rounded-lg text-xs shadow-md cursor-pointer flex items-center justify-center gap-1.5"
                 >
-                  <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
-                  <span>엑셀웨이브 런칭 특가 상담</span>
+                  <CalendarCheck className="w-3.5 h-3.5 text-[#E8C9B5] shrink-0" />
+                  <span>런칭 특가 상담</span>
                 </button>
                 <button
                   onClick={() => navigateTo('event')}
-                  className="bg-white/70 hover:bg-white text-[#4A2E24] border border-[#4A2E24]/25 px-5 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
+                  className="bg-white/80 text-[#4A2E24] border border-[#4A2E24]/25 px-3 py-2.5 rounded-lg text-xs font-semibold cursor-pointer flex items-center justify-center gap-1.5"
                 >
-                  <Sparkles className="w-4 h-4 text-[#9C6B52]" />
-                  <span>이달의 이벤트 전용 페이지로 이동</span>
+                  <Sparkles className="w-3.5 h-3.5 text-[#9C6B52] shrink-0" />
+                  <span>이달의 이벤트 보기</span>
                 </button>
               </div>
-            </div>
-            {/* 모바일: 배너 아래에 버튼 배치 */}
-            <div className="md:hidden w-full px-6 mt-6 flex flex-col gap-2.5">
-              <button
-                onClick={() => handleOpenBooking('엑셀웨이브 런칭 특가 상담')}
-                className="bg-[#4A2E24] text-white font-bold px-5 py-3.5 rounded-lg text-sm shadow-md cursor-pointer flex items-center justify-center gap-2"
-              >
-                <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
-                <span>엑셀웨이브 런칭 특가 상담</span>
-              </button>
-              <button
-                onClick={() => navigateTo('event')}
-                className="bg-white/70 text-[#4A2E24] border border-[#4A2E24]/25 px-5 py-3.5 rounded-lg text-sm font-semibold cursor-pointer flex items-center justify-center gap-2"
-              >
-                <Sparkles className="w-4 h-4 text-[#9C6B52]" />
-                <span>이달의 이벤트 전용 페이지로 이동</span>
-              </button>
             </div>
           </div>
         )}
