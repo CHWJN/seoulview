@@ -467,12 +467,19 @@ export default function App() {
         >
           {/* PC·태블릿: 가로 배너 */}
           <div className="hidden md:flex h-full items-center justify-center">
-            <div className="relative w-full aspect-[2000/729]">
+            <div className="@container relative w-full aspect-[2000/730]">
               <img
                 src={EXCELWAVE_BANNER_SRC}
                 alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규 도입"
                 className="w-full h-full object-contain [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
               />
+              {/* 배너 이미지의 설명 글씨가 깨져 있어 이미지에서 지우고, 원래 문구를 글자로 얹음 (배너 너비에 맞춰 크기 조절) */}
+              <p
+                className="absolute left-[17.2%] top-[54%] w-[37%] text-[#4A3F38] break-keep leading-[1.55]"
+                style={{ fontSize: '1.07cqw' }}
+              >
+                강력한 쿨링으로 피부 표면은 안전하게 보호하고, 2.45GHz 마이크로웨이브로 깊은 층을 따뜻하게 자극합니다. 처진 탄력과 무너진 윤곽, 거친 피부결을 한 번에 매끄럽게 정돈해 주는 비수술 리프팅 솔루션입니다.
+              </p>
               {/* 데스크톱: 배너 문구 아래에 버튼 배치 */}
               <div className="hidden md:flex absolute left-[17.5%] top-[71%] flex-wrap gap-3">
                 <button
