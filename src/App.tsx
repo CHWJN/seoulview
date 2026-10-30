@@ -531,25 +531,25 @@ export default function App() {
       </section>
 
       {/* ================= SECTION: BEFORE & AFTER (영상 바로 아래) ================= */}
-      <section id="sec-ba" className="py-20 md:py-28 bg-[#111111] text-white">
+      <section id="sec-ba" className="py-20 md:py-28 bg-[#F7F7F8] border-b border-[#E5E5E8]">
         {/* lg:pr-28 — 오른쪽 고정 퀵메뉴에 열람 동의 버튼·사진이 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
         <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
             <div>
-              <span className="text-xs sm:text-sm text-[#C5A880] font-bold">
+              <span className="text-xs sm:text-sm text-[#A6895E] font-bold">
                 서울뷰의원 당진은 결과로 증명합니다.
               </span>
-              <h2 className="text-2xl sm:text-4xl font-bold mt-1">시술 전후사진</h2>
-              <p className="text-xs sm:text-sm text-zinc-400 mt-1">보정 없는 동일 조명·동일 각도 임상 전후 기록입니다.</p>
+              <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">시술 전후사진</h2>
+              <p className="text-xs sm:text-sm text-zinc-600 mt-1">보정 없는 동일 조명·동일 각도 임상 전후 기록입니다.</p>
             </div>
 
             {/* Medical Law Consent Toggle */}
-            <div className="flex items-center gap-3 bg-white/10 border border-[#C5A880]/40 px-4 py-2.5 rounded-lg">
+            <div className="flex items-center gap-3 bg-white border border-[#C5A880]/40 px-4 py-2.5 rounded-lg shadow-xs">
               <div className="text-xs">
-                <span className="text-[#C5A880] font-bold">
+                <span className="text-[#A6895E] font-bold">
                   {isBaUnlocked ? "열람 동의 완료 (전후사진 잠금 해제됨)" : "의료법 준수 블러 적용 중"}
                 </span>
-                <p className="text-[11px] text-zinc-300">
+                <p className="text-[11px] text-zinc-600">
                   {isBaUnlocked ? "동일 조건 무보정 임상 케이스입니다." : "동의를 누르시면 모든 전후사진이 선명하게 표시됩니다."}
                 </p>
               </div>
@@ -563,7 +563,7 @@ export default function App() {
                   );
                 }}
                 className={`font-bold text-xs px-3.5 py-2 rounded shrink-0 transition cursor-pointer ${
-                  isBaUnlocked ? 'bg-zinc-700 text-white' : 'bg-[#C5A880] text-[#111111]'
+                  isBaUnlocked ? 'bg-zinc-200 text-zinc-800' : 'bg-[#C5A880] text-[#111111]'
                 }`}
               >
                 {isBaUnlocked ? "블러 다시 켜기" : "열람 동의 (잠금해제)"}
@@ -584,10 +584,10 @@ export default function App() {
                 key={tab.id}
                 onClick={() => setBaCat(tab.id)}
                 aria-label={tab.label}
-                className={`px-1 py-2.5 sm:px-4 rounded text-[11px] sm:text-sm leading-tight break-keep transition cursor-pointer ${
+                className={`px-0 py-2.5 sm:px-4 rounded text-[11px] sm:text-sm leading-tight break-keep transition cursor-pointer ${
                   baCat === tab.id
-                    ? 'font-bold bg-[#C5A880] text-[#111111]'
-                    : 'font-medium bg-white/10 text-zinc-300 hover:text-white'
+                    ? 'font-bold bg-[#0F2B22] text-white border border-[#0F2B22]'
+                    : 'font-medium bg-white border border-[#E5E5E8] text-zinc-700 hover:bg-zinc-100'
                 }`}
               >
                 <span className="sm:hidden">{tab.short}</span>
@@ -602,42 +602,42 @@ export default function App() {
             className="flex md:grid md:grid-cols-2 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 scroll-px-4"
           >
             {(BA_DATA[baCat] || []).map((item, idx) => (
-              <div key={idx} className="w-[86%] shrink-0 snap-start md:w-auto bg-white/5 border border-white/15 rounded-xl p-5 sm:p-6 flex flex-col justify-between">
+              <div key={idx} className="w-[86%] shrink-0 snap-start md:w-auto bg-white border border-[#E5E5E8] shadow-xs rounded-xl p-5 sm:p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-4">
-                    <h3 className="text-base sm:text-lg font-bold text-white break-keep">{item.title}</h3>
-                    <span className="shrink-0 whitespace-nowrap mt-0.5 text-[11px] bg-[#C5A880]/20 text-[#C5A880] px-2.5 py-0.5 rounded">
+                    <h3 className="text-base sm:text-lg font-bold text-[#111111] break-keep">{item.title}</h3>
+                    <span className="shrink-0 whitespace-nowrap mt-0.5 text-[11px] bg-[#C5A880]/15 text-[#85734F] px-2.5 py-0.5 rounded">
                       {item.period}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3 mb-4 relative">
                     {/* BEFORE */}
-                    <div className="bg-zinc-900 border border-white/10 rounded-lg p-5 text-center">
-                      <span className="inline-block text-[10px] font-en-cond tracking-widest bg-zinc-700 text-zinc-200 px-2 py-0.5 rounded mb-3">
+                    <div className="bg-[#F7F7F8] border border-[#E5E5E8] rounded-lg p-5 text-center">
+                      <span className="inline-block text-[10px] font-en-cond tracking-widest bg-zinc-200 text-zinc-700 px-2 py-0.5 rounded mb-3">
                         BEFORE
                       </span>
-                      <div className="h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-zinc-800 to-zinc-900 p-3">
-                        <p className="text-xs font-semibold text-zinc-300">{item.beforeMetric}</p>
+                      <div className="h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-zinc-100 to-zinc-200 p-3">
+                        <p className="text-xs font-semibold text-zinc-700">{item.beforeMetric}</p>
                         <p className="text-[10px] text-zinc-500 mt-1">마크뷰 정밀 촬영 원본</p>
                       </div>
                     </div>
 
                     {/* AFTER */}
-                    <div className="bg-zinc-900 border border-[#C5A880]/40 rounded-lg p-5 text-center relative overflow-hidden">
+                    <div className="bg-[#FAF8F5] border border-[#C5A880]/50 rounded-lg p-5 text-center relative overflow-hidden">
                       <span className="inline-block text-[10px] font-en-cond tracking-widest bg-[#C5A880] text-[#111111] font-bold px-2 py-0.5 rounded mb-3">
                         AFTER
                       </span>
                       <div
-                        className={`h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-[#0F2B22] to-zinc-900 p-3 ${
+                        className={`h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-[#0F2B22]/10 to-[#FAF8F5] p-3 ${
                           isBaUnlocked ? 'ba-unlocked' : 'ba-locked'
                         }`}
                       >
-                        <p className="text-xs font-bold text-[#C5A880]">{item.afterMetric}</p>
-                        <p className="text-[10px] text-zinc-300 mt-1">무보정 동일 조건 촬영</p>
+                        <p className="text-xs font-bold text-[#0F2B22]">{item.afterMetric}</p>
+                        <p className="text-[10px] text-zinc-500 mt-1">무보정 동일 조건 촬영</p>
                       </div>
                       {!isBaUnlocked && (
-                        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center p-3">
+                        <div className="absolute inset-0 bg-white/50 flex flex-col items-center justify-center p-3">
                           <button
                             onClick={() => {
                               setIsBaUnlocked(true);
@@ -652,13 +652,13 @@ export default function App() {
                     </div>
                   </div>
 
-                  <p className="text-xs text-zinc-300 leading-relaxed">{item.desc}</p>
+                  <p className="text-xs text-zinc-600 leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <p className="text-[11px] text-zinc-400 mt-6 border-t border-white/10 pt-4">
+          <p className="text-[11px] text-zinc-500 mt-6 border-t border-[#E5E5E8] pt-4">
             ※ 의료법 고지사항: 모든 시술은 개인의 피부 상태에 따라 붉은기, 부기, 멍, 색소침착, 염증 등의 부작용이 발생할 수 있으므로 시술 전 의료진과의 충분한 상담이 필요합니다.
           </p>
         </div>
@@ -711,13 +711,14 @@ export default function App() {
         {aboutTab === 'brand' && (
           <div className="space-y-12 animate-in fade-in">
             {/* Top Philosophy Intro Banner */}
-            <div className="bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl p-8 sm:p-12 shadow-xs">
+            <div className="bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl p-6 sm:p-12 shadow-xs">
               <span className="inline-block bg-[#0F2B22] text-[#C5A880] text-xs font-bold px-3 py-1 rounded mb-4">
                 SEOUL VIEW DANGJIN
               </span>
-              <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-[#0F2B22] leading-snug tracking-tight">
-                “수준 높은 시술을 위해 굳이 멀리 떠나실 필요 없도록,<br className="hidden sm:inline" />
-                {" "}당진 서울뷰의원에서 타협 없는 실력과 정성으로 증명해 보이겠습니다.”
+              {/* 모바일은 글자를 줄이고 뜻이 끊기지 않는 곳에서 줄바꿈 (break-keep: 단어 중간에서 안 끊김) */}
+              <h3 className="text-xl sm:text-3xl lg:text-[32px] font-bold text-[#0F2B22] leading-normal sm:leading-snug tracking-tight break-keep">
+                “수준 높은 시술을 위해<br className="sm:hidden" /> 굳이 멀리 떠나실 필요 없도록,<br />
+                당진 서울뷰의원에서<br className="sm:hidden" /> 타협 없는 실력과 정성으로<br className="sm:hidden" /> 증명해 보이겠습니다.”
               </h3>
               <p className="text-sm sm:text-base text-zinc-700 leading-relaxed mt-4 max-w-4xl font-normal">
                 당진 서울뷰의원은 나와 내 가족에게도 자신 있게 권할 수 있는 꼭 필요한 시술만을 정직하게 추천합니다. 또한, 친절함을 넘어 최상의 결과를 만들어내는 탄탄한 실력과 끊임없는 연구로 여러분의 건강한 아름다움을 책임지겠습니다.
