@@ -1,10 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  COLUMNS_DATA,
-  ColumnArticle,
-  CLINIC_AUTHOR
-} from './data/columnsData.ts';
+import { COLUMNS_DATA, ColumnBlock } from './data/columnsData.ts';
 import {
   ArrowLeft,
   Calendar,
@@ -50,9 +46,7 @@ export default function ColumnPage({
   // Selected article state (null = show all list, string = show article detail)
   const navigate = useNavigate();
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(initialArticleId || null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
@@ -94,7 +88,7 @@ export default function ColumnPage({
     if (typeof document === 'undefined') return;
 
     if (currentArticle) {
-      document.title = `${currentArticle.title} | 서울뷰의원 당진점 원장칼럼`;
+      document.title = `${currentArticle.seoTitle} | 서울뷰의원 당진점 원장칼럼`;
 
       // Update meta description
       let metaDesc = document.querySelector('meta[name="description"]');
@@ -146,24 +140,12 @@ export default function ColumnPage({
           {
             "@type": "BlogPosting",
             "headline": currentArticle.title,
-            "alternativeHeadline": currentArticle.subtitle,
             "datePublished": currentArticle.date.replace(/\. /g, '-').replace(/\./g, ''),
             "author": {
               "@type": "Person",
               "name": currentArticle.author.name
             },
             "keywords": currentArticle.keywords.join(", ")
-          },
-          {
-            "@type": "FAQPage",
-            "mainEntity": currentArticle.faqs.map(faq => ({
-              "@type": "Question",
-              "name": faq.question,
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": faq.answer
-              }
-            }))
           }
         ]
       };
@@ -195,16 +177,13 @@ export default function ColumnPage({
   // Filtered Articles for List View
   const filteredArticles = useMemo(() => {
     return COLUMNS_DATA.filter(article => {
-      const matchesCat = selectedCategory === 'all' || article.category === selectedCategory;
       const q = searchQuery.trim().toLowerCase();
-      const matchesQuery = !q ||
+      return !q ||
         article.title.toLowerCase().includes(q) ||
-        article.subtitle.toLowerCase().includes(q) ||
         article.preview.toLowerCase().includes(q) ||
         article.keywords.some(k => k.toLowerCase().includes(q));
-      return matchesCat && matchesQuery;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [searchQuery]);
 
   const selectArticle = (id: string) => {
     const article = COLUMNS_DATA.find((item) => item.id === id || item.slug === id);
@@ -219,14 +198,55 @@ export default function ColumnPage({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const categories = [
-    { id: 'all', label: '전체 칼럼' },
-    { id: 'laser', label: '프리미엄 제모' },
-    { id: 'pigment', label: '색소·기미·피코' },
-    { id: 'body', label: '엑셀웨이브 바디' },
-    { id: 'booster', label: '스킨부스터' },
-    { id: 'lifting', label: '초음파·고주파 리프팅' }
-  ];
+  // 칼럼 본문 블록 렌더링 (원문 문단 그대로)
+  const renderBlock = (block: ColumnBlock, key: number) => {
+    switch (block.type) {
+      case 'quote':
+        return (
+          <blockquote key={key} className="border-l-4 border-[#C5A880] bg-[#FAF7F2] px-5 py-4 rounded-r-lg text-[#0F2B22] font-semibold text-sm sm:text-[15px] leading-relaxed">
+            “{block.text}”
+          </blockquote>
+        );
+      case 'item':
+        return (
+          <div key={key} className="bg-[#FAF9F6] border border-[#EBE7E0] rounded-xl p-4 sm:p-5">
+            <p className="font-bold text-[#0F2B22] text-sm sm:text-[15px] mb-1">{block.label}</p>
+            <p className="text-zinc-700 text-sm sm:text-[15px] leading-relaxed whitespace-pre-line">{block.text}</p>
+          </div>
+        );
+      case 'list':
+        return (
+          <ul key={key} className="space-y-2 bg-[#FAF9F6] border border-[#EBE7E0] rounded-xl p-4 sm:p-5">
+            {block.items.map((item, i) => (
+              <li key={i} className="flex items-start gap-2 text-zinc-700 text-sm sm:text-[15px]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#A6895E] shrink-0 mt-2"></span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        );
+      case 'match':
+        return (
+          <ul key={key} className="space-y-2">
+            {block.items.map((item, i) => (
+              <li key={i} className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 bg-[#FAF9F6] border border-[#EBE7E0] rounded-xl p-4 text-sm sm:text-[15px]">
+                <span className="text-zinc-700 flex-1">{item.when}</span>
+                <span className="flex items-center gap-1.5 font-bold text-[#0F2B22] shrink-0">
+                  <ChevronRight className="w-4 h-4 text-[#A6895E]" />
+                  {item.then}
+                </span>
+              </li>
+            ))}
+          </ul>
+        );
+      default:
+        return (
+          <p key={key} className="leading-relaxed text-zinc-700 text-sm sm:text-[15px] whitespace-pre-line">
+            {block.text}
+          </p>
+        );
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-[#111111] selection:bg-[#0F2B22] selection:text-white font-sans">
@@ -499,7 +519,7 @@ export default function ColumnPage({
                 칼럼 전체 목록
               </button>
               <span className="text-zinc-300">/</span>
-              <span>{currentArticle.categoryLabel}</span>
+              <span>대표원장 의학 칼럼</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -517,9 +537,6 @@ export default function ColumnPage({
             {/* Article Header */}
             <header className="space-y-4">
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="bg-[#0F2B22] text-[#C5A880] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                  {currentArticle.tag}
-                </span>
                 <span className="flex items-center gap-1 text-xs text-zinc-500">
                   <Calendar className="w-3.5 h-3.5" />
                   <time dateTime={currentArticle.date.replace(/\. /g, '-').replace(/\./g, '')}>{currentArticle.date}</time>
@@ -534,9 +551,6 @@ export default function ColumnPage({
                 {currentArticle.title}
               </h1>
 
-              <p className="text-base sm:text-lg text-zinc-600 leading-relaxed font-normal">
-                {currentArticle.subtitle}
-              </p>
             </header>
 
             {/* Author Credential Card (E-E-A-T Signal for AI Search) */}
@@ -547,18 +561,10 @@ export default function ColumnPage({
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-base text-[#111111]">{currentArticle.author.name}</span>
+                    <span className="font-bold text-base text-[#111111]">{currentArticle.author.name} {currentArticle.author.title}</span>
                     <span className="text-xs font-bold text-[#A6895E] bg-[#A6895E]/10 px-2 py-0.5 rounded">대표원장 직접 집필</span>
                   </div>
-                  <p className="text-xs text-zinc-600 mt-0.5">{currentArticle.author.title} | {currentArticle.author.clinic}</p>
-                  <p className="text-[11px] text-zinc-500 mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
-                    {currentArticle.author.credentials.map((cred, i) => (
-                      <span key={i} className="inline-flex items-center gap-1">
-                        <ShieldCheck className="w-3 h-3 text-[#0F2B22]" />
-                        {cred}
-                      </span>
-                    ))}
-                  </p>
+                  <p className="text-xs text-zinc-600 mt-0.5">{currentArticle.author.clinic} {currentArticle.author.title}</p>
                 </div>
               </div>
 
@@ -570,117 +576,19 @@ export default function ColumnPage({
               </button>
             </section>
 
-            {/* Key Clinical Takeaways Box (GEO / AI Overview Summary) */}
-            <div className="bg-[#F0F5F2] border-l-4 border-[#0F2B22] p-5 sm:p-6 rounded-r-xl">
-              <h2 className="text-sm font-bold text-[#0F2B22] uppercase tracking-wider flex items-center gap-2 mb-3">
-                <Award className="w-4 h-4 text-[#A6895E]" />
-                대표원장 임상 핵심 요약 (Key Clinical Takeaways)
-              </h2>
-              <ul className="space-y-2 text-xs sm:text-sm text-zinc-700 leading-relaxed">
-                {currentArticle.summaryPoints.map((point, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#0F2B22] shrink-0 mt-0.5" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
             {/* Article Body Sections */}
-            <div className="space-y-10 pt-4 text-zinc-800 leading-relaxed text-sm sm:text-base">
+            <div className="space-y-10 pt-4 text-zinc-800">
               {currentArticle.sections.map((sec, sIdx) => (
                 <section key={sIdx} className="space-y-4">
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#111111] border-b border-zinc-200 pb-2">
-                    {sec.heading}
-                  </h2>
-                  {sec.paragraphs.map((p, pIdx) => (
-                    <p key={pIdx} className="leading-relaxed text-zinc-700 text-sm sm:text-[15px]">
-                      {p}
-                    </p>
-                  ))}
-
-                  {sec.highlightBox && (
-                    <div className="bg-[#FAF7F2] border border-[#EBE2D5] rounded-xl p-5 my-4">
-                      <h3 className="font-bold text-[#0F2B22] text-sm sm:text-base mb-3 flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-[#A6895E]" />
-                        {sec.highlightBox.title}
-                      </h3>
-                      <ul className="space-y-2 text-xs sm:text-sm text-zinc-700">
-                        {sec.highlightBox.items.map((item, iIdx) => (
-                          <li key={iIdx} className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#A6895E] shrink-0 mt-2"></span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  {sec.heading && (
+                    <h2 className="text-xl sm:text-2xl font-bold text-[#111111] border-b border-zinc-200 pb-2">
+                      {sec.heading}
+                    </h2>
                   )}
+                  {sec.blocks.map((block, bIdx) => renderBlock(block, bIdx))}
                 </section>
               ))}
             </div>
-
-            {/* Related Equipment Section */}
-            {currentArticle.relatedEquipment && (
-              <div className="bg-white border border-[#E5E5E8] rounded-xl p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                  <span className="text-[11px] font-bold text-[#A6895E] uppercase tracking-wider">OFFICIAL MEDICAL EQUIPMENT</span>
-                  <h3 className="text-base font-bold text-[#111111] mt-0.5">서울뷰의원 당진점 보유 오리지널 정품 장비</h3>
-                  <p className="text-xs text-zinc-500 mt-1">{currentArticle.relatedEquipment}</p>
-                </div>
-                <button
-                  onClick={() => onNavigateHome('sec-about')}
-                  className="text-xs font-bold text-[#0F2B22] hover:underline cursor-pointer flex items-center gap-1 shrink-0"
-                >
-                  보유 장비 전체 둘러보기 →
-                </button>
-              </div>
-            )}
-
-            {/* AI Search Favorite: Clinical FAQ Accordion */}
-            <section aria-label="대표원장 임상 FAQ" className="pt-8 border-t border-[#E5E5E8]">
-              <div className="mb-6">
-                <span className="text-xs font-bold text-[#A6895E] uppercase tracking-wider">CLINICAL Q&A</span>
-                <h2 className="text-xl sm:text-2xl font-bold text-[#111111] mt-1">
-                  환자분들이 가장 많이 질문하시는 임상 FAQ
-                </h2>
-                <p className="text-xs text-zinc-500 mt-1">시술을 결정하시기 전 꼭 알아두셔야 할 대표원장의 솔직한 답변입니다.</p>
-              </div>
-
-              <div className="space-y-3">
-                {currentArticle.faqs.map((faq, fIdx) => {
-                  const isOpen = openFaqIndex === fIdx;
-                  return (
-                    <div
-                      key={fIdx}
-                      className="border border-[#E5E5E8] rounded-xl bg-white overflow-hidden transition"
-                    >
-                      <button
-                        onClick={() => setOpenFaqIndex(isOpen ? null : fIdx)}
-                        className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-[#111111] hover:text-[#0F2B22] cursor-pointer"
-                      >
-                        <span className="flex items-center gap-2.5">
-                          <span className="text-[#A6895E] font-en-cond text-lg font-extrabold">Q.</span>
-                          <span>{faq.question}</span>
-                        </span>
-                        {isOpen ? (
-                          <ChevronUp className="w-5 h-5 text-zinc-400 shrink-0" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-zinc-400 shrink-0" />
-                        )}
-                      </button>
-                      {isOpen && (
-                        <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-zinc-600 leading-relaxed border-t border-zinc-100 bg-[#FAF9F6]">
-                          <p className="flex items-start gap-2">
-                            <span className="text-[#0F2B22] font-en-cond text-lg font-bold shrink-0">A.</span>
-                            <span>{faq.answer}</span>
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
 
             {/* Bottom Consultation CTA Banner */}
             <div className="bg-gradient-to-r from-[#0F2B22] to-[#173e32] text-white rounded-2xl p-6 sm:p-8 shadow-md mt-10">
@@ -736,10 +644,7 @@ export default function ColumnPage({
                     className="p-5 rounded-xl border border-[#E5E5E8] bg-white hover:border-[#C5A880] transition cursor-pointer flex flex-col justify-between group shadow-2xs"
                   >
                     <div>
-                      <span className="text-[10px] font-bold text-[#0F2B22] bg-[#0F2B22]/10 px-2 py-0.5 rounded">
-                        {other.categoryLabel}
-                      </span>
-                      <h4 className="font-bold text-sm sm:text-base text-[#111111] mt-2 group-hover:text-[#0F2B22] transition line-clamp-2">
+                      <h4 className="font-bold text-sm sm:text-base text-[#111111] group-hover:text-[#0F2B22] transition line-clamp-2">
                         {other.title}
                       </h4>
                       <p className="text-xs text-zinc-500 mt-2 line-clamp-2">
@@ -784,9 +689,6 @@ export default function ColumnPage({
                     <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 대표원장 100% 직접 집필
                   </span>
                   <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 8대 중점 임상 가이드
-                  </span>
-                  <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
                     <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 근거 중심 피부 치료 프로토콜
                   </span>
                 </div>
@@ -801,7 +703,7 @@ export default function ColumnPage({
             <div className="max-w-xl mx-auto relative">
               <input
                 type="text"
-                placeholder="관심 있는 시술, 증상, 장비명을 검색해보세요 (예: 젠틀맥스, 피코, 기미, 엑셀웨이브, 리쥬란)"
+                placeholder="관심 있는 시술이나 고민을 검색해보세요 (예: 리쥬란, 제모, 이중턱)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-11 pr-4 py-3 bg-white border border-[#E5E5E8] rounded-xl text-xs sm:text-sm focus:outline-none focus:border-[#0F2B22] shadow-xs"
@@ -809,22 +711,6 @@ export default function ColumnPage({
               <Search className="w-4 h-4 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2" />
             </div>
 
-            {/* Category Pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`text-xs font-semibold px-4 py-2 rounded-full transition cursor-pointer ${
-                    selectedCategory === cat.id
-                      ? 'bg-[#0F2B22] text-[#C5A880] shadow-sm'
-                      : 'bg-white text-zinc-600 border border-[#E5E5E8] hover:border-zinc-400'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Articles Grid */}
@@ -837,8 +723,9 @@ export default function ColumnPage({
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-bold text-[#0F2B22] bg-[#0F2B22]/10 px-2.5 py-1 rounded">
-                      {col.tag}
+                    <span className="text-xs text-zinc-400 flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {col.date}
                     </span>
                     <span className="text-xs text-zinc-400 flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
@@ -881,7 +768,7 @@ export default function ColumnPage({
               <BookOpen className="w-10 h-10 text-zinc-300 mx-auto mb-3" />
               <p className="text-zinc-600 font-semibold text-sm">검색 결과와 일치하는 원장 칼럼이 없습니다.</p>
               <button
-                onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+                onClick={() => setSearchQuery('')}
                 className="mt-3 text-xs text-[#0F2B22] font-bold hover:underline cursor-pointer"
               >
                 전체 칼럼 보기

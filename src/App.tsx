@@ -1780,13 +1780,9 @@ export default function App() {
                 className="bg-white rounded-xl border border-[#E5E5E8] p-7 hover:border-[#C5A880] transition cursor-pointer flex flex-col justify-between group shadow-xs"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold text-[#0F2B22] bg-[#0F2B22]/10 px-2.5 py-1 rounded">
-                      {col.tag}
-                    </span>
-                    <span className="text-[11px] text-zinc-400">
-                      {col.readTime}
-                    </span>
+                  <div className="flex items-center justify-between mb-2 text-[11px] text-zinc-400">
+                    <span>{col.date}</span>
+                    <span>{col.readTime}</span>
                   </div>
                   <h3 className="text-lg font-bold text-[#111111] mt-3 group-hover:text-[#0F2B22] transition leading-snug">
                     {col.title}
