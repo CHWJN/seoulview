@@ -262,13 +262,14 @@ export default function App() {
   // 홈에 보여 줄 최신 칼럼 3편 (날짜 "2026. 10. 29" 형식이라 글자 순 정렬 = 날짜 순)
   const latestColumns = [...COLUMNS_DATA].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
 
-  // 모바일 칼럼 카드 자동 넘기기: 화면에 보이면 3.5초마다 다음 카드로 1.2초 동안 천천히 이동,
-  // 마지막 '더 많은 칼럼' 카드에서 멈춤. 손으로 만지면 자동 이동을 멈춘다.
+  // 모바일 칼럼 카드 자동 넘기기: 칼럼 칸이 화면에 들어오자마자 다음 카드로 1.2초 동안 천천히 이동하고,
+  // 이후 3.5초마다 한 장씩 넘김. 마지막 '더 많은 칼럼' 카드에서 멈춤.
+  // 손으로 옆으로 밀 때만 자동 이동을 멈춘다 (페이지를 위아래로 스크롤하다 카드를 스친 것은 무시).
   const columnScrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = columnScrollRef.current;
     if (!el || currentPage !== 'home') return;
-    if (window.matchMedia('(min-width: 768px), (prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(min-width: 768px)').matches) return;
     let timer: number | undefined;
     let raf = 0;
     let stopped = false;
@@ -302,15 +303,21 @@ export default function App() {
     const io = new IntersectionObserver(([entry]) => {
       const wasVisible = visible;
       visible = entry.isIntersecting;
-      if (visible && !wasVisible) { window.clearTimeout(timer); timer = window.setTimeout(next, 2500); }
+      if (visible && !wasVisible) { window.clearTimeout(timer); timer = window.setTimeout(next, 400); }
       if (!visible) window.clearTimeout(timer);
-    }, { threshold: 0.6 });
+    }, { threshold: 0.3 });
     io.observe(el);
 
     const stop = () => { stopped = true; window.clearTimeout(timer); cancelAnimationFrame(raf); el.style.scrollSnapType = ''; };
-    el.addEventListener('pointerdown', stop, { passive: true });
-    el.addEventListener('touchstart', stop, { passive: true });
-    return () => { io.disconnect(); stop(); el.removeEventListener('pointerdown', stop); el.removeEventListener('touchstart', stop); };
+    let sx = 0, sy = 0;
+    const onStart = (e: TouchEvent) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; };
+    const onMove = (e: TouchEvent) => {
+      const dx = Math.abs(e.touches[0].clientX - sx), dy = Math.abs(e.touches[0].clientY - sy);
+      if (dx > 12 && dx > dy) stop(); // 옆으로 미는 동작일 때만 멈춤
+    };
+    el.addEventListener('touchstart', onStart, { passive: true });
+    el.addEventListener('touchmove', onMove, { passive: true });
+    return () => { io.disconnect(); stop(); el.removeEventListener('touchstart', onStart); el.removeEventListener('touchmove', onMove); };
   }, [currentPage]);
 
   // Before & After Data
