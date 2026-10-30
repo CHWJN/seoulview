@@ -499,7 +499,7 @@ export default function App() {
           <span className="text-[11px] font-bold text-[#0F2B22]">이벤트</span>
         </button>
         <button
-          onClick={() => scrollToSection('sec-column')}
+          onClick={() => navigateTo('column')}
           className="py-3.5 px-2 hover:bg-[#F7F7F8] transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
           <BookOpen className="w-5 h-5 text-[#A6895E] mb-1" />
@@ -702,7 +702,7 @@ export default function App() {
             />
           </div>
 
-          {/* 모든 분류의 사례를 한 줄로 나열, 화면에 보이면 천천히 계속 옆으로 흘러가고 끝나면 처음으로 이어짐 (손으로 밀거나 PC 화살표로도 이동). 끝에 '더 많은 전후사진 보러가기' */}
+          {/* 모든 분류의 사례를 한 줄로 나열, 화면에 보이면 천천히 계속 옆으로 흘러가고 끝나면 처음으로 이어짐 (손으로 밀거나 PC 화살표로도 이동) */}
           <div className="relative">
             {/* 같은 목록을 두 번 이어 붙여, 끝에 닿으면 처음으로 자연스럽게 이어지게 함 (두 번째 묶음은 화면 읽기 프로그램에서 숨김) */}
             <div ref={baScrollRef} className="flex overflow-x-auto no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 pb-2">
@@ -721,16 +721,6 @@ export default function App() {
                       className="w-[80vw] max-w-[420px] sm:w-[420px] shrink-0"
                     />
                   ))}
-                  <button
-                    onClick={() => navigateTo('ba')}
-                    tabIndex={copy === 1 ? -1 : undefined}
-                    className="w-[38vw] sm:w-40 shrink-0 flex flex-col items-center justify-center gap-3 text-[#0F2B22] cursor-pointer group/more"
-                  >
-                    <span className="w-14 h-14 rounded-full bg-[#0F2B22] text-white flex items-center justify-center shadow-md transition md:group-hover/more:translate-x-1 md:group-hover/more:bg-[#173F32]">
-                      <ChevronRight className="w-6 h-6" />
-                    </span>
-                    <span className="text-sm font-bold text-center leading-snug break-keep">더 많은 전후사진<br />보러가기</span>
-                  </button>
                 </div>
               ))}
             </div>
