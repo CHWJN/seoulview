@@ -17,6 +17,7 @@ interface SiteHeaderProps {
 
 const ABOUT_ITEMS = [
   ['서울뷰의원 당진', 'brand'],
+  ['대표원장 소개', 'doctor'],
   ['장비 소개', 'devices'],
   ['시설 소개', 'facility']
 ] as const;
@@ -77,9 +78,6 @@ export default function SiteHeader({ onLogo, onSection, onEvent, onPrices, onCol
             </button>
             <div className={`${DROPDOWN_CLASS} w-48`}>
               {subMenu('sec-about', 'about', ABOUT_ITEMS, 'py-2.5')}
-              <button onClick={() => onSection('sec-doctor')} className={`${ITEM_CLASS} py-2.5`}>
-                대표원장 소개
-              </button>
             </div>
           </div>
 

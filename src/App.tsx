@@ -135,7 +135,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   // Section Tabs
-  const [aboutTab, setAboutTab] = useState<'brand' | 'devices' | 'facility'>('brand');
+  const [aboutTab, setAboutTab] = useState<'brand' | 'doctor' | 'devices' | 'facility'>('brand');
   const [baCat, setBaCat] = useState<'melasma' | 'filler' | 'acne' | 'hair' | 'tattoo'>('melasma');
   const [isBaUnlocked, setIsBaUnlocked] = useState<boolean>(false);
 
@@ -243,7 +243,8 @@ export default function App() {
     }
   ];
 
-  // 대표원장 약력 (원장님이 주신 원문 그대로)
+  // 대표원장 사진·약력 (약력은 원장님이 주신 원문 그대로)
+  const DOCTOR_PHOTO_SRC = "/assets/doctor_park.webp";
   const DOCTOR_CAREER = [
     '공주 한일고 졸업',
     '충남대학교 의과대학 졸업',
@@ -699,37 +700,28 @@ export default function App() {
             </span>
             <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">서울뷰의원 당진점 소개</h2>
           </div>
-          <div className="flex gap-2 mt-4 md:mt-0 overflow-x-auto no-scrollbar">
-            <button
-              onClick={() => setAboutTab('brand')}
-              className={`px-5 py-2.5 rounded text-xs sm:text-sm transition shrink-0 cursor-pointer ${
-                aboutTab === 'brand'
-                  ? 'font-bold bg-[#111111] text-white'
-                  : 'font-medium bg-[#F7F7F8] text-zinc-600 hover:text-[#111111]'
-              }`}
-            >
-              서울뷰의원 당진
-            </button>
-            <button
-              onClick={() => setAboutTab('devices')}
-              className={`px-5 py-2.5 rounded text-xs sm:text-sm transition shrink-0 cursor-pointer ${
-                aboutTab === 'devices'
-                  ? 'font-bold bg-[#111111] text-white'
-                  : 'font-medium bg-[#F7F7F8] text-zinc-600 hover:text-[#111111]'
-              }`}
-            >
-              보유 장비 소개
-            </button>
-            <button
-              onClick={() => setAboutTab('facility')}
-              className={`px-5 py-2.5 rounded text-xs sm:text-sm transition shrink-0 cursor-pointer ${
-                aboutTab === 'facility'
-                  ? 'font-bold bg-[#111111] text-white'
-                  : 'font-medium bg-[#F7F7F8] text-zinc-600 hover:text-[#111111]'
-              }`}
-            >
-              원내 시설 소개
-            </button>
+          {/* 하위 탭 4개: 모바일은 짧은 이름으로 한 줄에 4개, PC는 제목 오른쪽에 한 줄 */}
+          <div className="grid grid-cols-4 gap-1.5 mt-5 md:mt-0 md:flex md:gap-2">
+            {([
+              { id: 'brand', label: '서울뷰의원 당진', short: '병원 소개' },
+              { id: 'doctor', label: '대표원장 소개', short: '대표원장' },
+              { id: 'devices', label: '보유 장비 소개', short: '보유 장비' },
+              { id: 'facility', label: '원내 시설 소개', short: '원내 시설' }
+            ] as const).map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setAboutTab(tab.id)}
+                aria-label={tab.label}
+                className={`px-1 py-2.5 md:px-5 rounded text-xs md:text-sm whitespace-nowrap transition cursor-pointer ${
+                  aboutTab === tab.id
+                    ? 'font-bold bg-[#111111] text-white'
+                    : 'font-medium bg-[#F7F7F8] text-zinc-600 hover:text-[#111111]'
+                }`}
+              >
+                <span className="md:hidden">{tab.short}</span>
+                <span className="hidden md:inline">{tab.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 
@@ -855,7 +847,37 @@ export default function App() {
           </div>
         )}
 
-        {/* 1-2. Devices */}
+        {/* 1-2. Doctor (대표원장 사진 + 약력, 약력은 원장님이 주신 원문 그대로) */}
+        {aboutTab === 'doctor' && (
+          <div className="grid md:grid-cols-12 gap-6 lg:gap-10 items-stretch animate-in fade-in">
+            <div className="md:col-span-5 rounded-2xl overflow-hidden bg-[#F7F7F8] border border-[#E5E5E8]">
+              <img
+                src={DOCTOR_PHOTO_SRC}
+                alt="박상덕 대표원장"
+                className="w-full h-full aspect-[4/5] object-cover object-top"
+                loading="lazy"
+              />
+            </div>
+            <div className="md:col-span-7 bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl p-6 sm:p-10 flex flex-col justify-center">
+              <p className="text-xs sm:text-sm text-[#A6895E] font-bold">서울뷰의원당진 진료과목 피부과</p>
+              <h3 className="text-3xl sm:text-4xl font-bold text-[#0F2B22] mt-2 tracking-tight">
+                박상덕 <span className="text-lg sm:text-xl font-semibold text-[#A6895E]">대표원장</span>
+              </h3>
+              <div className="w-10 h-px bg-[#C5A880] my-6 sm:my-8" />
+              <h4 className="text-sm font-bold text-[#A6895E] mb-1">약력</h4>
+              <ul className="divide-y divide-[#C5A880]/20">
+                {DOCTOR_CAREER.map((line) => (
+                  <li key={line} className="py-3 flex items-start gap-3 text-sm sm:text-base text-zinc-800">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#C5A880] shrink-0" />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {/* 1-3. Devices */}
         {aboutTab === 'devices' && (
           // 모바일은 옆으로 넘겨 보기, 태블릿 2열·PC 3열
           <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 animate-in fade-in">
@@ -888,7 +910,7 @@ export default function App() {
           </div>
         )}
 
-        {/* 1-3. Facility (사용자가 사실로 확인한 항목만) */}
+        {/* 1-4. Facility (사용자가 사실로 확인한 항목만) */}
         {aboutTab === 'facility' && (
           <div className="animate-in fade-in">
             <div className="sm:max-w-md bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
@@ -902,46 +924,14 @@ export default function App() {
 
 
 
-      {/* ================= SECTION 2: DOCTOR (대표원장 소개, 약력은 원장님이 주신 원문 그대로) ================= */}
-      <section id="sec-doctor" className="py-20 md:py-28 border-t border-[#E5E5E8]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
-          <div className="mb-10">
-            <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-              02 / DOCTOR
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">대표원장 소개</h2>
-          </div>
-
-          <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-            <div className="lg:col-span-5 bg-[#0F2B22] text-white rounded-2xl p-8 sm:p-10 flex flex-col justify-center">
-              <p className="text-xs sm:text-sm text-[#C5A880] font-bold">서울뷰의원당진 진료과목 피부과</p>
-              <h3 className="text-3xl sm:text-4xl font-bold mt-2 tracking-tight">
-                박상덕 <span className="text-lg sm:text-xl font-semibold text-[#C5A880]">대표원장</span>
-              </h3>
-            </div>
-            <div className="lg:col-span-7 bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl p-6 sm:p-10">
-              <h4 className="text-sm font-bold text-[#A6895E] mb-2">약력</h4>
-              <ul className="divide-y divide-[#C5A880]/20">
-                {DOCTOR_CAREER.map((line) => (
-                  <li key={line} className="py-3 flex items-start gap-3 text-sm sm:text-base text-zinc-800">
-                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#C5A880] shrink-0" />
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= SECTION 3: DR. COLUMN ================= */}
+      {/* ================= SECTION 2: DR. COLUMN ================= */}
       <section id="sec-column" className="py-20 md:py-28 bg-[#F7F7F8] border-t border-[#E5E5E8]">
         {/* lg:pr-28 — 오른쪽 고정 퀵메뉴에 전체보기 버튼·카드가 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
         <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-                03 / DOCTOR'S COLUMN
+                02 / DOCTOR'S COLUMN
               </span>
               <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">대표원장 진료 칼럼</h2>
               <p className="text-xs sm:text-sm text-zinc-600 mt-1">시술을 결정하시기 전 꼭 한 번 읽어보시면 도움 되는 대표원장의 솔직한 의학 칼럼입니다.</p>
@@ -987,12 +977,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* ================= SECTION 4: LOCATION & HOURS ================= */}
+      {/* ================= SECTION 3: LOCATION & HOURS ================= */}
       {/* lg:pr-28 — 오른쪽에 온 진료시간 안내가 고정 퀵메뉴에 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
       <section id="sec-location" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
         <div className="mb-10">
           <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-            04 / LOCATION & HOURS
+            03 / LOCATION & HOURS
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">오시는 길 및 진료안내</h2>
         </div>
