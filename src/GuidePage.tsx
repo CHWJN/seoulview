@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { GUIDE_DATA } from './data/guideData.ts';
 import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
 import SiteHeader from './SiteHeader.tsx';
-import { openNaverBooking, LOGO_SRC } from './clinicLinks.ts';
+import { LOGO_SRC } from './clinicLinks.ts';
 import { ShieldCheck, Info } from 'lucide-react';
 
 interface GuidePageProps {
@@ -94,16 +94,8 @@ export default function GuidePage({ guideId, onNavigateHome, onNavigateEvent, on
 
         {/* 선택한 시술 안내 */}
         <div key={guide.id} className="bg-[#FAF8F5] border border-[#C5A880]/40 rounded-2xl p-6 sm:p-10 animate-in fade-in">
-          <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#C5A880]/30 pb-6 mb-6 gap-4">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#111111] break-keep">{guide.subtitle}</h2>
-            </div>
-            <button
-              onClick={openNaverBooking}
-              className="bg-[#0F2B22] text-white text-xs font-bold px-5 py-3 rounded-lg shrink-0 hover:bg-[#173F32] transition cursor-pointer"
-            >
-              해당 시술 상담 예약하기
-            </button>
+          <div className="border-b border-[#C5A880]/30 pb-6 mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#111111] break-keep">{guide.subtitle}</h2>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 text-xs">

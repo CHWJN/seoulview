@@ -48,7 +48,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 | `src/EventPage.tsx` | 이벤트 페이지 |
 | `src/PricePage.tsx` | 상세 비급여 수가표 페이지 |
 | `src/ColumnPage.tsx` | 대표원장 의학 칼럼 목록·본문 |
-| `src/GuidePage.tsx` | 시술안내 및 주의사항 페이지. 탭을 바꾸면 주소가 `/guide/lifting`처럼 바뀐다. 모바일 탭은 `short` 이름으로 4개씩 두 줄. 시술 검색칸은 사용자 요청으로 만들었다가 삭제 |
+| `src/GuidePage.tsx` | 시술안내 및 주의사항 페이지. 탭을 바꾸면 주소가 `/guide/lifting`처럼 바뀐다. 모바일 탭은 `short` 이름으로 4개씩 두 줄. 시술 검색칸과 '해당 시술 상담 예약하기' 버튼은 사용자 요청으로 삭제 |
 | `src/EventBoard.tsx` | 이벤트 페이지의 이벤트 카드 목록 |
 | `src/MobileNav.tsx` | 모든 페이지 공용 모바일 메뉴(햄버거)와 모바일 하단바 (이벤트 페이지 하단바만 구성이 다르다) |
 | `src/data/pricingData.ts` | 이벤트(10종·39항목)와 상세 비급여 수가(15개 분류·164개 가격). 원본은 사용자가 준 가격표 엑셀 |
