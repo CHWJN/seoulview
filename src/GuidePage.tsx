@@ -94,8 +94,7 @@ export default function GuidePage({ guideId, onNavigateHome, onNavigateEvent, on
         <div key={guide.id} className="bg-[#FAF8F5] border border-[#C5A880]/40 rounded-2xl p-6 sm:p-10 animate-in fade-in">
           <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#C5A880]/30 pb-6 mb-6 gap-4">
             <div>
-              <span className="text-xs font-bold text-[#0F2B22]">{guide.subtitle}</span>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#111111] mt-1">{guide.title}</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#111111] break-keep">{guide.subtitle}</h2>
             </div>
             <button
               onClick={openNaverBooking}

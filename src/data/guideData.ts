@@ -4,8 +4,7 @@
 export interface GuideItem {
   id: string;
   label: string; // 탭·메뉴에 보이는 이름
-  title: string;
-  subtitle: string;
+  subtitle: string; // 시술 내용 안에 제목으로 표시
   time: string;
   anesthesia: string;
   cycle: string;
@@ -17,7 +16,6 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "toning",
     label: "레이저토닝 / 잡티제거",
-    title: "01. 레이저토닝 / 잡티제거 시술안내 및 주의사항",
     subtitle: "피코토닝 · 레이저토닝 · 흑자/잡티 레이저",
     time: "약 15~20분",
     anesthesia: "무마취 또는 연고마취",
@@ -33,7 +31,6 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "lifting",
     label: "리프팅",
-    title: "02. 리프팅 (인모드 / 슈링크) 주의사항",
     subtitle: "초음파(HIFU) 및 고주파(RF) 안티에이징 리프팅",
     time: "약 30~50분",
     anesthesia: "마취크림 도포",
@@ -49,7 +46,6 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "hair",
     label: "제모",
-    title: "03. 레이저 제모 주의사항",
     subtitle: "레이저 제모",
     time: "약 5~20분",
     anesthesia: "부위별 마취크림 (남성수염 등)",
@@ -65,7 +61,6 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "booster",
     label: "스킨부스터",
-    title: "04. 스킨부스터 (리쥬란 힐러 / 쥬베룩 / 물광) 주의사항",
     subtitle: "진피층 직접 주사 스킨부스터",
     time: "약 30~40분",
     anesthesia: "마취크림 + 통증완화 시스템",
@@ -80,7 +75,6 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "botox",
     label: "보톡스 / 윤곽주사",
-    title: "05. 보톡스 / 윤곽주사 주의사항",
     subtitle: "주름·사각턱·바디 보톡스 및 이중턱 지방파괴술",
     time: "약 5~15분",
     anesthesia: "아이스 쿨링 또는 연고마취",
@@ -95,7 +89,6 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "filler",
     label: "필러 / 실리프팅 / 쥬베룩 볼륨",
-    title: "06. 필러 / 실리프팅 / 쥬베룩 볼륨 주의사항",
     subtitle: "자연스러운 볼륨 채움 및 윤곽 고정 시술",
     time: "약 20~40분",
     anesthesia: "국소마취 및 연고마취",
@@ -111,7 +104,6 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "mole",
     label: "점 / 사마귀 / 쥐젖제거",
-    title: "07. 점 / 사마귀 / 쥐젖 / 비립종 / 편평사마귀 제거 주의사항",
     subtitle: "레이저 정밀 제거술",
     time: "약 10~20분",
     anesthesia: "마취크림 도포",
@@ -126,7 +118,6 @@ export const GUIDE_DATA: GuideItem[] = [
   {
     id: "diet",
     label: "다이어트",
-    title: "08. 다이어트 / 체형관리 주사 및 처방 주의사항",
     subtitle: "위고비 · 바디 인모드 · 지방분해주사",
     time: "약 15~30분",
     anesthesia: "아이스 쿨링",

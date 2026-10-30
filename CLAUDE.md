@@ -52,7 +52,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 | `src/EventBoard.tsx` | 이벤트 페이지의 이벤트 카드 목록 |
 | `src/MobileNav.tsx` | 모든 페이지 공용 모바일 메뉴(햄버거)와 모바일 하단바 (이벤트 페이지 하단바만 구성이 다르다) |
 | `src/data/pricingData.ts` | 이벤트(10종·39항목)와 상세 비급여 수가(15개 분류·164개 가격). 원본은 사용자가 준 가격표 엑셀 |
-| `src/data/guideData.ts` | 시술안내 8종 (탭·메뉴 이름, 소요시간, 주의사항 등). 순서대로 탭에 나온다 |
+| `src/data/guideData.ts` | 시술안내 8종 (탭·메뉴 이름 `label`, 내용 제목 `subtitle`, 소요시간, 주의사항 등). 순서대로 탭에 나온다. 예전 큰 제목(`title`, "01. ○○ 시술안내 및 주의사항")은 사용자 요청으로 삭제 |
 | `src/data/columnsData.ts` | 칼럼 5편. 최신 글이 맨 앞. 본문은 문단 블록(p / quote / item / list / match) |
 | `src/clinicLinks.ts` | 네이버 예약·지도, 카카오톡 채팅, 구글 지도 링크, 로고 경로. 모든 예약 버튼은 `openNaverBooking()`으로 네이버 예약을 연다 |
 | `public/assets/` | 메인 영상(`main_video.mp4`), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형), 대표원장 사진(`doctor_park.webp`) |
