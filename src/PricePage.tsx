@@ -1,16 +1,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import { PRICE_CATEGORIES, formatWon } from './data/pricingData.ts';
 import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
-import { openNaverBooking } from './clinicLinks.ts';
+import SiteHeader from './SiteHeader.tsx';
+import { openNaverBooking, LOGO_SRC } from './clinicLinks.ts';
 import {
-  CalendarCheck,
   Search,
   X,
   ShieldCheck,
   Check,
-  ChevronDown,
   Info,
-  Menu,
   FileSpreadsheet
 } from 'lucide-react';
 
@@ -18,14 +16,12 @@ interface PricePageProps {
   onNavigateHome: (sectionId?: string) => void;
   onNavigateEvent: () => void;
   onNavigateColumn?: () => void;
-  onOpenBooking?: (itemName: string) => void;
 }
 
 // 가격 구분 중 옵션 옆에 함께 보여줄 제품 구분
 const PRODUCT_TYPES = ['국산', '코어톡스'];
 
-export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateColumn, onOpenBooking }: PricePageProps) {
-  const LOGO_SRC = "/assets/aistudio/____________c4c3a0ad.png";
+export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateColumn }: PricePageProps) {
 
   const [activeCategory, setActiveCategory] = useState<string>(PRICE_CATEGORIES[0].name);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -33,11 +29,6 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, []);
-
-  const handleBooking = (itemName: string) => {
-    if (onOpenBooking) onOpenBooking(itemName);
-    else openNaverBooking();
-  };
 
   const totalRows = PRICE_CATEGORIES.reduce(
     (sum, c) => sum + c.groups.reduce((n, g) => n + g.rows.length, 0),
@@ -69,238 +60,15 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
 
   return (
     <div className="min-h-screen bg-[#FBF9F6] text-[#111111] selection:bg-[#0F2B22] selection:text-white flex flex-col justify-between pb-14 lg:pb-0">
-      {/* ================= MAIN HEADER & NAVIGATION (메인화면과 100% 동일) ================= */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5E5E8] shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
-          
-          {/* Brand Logo */}
-          <button
-            onClick={() => onNavigateHome()}
-            className="flex items-center gap-3 group shrink-0 cursor-pointer"
-          >
-            <img
-              src={LOGO_SRC}
-              alt="꽃을보듯너를 서울뷰의원 당진"
-              className="h-10 sm:h-12 w-auto object-contain transition group-hover:opacity-95"
-            />
-          </button>
-
-          {/* Desktop Navigation (7 Core Menus) */}
-          <nav className="hidden xl:flex items-center space-x-1">
-            {/* 1. 서울뷰의원 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <button
-                onClick={() => onNavigateHome('sec-about')}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer"
-              >
-                서울뷰의원 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-              </button>
-              <div className="nav-dropdown absolute left-0 top-full w-48 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => onNavigateHome('sec-about')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  서울뷰의원 당진
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-about')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  장비 소개
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-about')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  시설 소개
-                </button>
-              </div>
-            </div>
-
-            {/* 2. 이벤트 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <button
-                onClick={onNavigateEvent}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer"
-              >
-                이벤트 <span className="w-1.5 h-1.5 rounded-full bg-red-500 mb-2"></span>
-              </button>
-              <div className="nav-dropdown absolute left-0 top-full w-56 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={onNavigateEvent}
-                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-[#0F2B22] hover:bg-[#F7F7F8] transition cursor-pointer flex items-center justify-between"
-                >
-                  <span>10월 이벤트</span>
-                  <span className="text-[10px] bg-[#0F2B22] text-[#C5A880] px-1.5 py-0.5 rounded font-bold">PAGE</span>
-                </button>
-                <button
-                  onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer flex items-center justify-between"
-                >
-                  <span>상세 비급여 수가표</span>
-                  <span className="text-[10px] bg-[#C5A880]/30 text-[#85734F] px-1.5 py-0.5 rounded font-bold">PAGE</span>
-                </button>
-              </div>
-            </div>
-
-            {/* 4. 시술 전후사진 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <button
-                onClick={() => onNavigateHome('sec-ba')}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer"
-              >
-                시술 전후사진 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-              </button>
-              <div className="nav-dropdown absolute left-0 top-full w-60 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => onNavigateHome('sec-ba')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  기미 / 난치성색소
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-ba')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  필러
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-ba')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  여드름 / 모공, 흉터 / 홍조
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-ba')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  레이저 제모
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-ba')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  문신제거
-                </button>
-              </div>
-            </div>
-
-            {/* 5. 시술안내 및 주의사항 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <button
-                onClick={() => onNavigateHome('sec-guide')}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer"
-              >
-                시술안내 및 주의사항 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-              </button>
-              <div className="nav-dropdown absolute left-0 top-full w-64 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  레이저토닝 / 잡티제거
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  리프팅
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  제모
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  스킨부스터
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  보톡스 / 윤곽주사
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  필러 / 실리프팅 / 쥬베룩 볼륨
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  점 / 사마귀 / 쥐젖제거
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  다이어트
-                </button>
-              </div>
-            </div>
-
-            {/* 6. 원장 칼럼 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <button
-                onClick={() => onNavigateColumn ? onNavigateColumn() : onNavigateHome('sec-column')}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer"
-              >
-                원장 칼럼 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-              </button>
-              <div className="nav-dropdown absolute left-0 top-full w-56 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => onNavigateColumn ? onNavigateColumn() : onNavigateHome('sec-column')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-[#0F2B22] hover:bg-[#F7F7F8] transition cursor-pointer flex items-center justify-between"
-                >
-                  <span>원장칼럼 전문 페이지</span>
-                  <span className="text-[10px] bg-[#0F2B22] text-[#C5A880] px-1.5 py-0.5 rounded font-bold">PAGE</span>
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-column')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  메인 요약 칼럼 바로가기
-                </button>
-              </div>
-            </div>
-
-            {/* 7. 오시는 길 */}
-            <div className="py-6 px-3.5">
-              <button
-                onClick={() => onNavigateHome('sec-location')}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition cursor-pointer"
-              >
-                오시는 길
-              </button>
-            </div>
-          </nav>
-
-          {/* Right Action Buttons */}
-          <div className="flex items-center gap-2.5">
-            <button
-              onClick={() => handleBooking('실시간 맞춤 예약')}
-              className="hidden sm:inline-flex items-center gap-2 bg-[#0F2B22] hover:bg-[#173F32] text-white text-xs font-semibold px-4 py-2.5 rounded transition shadow-sm cursor-pointer"
-            >
-              <CalendarCheck className="w-3.5 h-3.5 text-[#C5A880]" />
-              <span>실시간 예약</span>
-            </button>
-            {/* Mobile Hamburger Button */}
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="xl:hidden p-2 rounded border border-[#E5E5E8] text-[#111111] hover:bg-[#F7F7F8] cursor-pointer"
-              aria-label="메뉴 열기"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* ================= MAIN HEADER & NAVIGATION (모든 페이지 공용) ================= */}
+      <SiteHeader
+        onLogo={() => onNavigateHome()}
+        onSection={(id) => onNavigateHome(id)}
+        onEvent={onNavigateEvent}
+        onPrices={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onColumn={() => (onNavigateColumn ? onNavigateColumn() : onNavigateHome('sec-column'))}
+        onOpenMenu={() => setMobileMenuOpen(true)}
+      />
 
       {/* ================= SUBPAGE HERO BANNER ================= */}
       <section className="bg-gradient-to-r from-[#0E2920] via-[#12362a] to-[#1a231f] text-white py-16 md:py-24 relative overflow-hidden">
@@ -441,7 +209,7 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
                   ))}
                 </ul>
                 <button
-                  onClick={() => handleBooking(group.name)}
+                  onClick={openNaverBooking}
                   className="mt-3 w-full border border-[#0F2B22] text-[#0F2B22] text-xs font-semibold py-2 rounded cursor-pointer"
                 >
                   예약신청
@@ -504,7 +272,7 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
                         {idx === 0 && (
                           <td rowSpan={group.rows.length} className="py-4 px-5 text-center align-top whitespace-nowrap bg-white">
                             <button
-                              onClick={() => handleBooking(group.name)}
+                              onClick={openNaverBooking}
                               className="border border-[#0F2B22] text-[#0F2B22] hover:bg-[#0F2B22] hover:text-white text-xs font-semibold px-3.5 py-1.5 rounded transition cursor-pointer whitespace-nowrap"
                             >
                               예약신청
@@ -581,7 +349,6 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
         onNavigateEvent={onNavigateEvent}
         onNavigatePrices={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         onNavigateColumn={() => (onNavigateColumn ? onNavigateColumn() : onNavigateHome('sec-column'))}
-        onBook={handleBooking}
       />
       <MobileBottomBar onNavigateHome={onNavigateHome} onNavigateEvent={onNavigateEvent} />
     </div>

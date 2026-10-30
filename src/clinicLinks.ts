@@ -15,3 +15,6 @@ export const KAKAO_CHAT_URL = "https://pf.kakao.com/_gIJQG/chat";
 export const openNaverBooking = () => {
   window.open(NAVER_BOOKING_URL, '_blank', 'noopener,noreferrer');
 };
+
+// 상단·모바일 메뉴 로고
+export const LOGO_SRC = "/assets/aistudio/____________c4c3a0ad.png";

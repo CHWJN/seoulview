@@ -1,15 +1,19 @@
-import React from 'react';
-import { X, ChevronRight, CalendarCheck, MessageCircle, Sparkles, MapPin } from 'lucide-react';
-import { NAVER_BOOKING_URL, KAKAO_CHAT_URL } from './clinicLinks.ts';
+import {
+  X,
+  ChevronRight,
+  CalendarCheck,
+  MessageCircle,
+  Sparkles,
+  MapPin
+} from 'lucide-react';
+import { NAVER_BOOKING_URL, KAKAO_CHAT_URL, LOGO_SRC, openNaverBooking } from './clinicLinks.ts';
 
-const LOGO_SRC = "/assets/aistudio/____________c4c3a0ad.png";
 
 interface MobileNavProps {
   onNavigateHome: (sectionId?: string) => void;
   onNavigateEvent: () => void;
   onNavigatePrices: () => void;
   onNavigateColumn: () => void;
-  onBook: (itemName: string) => void;
 }
 
 // 모바일 햄버거 메뉴 (수가표·칼럼 페이지 공용)
@@ -19,8 +23,7 @@ export function MobileDrawer({
   onNavigateHome,
   onNavigateEvent,
   onNavigatePrices,
-  onNavigateColumn,
-  onBook
+  onNavigateColumn
 }: MobileNavProps & { open: boolean; onClose: () => void }) {
   if (!open) return null;
 
@@ -68,7 +71,7 @@ export function MobileDrawer({
         </div>
         <div className="p-4 bg-[#F7F7F8] border-t border-[#E5E5E8]">
           <button
-            onClick={go(() => onBook('모바일 빠른 진료 예약'))}
+            onClick={go(openNaverBooking)}
             className="w-full bg-[#0F2B22] text-white py-3 rounded font-semibold text-xs tracking-wider cursor-pointer"
           >
             빠른 진료 예약 신청

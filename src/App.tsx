@@ -1,21 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import EventPage from './EventPage.tsx';
-import PricePage from './PricePage.tsx';
-import ColumnPage from './ColumnPage.tsx';
 import EventBoard from './EventBoard.tsx';
-import { MobileDrawer } from './MobileNav.tsx';
-import { NAVER_BOOKING_URL, NAVER_MAP_URL, GOOGLE_MAP_EMBED_URL, KAKAO_CHAT_URL, openNaverBooking } from './clinicLinks.ts';
+import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
+import SiteHeader from './SiteHeader.tsx';
+import { NAVER_MAP_URL, GOOGLE_MAP_EMBED_URL, KAKAO_CHAT_URL, openNaverBooking, LOGO_SRC } from './clinicLinks.ts';
 import { COLUMNS_DATA } from './data/columnsData.ts';
 import {
   Sparkles,
-  ChevronDown,
   ChevronUp,
   ChevronLeft,
   ChevronRight,
   CalendarCheck,
   Calendar,
-  Menu,
   CheckCircle2,
   MessageCircle,
   Instagram,
@@ -42,9 +38,13 @@ interface GuideItem {
   precautions: string[];
 }
 
+// 이벤트·수가표·칼럼 페이지는 들어갈 때 따로 불러온다 (홈 첫 화면을 가볍게)
+const EventPage = lazy(() => import('./EventPage.tsx'));
+const PricePage = lazy(() => import('./PricePage.tsx'));
+const ColumnPage = lazy(() => import('./ColumnPage.tsx'));
+
 export default function App() {
   // Brand Logo Path from user attachment
-  const LOGO_SRC = "/assets/aistudio/____________c4c3a0ad.png";
 
   // ===== 페이지 라우팅 (react-router: 정식 경로 방식) =====
   // /  /event  /prices  /column  /column/:slug
@@ -323,16 +323,16 @@ export default function App() {
       ]
     },
     botox: {
-      title: "05. 보톡스 / 윤곽주사 (브이올렛) 주의사항",
+      title: "05. 보톡스 / 윤곽주사 주의사항",
       subtitle: "주름·사각턱·바디 보톡스 및 이중턱 지방파괴술",
       time: "약 5~15분",
       anesthesia: "아이스 쿨링 또는 연고마취",
-      cycle: "보톡스 3~6개월 / 브이올렛 4주 간격 2~3회",
-      downtime: "일상생활 즉시 가능 (브이올렛은 붓기 3~7일)",
+      cycle: "보톡스 3~6개월",
+      downtime: "일상생활 즉시 가능",
       precautions: [
         "보톡스 시술 후 약물이 주변 근육으로 퍼지지 않도록 시술 후 4시간 동안은 눕지 마시고, 주사 부위를 문지르지 마세요.",
         "사각턱 보톡스 후 딱딱하거나 질긴 음식(오징어, 껌 등)을 자주 씹으시면 근육이 다시 발달할 수 있으니 줄여주세요.",
-        "브이올렛(이중턱 지방파괴 주사)은 지방세포가 분해되는 과정에서 붓기와 뻐근함, 멍울 느낌이 1~2주간 지속된 후 턱선이 서서히 갸름해집니다."
+        "이중턱 지방파괴 주사는 지방세포가 분해되는 과정에서 붓기와 뻐근함, 멍울 느낌이 1~2주간 지속된 후 턱선이 서서히 갸름해집니다."
       ]
     },
     filler: {
@@ -364,7 +364,7 @@ export default function App() {
     },
     diet: {
       title: "08. 다이어트 / 체형관리 주사 및 처방 주의사항",
-      subtitle: "삭센다 · 위고비 · 바디 인모드 · 지방분해주사",
+      subtitle: "위고비 · 바디 인모드 · 지방분해주사",
       time: "약 15~30분",
       anesthesia: "아이스 쿨링",
       cycle: "주 1~2회 또는 개인별 맞춤 프로그램",
@@ -384,9 +384,6 @@ export default function App() {
     }, 3500);
   };
 
-  // 예약 버튼은 모두 네이버 예약으로 연결 (시술명은 쓰지 않음)
-  const handleOpenBooking = (_itemName?: string) => openNaverBooking();
-
   const copyAddress = () => {
     const addr = "충청남도 당진시 시청2로 49-30, 7층 서울뷰의원 당진점";
     navigator.clipboard?.writeText(addr);
@@ -401,302 +398,51 @@ export default function App() {
     setMobileMenuOpen(false);
   };
 
-  // 알림은 홈·수가표·칼럼 페이지에서 함께 사용
-  const sharedOverlays = (
-    <>
-      {/* ================= TOAST NOTIFICATION ================= */}
-      {toastMessage && (
-        <div className="fixed bottom-20 lg:bottom-8 right-6 z-50 bg-[#0F2B22] text-white px-5 py-3.5 rounded-xl shadow-lg border border-[#C5A880] flex items-center gap-3 text-xs sm:text-sm animate-in slide-in-from-bottom duration-300">
-          <CheckCircle2 className="w-5 h-5 text-[#C5A880] shrink-0" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
-    </>
-  );
-
-  if (currentPage === 'event') {
+  if (currentPage !== 'home') {
     return (
-      <EventPage
-        onNavigateHome={(sec) => navigateTo('home', sec)}
-        onNavigateToPrices={() => navigateTo('prices')}
-        onNavigateToColumn={() => navigateTo('column')}
-      />
-    );
-  }
-
-  if (currentPage === 'prices') {
-    return (
-      <>
-        <PricePage
-          onNavigateHome={(sec) => navigateTo('home', sec)}
-          onNavigateEvent={() => navigateTo('event')}
-          onNavigateColumn={() => navigateTo('column')}
-          onOpenBooking={handleOpenBooking}
-        />
-        {sharedOverlays}
-      </>
-    );
-  }
-
-  if (currentPage === 'column') {
-    return (
-      <>
-        <ColumnPage
-          initialArticleId={selectedColumnArticleId}
-          onNavigateHome={(sec) => navigateTo('home', sec)}
-          onNavigateToPrices={() => navigateTo('prices')}
-          onNavigateToEvent={() => navigateTo('event')}
-          onOpenBooking={handleOpenBooking}
-        />
-        {sharedOverlays}
-      </>
+      <Suspense fallback={null}>
+        {currentPage === 'event' && (
+          <EventPage
+            onNavigateHome={(sec) => navigateTo('home', sec)}
+            onNavigateToPrices={() => navigateTo('prices')}
+            onNavigateToColumn={() => navigateTo('column')}
+          />
+        )}
+        {currentPage === 'prices' && (
+          <PricePage
+            onNavigateHome={(sec) => navigateTo('home', sec)}
+            onNavigateEvent={() => navigateTo('event')}
+            onNavigateColumn={() => navigateTo('column')}
+          />
+        )}
+        {currentPage === 'column' && (
+          <ColumnPage
+            initialArticleId={selectedColumnArticleId}
+            onNavigateHome={(sec) => navigateTo('home', sec)}
+            onNavigateToPrices={() => navigateTo('prices')}
+            onNavigateToEvent={() => navigateTo('event')}
+          />
+        )}
+      </Suspense>
     );
   }
 
   return (
     <div className="min-h-screen bg-white text-[#111111] selection:bg-[#0F2B22] selection:text-white">
-
-
-      {/* ================= MAIN HEADER & NAVIGATION ================= */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5E5E8] shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
-          
-          {/* Brand Logo - Updated with user's attached image */}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="flex items-center gap-3 group shrink-0"
-          >
-            <img
-              src={LOGO_SRC}
-              alt="꽃을보듯너를 서울뷰의원 당진"
-              className="h-10 sm:h-12 w-auto object-contain transition group-hover:opacity-95"
-            />
-          </a>
-
-          {/* Desktop Navigation (7 Core Menus) */}
-          <nav className="hidden xl:flex items-center space-x-1">
-            {/* 1. 서울뷰의원 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <a
-                href="#sec-about"
-                onClick={(e) => { e.preventDefault(); scrollToSection('sec-about'); }}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1"
-              >
-                서울뷰의원 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-              </a>
-              <div className="nav-dropdown absolute left-0 top-full w-48 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => { scrollToSection('sec-about'); setAboutTab('brand'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  서울뷰의원 당진
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-about'); setAboutTab('devices'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  장비 소개
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-about'); setAboutTab('facility'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  시설 소개
-                </button>
-              </div>
-            </div>
-
-            {/* 2. 이벤트 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <button
-                onClick={() => navigateTo('event')}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer"
-              >
-                이벤트 <span className="w-1.5 h-1.5 rounded-full bg-red-500 mb-2"></span>
-              </button>
-              <div className="nav-dropdown absolute left-0 top-full w-56 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => navigateTo('event')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-[#0F2B22] hover:bg-[#F7F7F8] transition cursor-pointer flex items-center justify-between"
-                >
-                  <span>10월 이벤트</span>
-                  <span className="text-[10px] bg-[#0F2B22] text-[#C5A880] px-1.5 py-0.5 rounded font-bold">PAGE</span>
-                </button>
-                <button
-                  onClick={() => navigateTo('prices')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer flex items-center justify-between"
-                >
-                  <span>상세 비급여 수가표</span>
-                  <span className="text-[10px] bg-[#C5A880]/30 text-[#85734F] px-1.5 py-0.5 rounded font-bold">PAGE</span>
-                </button>
-              </div>
-            </div>
-
-            {/* 4. 시술 전후사진 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <a
-                href="#sec-ba"
-                onClick={(e) => { e.preventDefault(); scrollToSection('sec-ba'); }}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1"
-              >
-                시술 전후사진 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-              </a>
-              <div className="nav-dropdown absolute left-0 top-full w-60 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => { scrollToSection('sec-ba'); setBaCat('melasma'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  기미 / 난치성색소
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-ba'); setBaCat('filler'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  필러
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-ba'); setBaCat('acne'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  여드름 / 모공, 흉터 / 홍조
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-ba'); setBaCat('hair'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  레이저 제모
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-ba'); setBaCat('tattoo'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  문신제거
-                </button>
-              </div>
-            </div>
-
-            {/* 5. 시술안내 및 주의사항 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <a
-                href="#sec-guide"
-                onClick={(e) => { e.preventDefault(); scrollToSection('sec-guide'); }}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1"
-              >
-                시술안내 및 주의사항 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-              </a>
-              <div className="nav-dropdown absolute left-0 top-full w-64 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('toning'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  레이저토닝 / 잡티제거
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('lifting'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  리프팅
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('hair'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  제모
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('booster'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  스킨부스터
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('botox'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  보톡스 / 윤곽주사
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('filler'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  필러 / 실리프팅 / 쥬베룩 볼륨
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('mole'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  점 / 사마귀 / 쥐젖제거
-                </button>
-                <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('diet'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  다이어트
-                </button>
-              </div>
-            </div>
-
-            {/* 6. 원장 칼럼 */}
-            <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-              <button
-                onClick={() => navigateTo('column')}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer"
-              >
-                원장 칼럼 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-              </button>
-              <div className="nav-dropdown absolute left-0 top-full w-56 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => navigateTo('column')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-[#0F2B22] hover:bg-[#F7F7F8] transition cursor-pointer flex items-center justify-between"
-                >
-                  <span>원장칼럼 전문 페이지</span>
-                  <span className="text-[10px] bg-[#0F2B22] text-[#C5A880] px-1.5 py-0.5 rounded font-bold">PAGE</span>
-                </button>
-                <button
-                  onClick={() => scrollToSection('sec-column')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  메인 요약 칼럼 바로가기
-                </button>
-              </div>
-            </div>
-
-            {/* 7. 오시는 길 */}
-            <div className="py-6 px-3.5">
-              <a
-                href="#sec-location"
-                onClick={(e) => { e.preventDefault(); scrollToSection('sec-location'); }}
-                className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition"
-              >
-                오시는 길
-              </a>
-            </div>
-          </nav>
-
-          {/* Right Action Buttons */}
-          <div className="flex items-center gap-2.5">
-            <button
-              onClick={() => handleOpenBooking('실시간 맞춤 예약')}
-              className="hidden sm:inline-flex items-center gap-2 bg-[#0F2B22] hover:bg-[#173F32] text-white text-xs font-semibold px-4 py-2.5 rounded transition shadow-sm cursor-pointer"
-            >
-              <CalendarCheck className="w-3.5 h-3.5 text-[#C5A880]" />
-              <span>실시간 예약</span>
-            </button>
-            {/* Mobile Hamburger Button */}
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="xl:hidden p-2 rounded border border-[#E5E5E8] text-[#111111] hover:bg-[#F7F7F8] cursor-pointer"
-              aria-label="메뉴 열기"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* ================= MAIN HEADER & NAVIGATION (모든 페이지 공용) ================= */}
+      <SiteHeader
+        onLogo={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onSection={(id, sub) => {
+          scrollToSection(id);
+          if (sub?.tab === 'about') setAboutTab(sub.id as typeof aboutTab);
+          if (sub?.tab === 'ba') setBaCat(sub.id as typeof baCat);
+          if (sub?.tab === 'guide') setGuideCat(sub.id);
+        }}
+        onEvent={() => navigateTo('event')}
+        onPrices={() => navigateTo('prices')}
+        onColumn={() => navigateTo('column')}
+        onOpenMenu={() => setMobileMenuOpen(true)}
+      />
 
       {/* ================= MOBILE DRAWER (이벤트·수가표·칼럼 페이지와 같은 메뉴) ================= */}
       <MobileDrawer
@@ -706,13 +452,12 @@ export default function App() {
         onNavigateEvent={() => navigateTo('event')}
         onNavigatePrices={() => navigateTo('prices')}
         onNavigateColumn={() => navigateTo('column')}
-        onBook={handleOpenBooking}
       />
 
       {/* ================= RIGHT FLOATING QUICK BAR ================= */}
       <aside className="hidden lg:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E5E5E8] rounded-xl shadow-md overflow-hidden divide-y divide-[#E5E5E8] w-20 text-center">
         <button
-          onClick={() => handleOpenBooking('우측 퀵바 빠른 예약')}
+          onClick={openNaverBooking}
           className="py-3.5 px-2 bg-[#0F2B22] text-white hover:bg-[#173F32] transition flex flex-col items-center justify-center group cursor-pointer"
         >
           <Calendar className="w-5 h-5 text-[#C5A880] mb-1 group-hover:scale-110 transition" />
@@ -807,7 +552,7 @@ export default function App() {
                 {/* 데스크톱: 배너 문구 아래에 버튼 배치 */}
                 <div className="hidden md:flex absolute left-[17.5%] top-[71%] flex-wrap gap-3">
                   <button
-                    onClick={() => handleOpenBooking('엑셀웨이브 런칭 특가 상담')}
+                    onClick={openNaverBooking}
                     className="bg-[#4A2E24] hover:bg-[#2E1C16] text-white font-bold px-6 py-3 rounded-lg text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
                   >
                     <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
@@ -833,7 +578,7 @@ export default function App() {
               />
               <div className="absolute left-4 bottom-[13%] w-[52%] flex flex-col gap-2">
                 <button
-                  onClick={() => handleOpenBooking('엑셀웨이브 런칭 특가 상담')}
+                  onClick={openNaverBooking}
                   className="bg-[#4A2E24] text-white font-bold px-3 py-2.5 rounded-lg text-xs shadow-md cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   <CalendarCheck className="w-3.5 h-3.5 text-[#E8C9B5] shrink-0" />
@@ -903,7 +648,6 @@ export default function App() {
 
           {/* 이벤트 목록 (이벤트마다 대표 항목 3개, 나머지는 이벤트 페이지에서) */}
           <EventBoard
-            onBook={(name) => handleOpenBooking(name)}
             previewCount={3}
             onMore={() => navigateTo('event')}
           />
@@ -1354,7 +1098,7 @@ export default function App() {
                 <h3 className="text-xl sm:text-2xl font-bold text-[#111111] mt-1">{GUIDE_DATA[guideCat].title}</h3>
               </div>
               <button
-                onClick={() => handleOpenBooking(`${GUIDE_DATA[guideCat].title} 상담`)}
+                onClick={openNaverBooking}
                 className="bg-[#0F2B22] text-white text-xs font-bold px-5 py-3 rounded-lg shrink-0 hover:bg-[#173F32] transition cursor-pointer"
               >
                 해당 시술 상담 예약하기
@@ -1488,7 +1232,7 @@ export default function App() {
 
             <div className="pt-6 mt-6 border-t border-white/15 grid grid-cols-2 gap-3">
               <button
-                onClick={() => handleOpenBooking('오시는길 섹션 빠른 예약')}
+                onClick={openNaverBooking}
                 className="bg-[#C5A880] text-[#111111] font-bold py-3 rounded text-xs hover:opacity-95 transition cursor-pointer"
               >
                 온라인 예약 신청
@@ -1595,42 +1339,15 @@ export default function App() {
       </footer>
 
       {/* ================= MOBILE BOTTOM FIXED BAR ================= */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E5E8] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
-        <a
-          href={NAVER_BOOKING_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="py-3 bg-[#0F2B22] text-white flex flex-col items-center justify-center cursor-pointer"
-        >
-          <CalendarCheck className="w-4 h-4 text-[#C5A880] mb-0.5" />
-          <span>실시간예약</span>
-        </a>
-        <a
-          href={KAKAO_CHAT_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
-        >
-          <MessageCircle className="w-4 h-4 text-amber-500 mb-0.5" />
-          <span>카톡상담</span>
-        </a>
-        <button
-          onClick={() => navigateTo('event')}
-          className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
-        >
-          <Sparkles className="w-4 h-4 text-[#C5A880] mb-0.5" />
-          <span>이벤트</span>
-        </button>
-        <button
-          onClick={() => scrollToSection('sec-location')}
-          className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
-        >
-          <MapPin className="w-4 h-4 text-[#0F2B22] mb-0.5" />
-          <span>오시는길</span>
-        </button>
-      </div>
+      <MobileBottomBar onNavigateHome={(sec) => sec && scrollToSection(sec)} onNavigateEvent={() => navigateTo('event')} />
 
-      {sharedOverlays}
+      {/* ================= TOAST NOTIFICATION ================= */}
+      {toastMessage && (
+        <div className="fixed bottom-20 lg:bottom-8 right-6 z-50 bg-[#0F2B22] text-white px-5 py-3.5 rounded-xl shadow-lg border border-[#C5A880] flex items-center gap-3 text-xs sm:text-sm animate-in slide-in-from-bottom duration-300">
+          <CheckCircle2 className="w-5 h-5 text-[#C5A880] shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 }

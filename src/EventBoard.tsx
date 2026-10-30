@@ -1,16 +1,15 @@
-import React from 'react';
 import { ChevronRight } from 'lucide-react';
+import { openNaverBooking } from './clinicLinks.ts';
 import { EVENTS, EventGroup, formatWon, discountRate } from './data/pricingData.ts';
 
 interface EventBoardProps {
-  onBook: (itemName: string) => void;
   // 홈 화면용 요약 모드: 이벤트마다 일부 항목만 보여주고 나머지는 이벤트 페이지로 안내
   previewCount?: number;
   onMore?: () => void;
   events?: EventGroup[];
 }
 
-export default function EventBoard({ onBook, previewCount, onMore, events = EVENTS }: EventBoardProps) {
+export default function EventBoard({ previewCount, onMore, events = EVENTS }: EventBoardProps) {
   return (
     // lg:pr-24 — 오른쪽 고정 퀵메뉴에 가격이 가려지지 않도록 (화면이 넓은 2xl부터는 여백 불필요)
     <div className={`grid gap-6 lg:pr-24 2xl:pr-0 ${previewCount ? 'sm:grid-cols-2 lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
@@ -69,7 +68,7 @@ export default function EventBoard({ onBook, previewCount, onMore, events = EVEN
                 </button>
               )}
               <button
-                onClick={() => onBook(ev.name)}
+                onClick={openNaverBooking}
                 className="w-full bg-[#111111] hover:bg-[#0F2B22] text-white font-semibold py-2.5 rounded text-xs transition cursor-pointer"
               >
                 이 이벤트로 예약/상담 신청

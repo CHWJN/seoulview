@@ -42,15 +42,16 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 
 | 파일 | 내용 |
 |---|---|
-| `src/App.tsx` | 메인 페이지 전체 + 페이지 라우팅 (`/`, `/event`, `/prices`, `/column`, `/column/:slug`). 알림(`sharedOverlays`)을 수가표·칼럼 페이지가 함께 쓴다 |
+| `src/App.tsx` | 메인 페이지 전체 + 페이지 라우팅 (`/`, `/event`, `/prices`, `/column`, `/column/:slug`). 이벤트·수가표·칼럼 페이지는 `lazy`로 들어갈 때 따로 불러온다 |
+| `src/SiteHeader.tsx` | 모든 페이지 공용 상단 메뉴(PC 드롭다운). 메뉴 항목을 고칠 때는 이 파일만 고치면 된다 |
 | `src/EventPage.tsx` | 이벤트 페이지 |
 | `src/PricePage.tsx` | 상세 비급여 수가표 페이지 |
 | `src/ColumnPage.tsx` | 대표원장 의학 칼럼 목록·본문 |
 | `src/EventBoard.tsx` | 이벤트 카드 (홈은 이벤트당 3개 미리보기, 이벤트 페이지는 전체) |
-| `src/MobileNav.tsx` | 모든 페이지 공용 모바일 메뉴(햄버거)와 모바일 하단바 |
+| `src/MobileNav.tsx` | 모든 페이지 공용 모바일 메뉴(햄버거)와 모바일 하단바 (이벤트 페이지 하단바만 구성이 다르다) |
 | `src/data/pricingData.ts` | 이벤트(10종·39항목)와 상세 비급여 수가(15개 분류·164개 가격). 원본은 사용자가 준 가격표 엑셀 |
 | `src/data/columnsData.ts` | 칼럼 5편. 최신 글이 맨 앞. 본문은 문단 블록(p / quote / item / list / match) |
-| `src/clinicLinks.ts` | 네이버 예약·지도, 카카오톡 채팅, 구글 지도 링크. 모든 예약 버튼은 `openNaverBooking()`으로 네이버 예약을 연다 |
+| `src/clinicLinks.ts` | 네이버 예약·지도, 카카오톡 채팅, 구글 지도 링크, 로고 경로. 모든 예약 버튼은 `openNaverBooking()`으로 네이버 예약을 연다 |
 | `public/assets/` | 메인 영상(`main_video.mp4`), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형) |
 | `.claude/skills/ui-ux-pro-max/` | 디자인 참고 스킬 (외부 MIT 자료, 출처는 `SOURCE.md`) |
 
@@ -68,8 +69,10 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 ## 아직 남은 일 / 확인 필요
 
 - [ ] **네이버 지도 전환 (사용자 보류 중):** 사용자가 네이버 클라우드(NCP) Maps에서 Dynamic Map Client ID를 받아오면, 구글 지도를 네이버 지도로 교체한다. 웹 서비스 URL로 `https://seoulview.vercel.app` 등록이 필요하다.
-- [ ] **예시 문구 남아 있음:** 시술 전후사진 사례(사진·"멜라닌 지수 62% 감소" 같은 수치 포함), 시술안내 및 주의사항, 원내 시설 소개에 AI Studio 예시 문구가 남아 있다. 보유하지 않은 장비 이름은 모두 지웠다 (2026-10).
-- [ ] **시술안내의 약품명:** "브이올렛"(윤곽주사), "삭센다"(다이어트) 등 실제로 쓰는지 확인 안 된 약품 이름이 남아 있다.
+- [ ] **시술 전후사진 (사용자 보류 중):** 사례 사진·문구가 AI Studio 예시이고 "멜라닌 지수 62% 감소" 같은 근거 없는 수치가 있다. 사용자가 보류를 결정했다.
+- [ ] **예시 문구 남아 있음:** 시술안내 및 주의사항, 원내 시설 소개에 AI Studio 예시 문구가 남아 있다.
+- [ ] **원내 공간 사진 깨짐:** 홈 "서울뷰의원" 소개의 원내 공간 사진(`MAIN_IMAGE_SRC`)이 없는 파일(`main_image_2f557015.jpg`)을 가리켜 이미지가 안 나온다. 사진을 받으면 교체한다.
+- [ ] **칼럼 검색엔진 정보:** `ColumnPage.tsx`의 구조화 데이터(JSON-LD)에 실제와 다른 주소 `seoulview-dangjin.com`이 들어 있다. 실제 도메인이 정해지면 고친다.
 
 ### 완료 (2026-10)
 
@@ -78,10 +81,13 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 - "뉴비주"로 표기 통일.
 - 포텐자 없음 확인. 루카스 설명은 사용자가 준 문구로 교체.
 - 보유하지 않은 장비(젠틀맥스·피코슈어·울쎄라·레블라이트·포텐자·올리지오) 문구 삭제. 시술안내 "피코슈어 피코프락셀" 항목과 메뉴 삭제 (시술안내 8개).
+- 시술안내에서 브이올렛·삭센다 삭제 (사용하지 않음). 칼럼 본문의 브이올렛은 원장 원문이라 유지.
 - 셀르디엠 런칭 이벤트 추가 (리투오 이벤트와 가격·옵션 동일, 사용자 확인).
 - 큰 태블릿: 모바일 하단바·퀵메뉴 기준을 `lg`(1024px)로 바꿔 아이패드 세로에서도 하단바가 나온다.
 - PC 메인 배너 오른쪽 화살표를 퀵메뉴 왼쪽으로 옮김.
 
 ## 알려진 정리 대상 (기능에는 영향 없음)
 
-- `package.json`의 `@google/genai`, `express`는 쓰이지 않는다.
+- `public/assets/aistudio/`의 엑셀웨이브 장비 사진, "서울뷰의원의 약속" 시안 이미지, 로고 원본은 화면에 쓰이지 않는 참고 자료다 (로고 `____________c4c3a0ad.png`만 사용).
+- `README.md`, `metadata.json`은 AI Studio 기본 파일이다.
+- 2026-10 코드 정리: 4개 파일에 복사돼 있던 상단 메뉴를 `SiteHeader`로 합치고, 안 쓰는 패키지(`@google/genai`, `express`, `dotenv`, `motion` 등)와 안 쓰는 글꼴(Cormorant Garamond)을 뺐다. Pretendard는 필요한 글자만 받는 dynamic-subset으로 바꿨다. 정리 전후 화면을 픽셀 단위로 비교해 같음을 확인했다.
