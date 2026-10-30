@@ -5,7 +5,7 @@ import PricePage from './PricePage.tsx';
 import ColumnPage from './ColumnPage.tsx';
 import EventBoard from './EventBoard.tsx';
 import { MobileDrawer } from './MobileNav.tsx';
-import { NAVER_BOOKING_URL, NAVER_MAP_URL } from './clinicLinks.ts';
+import { NAVER_BOOKING_URL, NAVER_MAP_URL, GOOGLE_MAP_EMBED_URL } from './clinicLinks.ts';
 import { COLUMNS_DATA } from './data/columnsData.ts';
 import {
   Sparkles,
@@ -1799,27 +1799,25 @@ export default function App() {
                 </span>
               </div>
 
-              {/* 네이버 지도 연결 */}
+              {/* 구글 지도 (네이버 지도 API 키를 받으면 네이버 지도로 교체 예정) */}
+              <div className="w-full h-64 sm:h-72 rounded-xl border border-[#E5E5E8] overflow-hidden bg-[#E9ECEA]">
+                <iframe
+                  title="서울뷰의원 당진점 위치 지도"
+                  src={GOOGLE_MAP_EMBED_URL}
+                  className="w-full h-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
               <a
                 href={NAVER_MAP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group w-full h-64 sm:h-72 bg-[#E9ECEA] rounded-xl border border-[#E5E5E8] relative overflow-hidden flex flex-col items-center justify-center gap-4 cursor-pointer"
+                className="mt-3 w-full inline-flex items-center justify-center gap-1.5 bg-[#03C75A] hover:bg-[#02b350] text-white text-sm font-bold px-5 py-2.5 rounded-lg shadow-sm transition"
               >
-                <div className="absolute inset-0 opacity-40 bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] [background-size:32px_32px]"></div>
-                <div className="relative z-10 bg-[#0F2B22] text-white px-5 py-3 rounded-xl shadow-lg border-2 border-[#C5A880] flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-[#C5A880] text-[#111111] flex items-center justify-center font-bold">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-[#C5A880] font-en-cond tracking-wider">SEOUL VIEW DANGJIN</p>
-                    <p className="text-sm font-bold">서울뷰의원 당진점 (7F)</p>
-                  </div>
-                </div>
-                <span className="relative z-10 inline-flex items-center gap-1.5 bg-[#03C75A] group-hover:bg-[#02b350] text-white text-sm font-bold px-5 py-2.5 rounded-lg shadow-md transition">
-                  네이버 지도에서 위치·길찾기 보기
-                  <ExternalLink className="w-4 h-4" />
-                </span>
+                네이버 지도에서 위치·길찾기 보기
+                <ExternalLink className="w-4 h-4" />
               </a>
             </div>
 
