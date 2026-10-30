@@ -1170,7 +1170,8 @@ export default function App() {
                 주소: 충청남도 당진시 시청2로 49-30, 7층 | 대표전화: 041-352-3994
               </p>
             </div>
-            <div className="flex flex-wrap gap-4 items-start text-zinc-300">
+            {/* 모바일에서도 링크 3개가 한 줄에 들어가도록 간격·글자 크기 조정 */}
+            <div className="flex flex-nowrap gap-[min(1.6vw,16px)] sm:gap-4 items-start text-zinc-300 text-[min(3.2vw,12px)] whitespace-nowrap">
               <button
                 onClick={() => navigateTo('prices')}
                 className="hover:text-[#C5A880] cursor-pointer"
