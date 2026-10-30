@@ -163,7 +163,7 @@ export default function App() {
   const [aboutTab, setAboutTab] = useState<'brand' | 'devices' | 'facility'>('brand');
   const [priceCat, setPriceCat] = useState<string>('pigment');
   const [priceSearch, setPriceSearch] = useState<string>('');
-  const [baCat, setBaCat] = useState<'lifting' | 'melasma' | 'filler' | 'acne' | 'hair' | 'tattoo'>('lifting');
+  const [baCat, setBaCat] = useState<'melasma' | 'filler' | 'acne' | 'hair' | 'tattoo'>('melasma');
   const [isBaUnlocked, setIsBaUnlocked] = useState<boolean>(false);
   const [guideCat, setGuideCat] = useState<string>('toning');
 
@@ -280,10 +280,6 @@ export default function App() {
 
   // Before & After Data
   const BA_DATA: Record<string, BaItem[]> = {
-    lifting: [
-      { title: "울쎄라 400샷 + 쥬베룩 볼륨 1병", period: "시술 후 8주 경과", desc: "처진 심부볼과 무너진 턱선 라인을 정돈하고 꺼진 앞볼에 자연스러운 자가 콜라겐 볼륨을 회복한 케이스입니다.", beforeMetric: "시술 전: 하안면 처짐 및 팔자 꺼짐", afterMetric: "시술 후: SMAS층 견인 및 앞볼 볼륨 개선" },
-      { title: "인모드 FX + FORMA 3회", period: "3회차 시술 후 4주 경과", desc: "이중턱 부위의 불필요한 지방층을 감소시키고 피부 표면 탄력을 타이트닝하여 날렵한 옆선을 완성했습니다.", beforeMetric: "시술 전: 이중턱 지방 축적", afterMetric: "시술 후: 턱밑 윤곽선 명확화" }
-    ],
     melasma: [
       { title: "피코슈어 755nm + 레블라이트SI 복합 토닝 10회", period: "시술 후 12주 경과", desc: "양 볼에 넓게 퍼진 혼합형 난치성 기미와 잡티를 열 손상 없이 안전하게 분해하여 전체 피부 톤을 밝힌 사례입니다.", beforeMetric: "시술 전: 진피성 기미 및 불균일한 톤", afterMetric: "시술 후: 멜라닌 지수 62% 감소" },
       { title: "피코슈어 흑자(검버섯) 원데이 제거", period: "시술 후 3주 경과", desc: "일반 레이저 토닝으로 지워지지 않던 광대 부위 흑자를 피코슈어 755nm 스팟 조사로 1회 시술 만에 깨끗하게 제거했습니다.", beforeMetric: "시술 전: 짙은 갈색 흑자 병변", afterMetric: "시술 후: 흉터 없이 정상 피부톤 회복" }
@@ -663,12 +659,6 @@ export default function App() {
                 시술 전후사진 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
               </a>
               <div className="nav-dropdown absolute left-0 top-full w-60 bg-white border border-[#E5E5E8] shadow-md rounded-b-md py-2 z-50">
-                <button
-                  onClick={() => { scrollToSection('sec-ba'); setBaCat('lifting'); }}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  쥬베룩 / 리프팅
-                </button>
                 <button
                   onClick={() => { scrollToSection('sec-ba'); setBaCat('melasma'); }}
                   className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
@@ -1577,7 +1567,6 @@ export default function App() {
           {/* 6 BA Tabs */}
           <div className="flex flex-wrap gap-2 mb-10">
             {[
-              { id: 'lifting', label: '쥬베룩 / 리프팅' },
               { id: 'melasma', label: '기미 / 난치성색소' },
               { id: 'filler', label: '필러' },
               { id: 'acne', label: '여드름 / 모공, 흉터 / 홍조' },

@@ -155,12 +155,6 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
                   onClick={() => onNavigateHome('sec-ba')}
                   className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
                 >
-                  쥬베룩 / 리프팅
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-ba')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
                   기미 / 난치성색소
                 </button>
                 <button
