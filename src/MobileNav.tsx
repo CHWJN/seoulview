@@ -38,7 +38,7 @@ export function MobileDrawer({
     { label: '서울뷰의원 소개', onClick: go(() => onNavigateHome('sec-about')) },
     { label: '이벤트', onClick: go(onNavigateEvent) },
     { label: '상세 비급여 수가표', onClick: go(onNavigatePrices) },
-    { label: '시술 전후사진', onClick: go(() => onNavigateHome('sec-ba')) },
+    { label: '시술 전후사진', onClick: go(() => { navigate('/before-after'); window.scrollTo({ top: 0, behavior: 'smooth' }); }) },
     { label: '시술안내 및 주의사항', onClick: go(() => { navigate('/guide'); window.scrollTo({ top: 0, behavior: 'smooth' }); }) },
     { label: '원장 칼럼', onClick: go(onNavigateColumn) },
     { label: '오시는 길 & 진료시간', onClick: go(() => onNavigateHome('sec-location')) }

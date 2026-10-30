@@ -2,9 +2,10 @@ import { CalendarCheck, ChevronDown, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LOGO_SRC, openNaverBooking } from './clinicLinks.ts';
 import { GUIDE_DATA } from './data/guideData.ts';
+import { BA_CATEGORIES } from './data/baData.ts';
 
-// 홈 화면 섹션 안의 탭 (서울뷰의원 소개 / 전후사진)
-export type HomeTab = { tab: 'about' | 'ba'; id: string };
+// 홈 화면 섹션 안의 탭 (서울뷰의원 소개)
+export type HomeTab = { tab: 'about'; id: string };
 
 interface SiteHeaderProps {
   onLogo: () => void;
@@ -22,13 +23,6 @@ const ABOUT_ITEMS = [
   ['시설 소개', 'facility']
 ] as const;
 
-const BA_ITEMS = [
-  ['기미 / 난치성색소', 'melasma'],
-  ['필러', 'filler'],
-  ['여드름 / 모공, 흉터 / 홍조', 'acne'],
-  ['레이저 제모', 'hair'],
-  ['문신제거', 'tattoo']
-] as const;
 
 
 const TOP_CLASS = 'text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition flex items-center gap-1 cursor-pointer';
@@ -40,6 +34,11 @@ const PAGE_ITEM_CLASS = 'w-full text-left px-4 py-2.5 text-xs hover:bg-[#F7F7F8]
 export default function SiteHeader({ onLogo, onSection, onEvent, onPrices, onColumn, onOpenMenu }: SiteHeaderProps) {
   const navigate = useNavigate();
   // 시술안내 및 주의사항은 별도 페이지 (/guide, /guide/<id>)
+  // 시술 전후사진은 별도 페이지 (/before-after, /before-after/<분류>)
+  const goBa = (id?: string) => {
+    navigate(id ? `/before-after/${id}` : '/before-after');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   const goGuide = (id?: string) => {
     navigate(id ? `/guide/${id}` : '/guide');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -100,10 +99,16 @@ export default function SiteHeader({ onLogo, onSection, onEvent, onPrices, onCol
 
           {/* 4. 시술 전후사진 */}
           <div className="relative nav-item py-6 px-3.5 cursor-pointer">
-            <button onClick={() => onSection('sec-ba')} className={TOP_CLASS}>
+            <button onClick={() => goBa()} className={TOP_CLASS}>
               시술 전후사진 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
             </button>
-            <div className={`${DROPDOWN_CLASS} w-60`}>{subMenu('sec-ba', 'ba', BA_ITEMS, 'py-2.5')}</div>
+            <div className={`${DROPDOWN_CLASS} w-60`}>
+              {BA_CATEGORIES.map((c) => (
+                <button key={c.id} onClick={() => goBa(c.id)} className={`${ITEM_CLASS} py-2.5`}>
+                  {c.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* 5. 시술안내 및 주의사항 */}

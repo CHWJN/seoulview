@@ -4,6 +4,8 @@ import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
 import SiteHeader from './SiteHeader.tsx';
 import { NAVER_MAP_URL, GOOGLE_MAP_EMBED_URL, KAKAO_CHAT_URL, openNaverBooking, LOGO_SRC } from './clinicLinks.ts';
 import { COLUMNS_DATA } from './data/columnsData.ts';
+import { ALL_BA_ITEMS } from './data/baData.ts';
+import BaCard, { BaConsentToggle, BA_LEGAL_NOTICE } from './BaCard.tsx';
 import {
   Sparkles,
   ChevronUp,
@@ -19,27 +21,19 @@ import {
   ExternalLink
 } from 'lucide-react';
 
-// Data Types
-interface BaItem {
-  title: string;
-  period: string;
-  desc: string;
-  beforeMetric: string;
-  afterMetric: string;
-}
-
 // 이벤트·수가표·칼럼·시술안내 페이지는 들어갈 때 따로 불러온다 (홈 첫 화면을 가볍게)
 const EventPage = lazy(() => import('./EventPage.tsx'));
 const PricePage = lazy(() => import('./PricePage.tsx'));
 const ColumnPage = lazy(() => import('./ColumnPage.tsx'));
 const GuidePage = lazy(() => import('./GuidePage.tsx'));
+const BeforeAfterPage = lazy(() => import('./BeforeAfterPage.tsx'));
 
 export default function App() {
   // Brand Logo Path from user attachment
 
   // ===== 페이지 라우팅 (react-router: 정식 경로 방식) =====
   // /  /event  /prices  /column  /column/:slug
-  type PageName = 'home' | 'event' | 'prices' | 'column' | 'guide';
+  type PageName = 'home' | 'event' | 'prices' | 'column' | 'guide' | 'ba';
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname.replace(/\/+$/, '') || '/';
@@ -48,6 +42,8 @@ export default function App() {
     ? 'column'
     : pathname === '/guide' || pathname.startsWith('/guide/')
     ? 'guide'
+    : pathname === '/before-after' || pathname.startsWith('/before-after/')
+    ? 'ba'
     : pathname === '/event'
     ? 'event'
     : pathname === '/prices'
@@ -77,6 +73,9 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (page === 'event') {
       navigate('/event');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (page === 'ba') {
+      navigate(targetId ? `/before-after/${targetId}` : '/before-after');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (page === 'guide') {
       navigate(targetId ? `/guide/${targetId}` : '/guide');
@@ -116,7 +115,7 @@ export default function App() {
 
   // 알 수 없는 경로는 홈으로
   useEffect(() => {
-    const known = pathname === '/' || pathname === '/event' || pathname === '/prices' || pathname.startsWith('/column') || pathname === '/guide' || pathname.startsWith('/guide/');
+    const known = pathname === '/' || pathname === '/event' || pathname === '/prices' || pathname.startsWith('/column') || pathname === '/guide' || pathname.startsWith('/guide/') || pathname === '/before-after' || pathname.startsWith('/before-after/');
     if (!known) navigate('/', { replace: true });
   }, [pathname]);
 
@@ -136,7 +135,6 @@ export default function App() {
 
   // Section Tabs
   const [aboutTab, setAboutTab] = useState<'brand' | 'doctor' | 'devices' | 'facility'>('brand');
-  const [baCat, setBaCat] = useState<'melasma' | 'filler' | 'acne' | 'hair' | 'tattoo'>('melasma');
   const [isBaUnlocked, setIsBaUnlocked] = useState<boolean>(false);
 
   // Notifications
@@ -266,6 +264,7 @@ export default function App() {
   // 이후 3.5초마다 한 장씩 넘김. 마지막 '더 많은 칼럼' 카드에서 멈춤.
   // 손으로 옆으로 밀 때만 자동 이동을 멈춘다 (페이지를 위아래로 스크롤하다 카드를 스친 것은 무시).
   const columnScrollRef = useRef<HTMLDivElement>(null);
+  const baScrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = columnScrollRef.current;
     if (!el || currentPage !== 'home') return;
@@ -320,29 +319,6 @@ export default function App() {
     return () => { io.disconnect(); stop(); el.removeEventListener('touchstart', onStart); el.removeEventListener('touchmove', onMove); };
   }, [currentPage]);
 
-  // Before & After Data
-  const BA_DATA: Record<string, BaItem[]> = {
-    melasma: [
-      { title: "색소 레이저 복합 토닝 10회", period: "시술 후 12주 경과", desc: "양 볼에 넓게 퍼진 혼합형 난치성 기미와 잡티를 열 손상 없이 안전하게 분해하여 전체 피부 톤을 밝힌 사례입니다.", beforeMetric: "시술 전: 진피성 기미 및 불균일한 톤", afterMetric: "시술 후: 전체 피부 톤 개선" },
-      { title: "흑자(검버섯) 원데이 제거", period: "시술 후 3주 경과", desc: "일반 레이저 토닝으로 지워지지 않던 광대 부위 흑자를 레이저 스팟 조사로 제거했습니다.", beforeMetric: "시술 전: 짙은 갈색 흑자 병변", afterMetric: "시술 후: 흉터 없이 정상 피부톤 회복" }
-    ],
-    filler: [
-      { title: "벨로테로 팔자주름 + 앞볼 커스텀 필러 2cc", period: "시술 직후 및 2주 경과", desc: "과하게 부풀어 오르는 느낌 없이 코 옆 꺼진 삼각존(귀족 부위)을 자연스럽게 채워 인상을 부드럽게 개선했습니다.", beforeMetric: "시술 전: 깊은 팔자 고랑", afterMetric: "시술 후: 이물감 없는 자연스러운 윤곽" },
-      { title: "입술 디자인 필러 + 입꼬리 보톡스", period: "시술 후 1주 경과", desc: "말려 들어가고 비대칭이던 윗입술 라인에 입체감을 부여하고 자연스럽게 올라간 입꼬리를 디자인했습니다.", beforeMetric: "시술 전: 얇고 비대칭인 입술", afterMetric: "시술 후: 볼륨 및 입꼬리 대칭 개선" }
-    ],
-    acne: [
-      { title: "모공·흉터 레이저 + 쥬베룩 3회", period: "시술 후 10주 경과", desc: "나비존(볼·코 옆)의 늘어진 세로 모공과 패인 여드름 롤링성 흉터를 진피 재생 유도로 촘촘하게 메운 케이스입니다.", beforeMetric: "시술 전: 확장된 모공 및 요철", afterMetric: "시술 후: 모공 면적 축소 및 피부결 매끈화" },
-      { title: "홍조 레이저 + LDM 5회", period: "시술 후 6주 경과", desc: "만성적인 양 볼 안면홍조와 여드름 붉은 자국을 개선하고 얇아진 피부 장벽을 튼튼하게 복원했습니다.", beforeMetric: "시술 전: 여드름 홍반 및 모세혈관 확장", afterMetric: "시술 후: 붉은기 진정 및 장벽 강화" }
-    ],
-    hair: [
-      { title: "남성 수염 전체 레이저 제모 5회", period: "5회 시술 완료 후 4주 경과", desc: "매일 아침 면도 독(모낭염)과 푸른 수염 자국으로 스트레스받던 남성 환자분의 인중·턱·목 수염을 정리했습니다.", beforeMetric: "시술 전: 굵고 빽빽한 수염 및 모낭염", afterMetric: "시술 후: 푸른 자국 소실 및 매끈한 턱선" },
-      { title: "여성 종아리/겨드랑이 레이저 제모 5회", period: "5회 시술 완료 후", desc: "모공 각화증과 체모를 동시에 깔끔하게 정리했습니다.", beforeMetric: "시술 전: 잦은 면도로 인한 색소침착", afterMetric: "시술 후: 체모 제거 및 피부결 개선" }
-    ],
-    tattoo: [
-      { title: "눈썹 반영구 문신 잔흔 제거 3회", period: "3회 시술 후 6주 경과", desc: "오래되어 붉고 푸르게 변색된 눈썹 문신 색소를 눈썹 모근 손상 없이 깨끗하게 지워낸 케이스입니다.", beforeMetric: "시술 전: 비대칭 붉은/푸른 잔흔", afterMetric: "시술 후: 눈썹 털 손상 없이 색소 제거" },
-      { title: "팔목 레터링 & 컬러 타투 제거 5회", period: "5회 시술 후", desc: "나노 레이저로 지워지지 않던 미세 잉크 입자를 피코초 단위로 잘게 쪼개어 흉터 없이 배출시켰습니다.", beforeMetric: "시술 전: 짙은 블랙 및 컬러 타투", afterMetric: "시술 후: 정상 피부 조직 복원" }
-    ]
-  };
 
 
   const showToast = (msg: string) => {
@@ -377,6 +353,15 @@ export default function App() {
             onNavigateColumn={() => navigateTo('column')}
           />
         )}
+        {currentPage === 'ba' && (
+          <BeforeAfterPage
+            categoryId={pathname.startsWith('/before-after/') ? pathname.slice('/before-after/'.length) : null}
+            onNavigateHome={(sec) => navigateTo('home', sec)}
+            onNavigateEvent={() => navigateTo('event')}
+            onNavigatePrices={() => navigateTo('prices')}
+            onNavigateColumn={() => navigateTo('column')}
+          />
+        )}
         {currentPage === 'guide' && (
           <GuidePage
             guideId={pathname.startsWith('/guide/') ? pathname.slice('/guide/'.length) : null}
@@ -406,7 +391,6 @@ export default function App() {
         onSection={(id, sub) => {
           scrollToSection(id);
           if (sub?.tab === 'about') setAboutTab(sub.id as typeof aboutTab);
-          if (sub?.tab === 'ba') setBaCat(sub.id as typeof baCat);
         }}
         onEvent={() => navigateTo('event')}
         onPrices={() => navigateTo('prices')}
@@ -627,7 +611,7 @@ export default function App() {
       <section id="sec-ba" className="py-20 md:py-28 bg-[#F7F7F8] border-b border-[#E5E5E8]">
         {/* lg:pr-28 — 오른쪽 고정 퀵메뉴에 열람 동의 버튼·사진이 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
         <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
             <div>
               <span className="text-xs sm:text-sm text-[#A6895E] font-bold">
                 서울뷰의원 당진은 결과로 증명합니다.
@@ -635,124 +619,59 @@ export default function App() {
               <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">시술 전후사진</h2>
               <p className="text-xs sm:text-sm text-zinc-600 mt-1">보정 없는 동일 조명·동일 각도 임상 전후 기록입니다.</p>
             </div>
+            <BaConsentToggle
+              unlocked={isBaUnlocked}
+              onToggle={() => {
+                setIsBaUnlocked(!isBaUnlocked);
+                showToast(!isBaUnlocked ? "의료법 준수 전후사진 열람 동의가 확인되었습니다." : "블러 보호 모드가 다시 활성화되었습니다.");
+              }}
+            />
+          </div>
 
-            {/* Medical Law Consent Toggle */}
-            <div className="flex items-center gap-3 bg-white border border-[#C5A880]/40 px-4 py-2.5 rounded-lg shadow-xs">
-              <div className="text-xs">
-                <span className="text-[#A6895E] font-bold">
-                  {isBaUnlocked ? "열람 동의 완료 (전후사진 잠금 해제됨)" : "의료법 준수 블러 적용 중"}
-                </span>
-                <p className="text-[11px] text-zinc-600">
-                  {isBaUnlocked ? "동일 조건 무보정 임상 케이스입니다." : "동의를 누르시면 모든 전후사진이 선명하게 표시됩니다."}
-                </p>
-              </div>
+          {/* 모든 분류의 사례를 한 줄로 나열, 옆으로 넘겨 보기 (PC는 좌우 화살표로도 이동). 끝에 '더 많은 전후사진 보러가기' */}
+          <div className="relative">
+            <div ref={baScrollRef} className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 lg:mx-0 lg:px-0 lg:scroll-px-0 pb-2">
+              {ALL_BA_ITEMS.map((item) => (
+                <BaCard
+                  key={item.title}
+                  item={item}
+                  category={item.category}
+                  unlocked={isBaUnlocked}
+                  onUnlock={() => {
+                    setIsBaUnlocked(true);
+                    showToast("의료법 준수 전후사진 열람 동의가 확인되었습니다.");
+                  }}
+                  className="w-[88%] sm:w-[420px] shrink-0 snap-start"
+                />
+              ))}
               <button
-                onClick={() => {
-                  setIsBaUnlocked(!isBaUnlocked);
-                  showToast(
-                    !isBaUnlocked
-                      ? "의료법 준수 전후사진 열람 동의가 확인되었습니다."
-                      : "블러 보호 모드가 다시 활성화되었습니다."
-                  );
-                }}
-                className={`font-bold text-xs px-3.5 py-2 rounded shrink-0 transition cursor-pointer ${
-                  isBaUnlocked ? 'bg-zinc-200 text-zinc-800' : 'bg-[#C5A880] text-[#111111]'
-                }`}
+                onClick={() => navigateTo('ba')}
+                className="w-[42%] sm:w-40 shrink-0 snap-start flex flex-col items-center justify-center gap-3 text-[#0F2B22] cursor-pointer group/more"
               >
-                {isBaUnlocked ? "블러 다시 켜기" : "열람 동의 (잠금해제)"}
+                <span className="w-14 h-14 rounded-full bg-[#0F2B22] text-white flex items-center justify-center shadow-md transition md:group-hover/more:translate-x-1 md:group-hover/more:bg-[#173F32]">
+                  <ChevronRight className="w-6 h-6" />
+                </span>
+                <span className="text-sm font-bold text-center leading-snug break-keep">더 많은 전후사진<br />보러가기</span>
               </button>
             </div>
+            {/* PC 좌우 화살표 */}
+            <button
+              onClick={() => baScrollRef.current?.scrollBy({ left: -450, behavior: 'smooth' })}
+              aria-label="이전 전후사진"
+              className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-[#E5E5E8] shadow-md items-center justify-center text-[#0F2B22] hover:bg-[#0F2B22] hover:text-white transition cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => baScrollRef.current?.scrollBy({ left: 450, behavior: 'smooth' })}
+              aria-label="다음 전후사진"
+              className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-[#E5E5E8] shadow-md items-center justify-center text-[#0F2B22] hover:bg-[#0F2B22] hover:text-white transition cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
 
-          {/* 5 BA Tabs (모바일은 짧은 이름으로 한 줄에 5개) */}
-          <div className="grid grid-cols-5 gap-1.5 sm:flex sm:flex-wrap sm:gap-2 mb-10">
-            {([
-              { id: 'melasma', label: '기미 / 난치성색소', short: '기미·색소' },
-              { id: 'filler', label: '필러', short: '필러' },
-              { id: 'acne', label: '여드름 / 모공, 흉터 / 홍조', short: '여드름·모공' },
-              { id: 'hair', label: '레이저 제모', short: '제모' },
-              { id: 'tattoo', label: '문신제거', short: '문신제거' }
-            ] as const).map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setBaCat(tab.id)}
-                aria-label={tab.label}
-                className={`px-0 py-2.5 sm:px-4 rounded text-[11px] sm:text-sm leading-tight break-keep transition cursor-pointer ${
-                  baCat === tab.id
-                    ? 'font-bold bg-[#0F2B22] text-white border border-[#0F2B22]'
-                    : 'font-medium bg-white border border-[#E5E5E8] text-zinc-700 hover:bg-zinc-100'
-                }`}
-              >
-                <span className="sm:hidden">{tab.short}</span>
-                <span className="hidden sm:inline">{tab.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* BA Cards: 모바일은 옆으로 넘겨 보기 (다음 카드가 살짝 보임), PC는 2열 */}
-          <div
-            key={baCat}
-            className="flex md:grid md:grid-cols-2 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 scroll-px-4"
-          >
-            {(BA_DATA[baCat] || []).map((item, idx) => (
-              <div key={idx} className="w-[90%] shrink-0 snap-start md:w-auto bg-white border border-[#E5E5E8] shadow-xs rounded-2xl p-4 sm:p-6 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <h3 className="text-base sm:text-xl font-bold text-[#111111] break-keep">{item.title}</h3>
-                    <span className="shrink-0 whitespace-nowrap mt-0.5 text-[11px] bg-[#C5A880]/15 text-[#85734F] px-2.5 py-0.5 rounded">
-                      {item.period}
-                    </span>
-                  </div>
-
-                  {/* 사진 칸: 세로가 조금 긴 4:5 비율로 크게 (실제 사진이 오면 이 칸을 사진으로 채운다) */}
-                  <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 relative">
-                    {/* BEFORE */}
-                    <div className="relative aspect-[4/5] bg-gradient-to-b from-zinc-100 to-zinc-200 border border-[#E5E5E8] rounded-xl overflow-hidden flex flex-col items-center justify-center p-4 text-center">
-                      <span className="absolute top-3 left-3 text-[10px] sm:text-[11px] font-en-cond tracking-widest bg-white/90 text-zinc-700 px-2 py-0.5 rounded">
-                        BEFORE
-                      </span>
-                      <p className="text-xs sm:text-sm font-semibold text-zinc-700 break-keep">{item.beforeMetric}</p>
-                      <p className="text-[10px] sm:text-[11px] text-zinc-500 mt-1">마크뷰 정밀 촬영 원본</p>
-                    </div>
-
-                    {/* AFTER */}
-                    <div className="relative aspect-[4/5] bg-[#FAF8F5] border border-[#C5A880]/50 rounded-xl overflow-hidden text-center">
-                      <span className="absolute z-10 top-3 left-3 text-[10px] sm:text-[11px] font-en-cond tracking-widest bg-[#C5A880] text-[#111111] font-bold px-2 py-0.5 rounded">
-                        AFTER
-                      </span>
-                      <div
-                        className={`h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#0F2B22]/10 to-[#FAF8F5] p-4 ${
-                          isBaUnlocked ? 'ba-unlocked' : 'ba-locked'
-                        }`}
-                      >
-                        <p className="text-xs sm:text-sm font-bold text-[#0F2B22] break-keep">{item.afterMetric}</p>
-                        <p className="text-[10px] sm:text-[11px] text-zinc-500 mt-1">무보정 동일 조건 촬영</p>
-                      </div>
-                      {!isBaUnlocked && (
-                        <div className="absolute inset-0 bg-white/50 flex flex-col items-center justify-center p-3">
-                          <button
-                            onClick={() => {
-                              setIsBaUnlocked(true);
-                              showToast("의료법 준수 전후사진 열람 동의가 확인되었습니다.");
-                            }}
-                            className="whitespace-nowrap bg-[#C5A880] text-[#111111] font-bold text-[11px] sm:text-xs px-3 py-1.5 sm:px-4 sm:py-2 rounded shadow cursor-pointer"
-                          >
-                            클릭하여 After 확인
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <p className="text-[11px] text-zinc-500 mt-6 border-t border-[#E5E5E8] pt-4">
-            ※ 의료법 고지사항: 모든 시술은 개인의 피부 상태에 따라 붉은기, 부기, 멍, 색소침착, 염증 등의 부작용이 발생할 수 있으므로 시술 전 의료진과의 충분한 상담이 필요합니다.
-          </p>
+          <p className="text-[11px] text-zinc-500 mt-6 border-t border-[#E5E5E8] pt-4">{BA_LEGAL_NOTICE}</p>
         </div>
       </section>
 
