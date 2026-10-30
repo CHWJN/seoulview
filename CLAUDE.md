@@ -55,7 +55,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 | `src/data/guideData.ts` | 시술안내 8종 (탭·메뉴 이름 `label`, 모바일 탭 `short`, 내용 제목 `subtitle`(사용자가 준 문구, 2026-10), 소요시간, 주의사항 등). 순서대로 탭에 나온다. 예전 큰 제목(`title`, "01. ○○ 시술안내 및 주의사항")은 사용자 요청으로 삭제 |
 | `src/data/columnsData.ts` | 칼럼 5편. 최신 글이 맨 앞. 본문은 문단 블록(p / quote / item / list / match) |
 | `src/clinicLinks.ts` | 네이버 예약·지도, 카카오톡 채팅, 구글 지도 링크, 로고 경로. 모든 예약 버튼은 `openNaverBooking()`으로 네이버 예약을 연다 |
-| `public/assets/` | 메인 영상(`main_video.mp4`), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형), 대표원장 사진(`doctor_park.webp`) |
+| `public/assets/` | 메인 영상(`main_video.mp4`), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형), 대표원장 사진(`doctor_park.webp`), 소개 문장 옆 사진(`about_doctor.webp`, 원본 오른쪽 아래 별 모양 표시는 잘라냄) |
 | `.claude/skills/ui-ux-pro-max/` | 디자인 참고 스킬 (외부 MIT 자료, 출처는 `SOURCE.md`) |
 
 로컬 실행: `npm install` 후 `npm run dev` (Windows PowerShell은 `npm.cmd install`, `npm.cmd run dev`).
@@ -90,6 +90,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 - 홍보 문구 사용자 확인(2026-10): 사실 O → "보정 없는 동일 조명·동일 각도", "1인 프라이빗 메디컬 관리실", "상담실장 과잉 권유 없이 대표원장 직접 진단", "마크뷰 피부진단기". 사실 아님 X(삭제) → "호텔 라운지형 대기 공간", "남·여 분리 1인 제모실", "대학병원급 멸균 소독", "정품·정량 인증서 발급", "수가 100% 공개". 원내 시설 소개는 1인 관리실 1개만 남음.
 - 메인 영상 위 문구: 제목 "당신의 자연스러운 아름다움을 봅니다."(고운바탕 Gowun Batang, `.font-serif-kr`, PC는 한 줄) + 금색 영어 "SEOULVIEW CLINIC"(Cormorant Garamond, `.font-en-serif`). 영상 화면이 나올 때마다 서서히 나타남(`.hero-fade-1/2`). 진료 예약하기 버튼은 사용자 요청으로 삭제.
 - 전후사진 사진 칸을 4:5 비율로 크게(PC 약 300px 높이). 실제 사진이 오면 이 칸을 사진으로 채운다.
+- 홈 소개 첫 탭: "수준 높은 시술을 위해~" 문장 칸에 사용자가 준 사진 추가 (PC 오른쪽, 모바일 위). 문장은 모든 화면에서 구절 단위 다섯 줄.
 - 대표원장 소개: 홈 "서울뷰의원 당진점 소개"의 두 번째 탭(`aboutTab === 'doctor'`)으로 넣음. 사진 `public/assets/doctor_park.webp`(사용자가 준 사진을 4:5로 잘라 800×1000), 약력은 원문 그대로 `DOCTOR_CAREER`. 소개 탭 4개(병원 소개·대표원장·보유 장비·원내 시설)는 모바일에서 짧은 이름으로 한 줄. 상단 메뉴 '서울뷰의원' 드롭다운에도 '대표원장 소개'. 홈 섹션 번호: 01 소개, 02 칼럼, 03 오시는 길.
 - 디자인 통일: 하위 페이지 색(#0E2920·#9E8A63·#BFA980 등)을 홈 색으로 맞추고 타자기 글꼴(font-mono)을 Oswald로 통일. 홈의 영어 장식 문구(SEOUL VIEW DANGJIN, SEOUL VIEW PRINCIPLES, CUSTOMER CENTER→대표번호) 정리. PC 퀵메뉴 아이콘을 금색으로 통일.
 - 홈 소개: "PREMIUM CLINIC ENVIRONMENT" 원내 공간 사진 칸 삭제 (사진 파일이 없어 깨져 보이던 칸).

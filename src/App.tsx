@@ -245,6 +245,7 @@ export default function App() {
 
   // 대표원장 사진·약력 (약력은 원장님이 주신 원문 그대로)
   const DOCTOR_PHOTO_SRC = "/assets/doctor_park.webp";
+  const ABOUT_PHOTO_SRC = "/assets/about_doctor.webp";
   const DOCTOR_CAREER = [
     '공주 한일고 졸업',
     '충남대학교 의과대학 졸업',
@@ -728,16 +729,26 @@ export default function App() {
         {/* 1-1. Brand Philosophy */}
         {aboutTab === 'brand' && (
           <div className="space-y-12 animate-in fade-in">
-            {/* Top Philosophy Intro Banner */}
-            <div className="bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl p-6 sm:p-12 shadow-xs">
-              {/* 모바일은 글자를 줄이고 뜻이 끊기지 않는 곳에서 줄바꿈 (break-keep: 단어 중간에서 안 끊김) */}
-              <h3 className="text-xl sm:text-3xl lg:text-[32px] font-bold text-[#0F2B22] leading-normal sm:leading-snug tracking-tight break-keep">
-                “수준 높은 시술을 위해<br className="sm:hidden" /> 굳이 멀리 떠나실 필요 없도록,<br />
-                당진 서울뷰의원에서<br className="sm:hidden" /> 타협 없는 실력과 정성으로<br className="sm:hidden" /> 증명해 보이겠습니다.”
-              </h3>
-              <p className="text-sm sm:text-base text-zinc-700 leading-relaxed mt-4 max-w-4xl font-normal">
-                당진 서울뷰의원은 나와 내 가족에게도 자신 있게 권할 수 있는 꼭 필요한 시술만을 정직하게 추천합니다. 또한, 친절함을 넘어 최상의 결과를 만들어내는 탄탄한 실력과 끊임없는 연구로 여러분의 건강한 아름다움을 책임지겠습니다.
-              </p>
+            {/* Top Philosophy Intro Banner: 문장 + 원장 사진 (PC는 문장 왼쪽·사진 오른쪽, 모바일은 사진 위·문장 아래) */}
+            <div className="bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl shadow-xs overflow-hidden grid md:grid-cols-12">
+              <div className="relative aspect-[4/3] md:aspect-auto md:col-span-5 md:order-last">
+                <img
+                  src={ABOUT_PHOTO_SRC}
+                  alt="서울뷰의원 당진 원내 모습"
+                  className="absolute inset-0 w-full h-full object-cover object-[50%_30%]"
+                  loading="lazy"
+                />
+              </div>
+              <div className="md:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-center">
+                {/* 뜻이 끊기지 않는 곳에서 줄바꿈 (break-keep: 단어 중간에서 안 끊김) */}
+                <h3 className="text-xl sm:text-3xl md:text-[22px] lg:text-[28px] xl:text-[32px] font-bold text-[#0F2B22] leading-normal sm:leading-snug tracking-tight break-keep">
+                  “수준 높은 시술을 위해<br /> 굳이 멀리 떠나실 필요 없도록,<br />
+                  당진 서울뷰의원에서<br /> 타협 없는 실력과 정성으로<br /> 증명해 보이겠습니다.”
+                </h3>
+                <p className="text-sm sm:text-base text-zinc-700 leading-relaxed mt-5 sm:mt-6 font-normal break-keep">
+                  당진 서울뷰의원은 나와 내 가족에게도 자신 있게 권할 수 있는 꼭 필요한 시술만을 정직하게 추천합니다. 또한, 친절함을 넘어 최상의 결과를 만들어내는 탄탄한 실력과 끊임없는 연구로 여러분의 건강한 아름다움을 책임지겠습니다.
+                </p>
+              </div>
             </div>
 
             {/* 4 Core Promises Section (서울뷰의원의 약속 - 브랜드 시그니처 딥그린 & 골드 톤) */}
