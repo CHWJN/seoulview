@@ -270,7 +270,7 @@ export default function App() {
 
   // 홈 전후사진 자동 흐름: 화면에 보이는 동안 초당 약 35px씩 천천히 왼쪽으로 흘러가고,
   // 첫 번째 묶음 끝에 닿으면 같은 모양의 두 번째 묶음 시작점에서 처음 위치로 되돌려 끊김 없이 순환.
-  // 손으로 밀거나 화살표를 누르면 2초 쉬었다가 그 위치에서 다시 흐른다.
+  // 손으로 옆으로 밀거나 화살표를 누르면 2초 쉬었다가 그 위치에서 다시 흐른다 (위아래 스크롤 중에는 계속 흐름).
   useEffect(() => {
     const el = baScrollRef.current;
     if (!el || currentPage !== 'home') return;
@@ -310,9 +310,19 @@ export default function App() {
 
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.2 });
     io.observe(el);
-    const onDown = () => { touching = true; };
-    const onUp = () => { touching = false; pausedUntil = performance.now() + 2000; pos = el.scrollLeft; };
+    // 옆으로 미는 손가락만 '직접 넘기기'로 보고 멈춤. 페이지를 위아래로 스크롤하다 카드를 스친 것은 무시하고 계속 흐른다.
+    let sx = 0, sy = 0;
+    const onDown = (e: TouchEvent) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; };
+    const onMove = (e: TouchEvent) => {
+      const dx = Math.abs(e.touches[0].clientX - sx), dy = Math.abs(e.touches[0].clientY - sy);
+      if (!touching && dx > 8 && dx > dy) touching = true;
+    };
+    const onUp = () => {
+      if (!touching) return;
+      touching = false; pausedUntil = performance.now() + 2000; pos = el.scrollLeft;
+    };
     el.addEventListener('touchstart', onDown, { passive: true });
+    el.addEventListener('touchmove', onMove, { passive: true });
     el.addEventListener('touchend', onUp, { passive: true });
     el.addEventListener('touchcancel', onUp, { passive: true });
     baNudge.current = (dx: number) => {
@@ -326,7 +336,7 @@ export default function App() {
     };
     return () => {
       cancelAnimationFrame(raf); io.disconnect();
-      el.removeEventListener('touchstart', onDown); el.removeEventListener('touchend', onUp); el.removeEventListener('touchcancel', onUp);
+      el.removeEventListener('touchstart', onDown); el.removeEventListener('touchmove', onMove); el.removeEventListener('touchend', onUp); el.removeEventListener('touchcancel', onUp);
     };
   }, [currentPage]);
   useEffect(() => {
