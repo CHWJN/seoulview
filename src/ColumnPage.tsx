@@ -841,7 +841,7 @@ export default function ColumnPage({
         onNavigateColumn={backToList}
         onBook={onOpenBooking}
       />
-      <MobileBottomBar onNavigateHome={onNavigateHome} onNavigateEvent={onNavigateToEvent} onBook={onOpenBooking} />
+      <MobileBottomBar onNavigateHome={onNavigateHome} onNavigateEvent={onNavigateToEvent} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import EventBoard from './EventBoard.tsx';
+import { NAVER_BOOKING_URL } from './clinicLinks.ts';
 import { EVENTS } from './data/pricingData.ts';
 import {
   Calendar,
@@ -586,13 +587,15 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
 
       {/* ================= MOBILE FIXED BOTTOM BAR ================= */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E8E3DD] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
-        <button
-          onClick={() => handleOpenBooking('모바일 빠른 진료예약')}
+        <a
+          href={NAVER_BOOKING_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="py-3 bg-[#0E2920] text-white flex flex-col items-center justify-center cursor-pointer"
         >
           <CalendarCheck className="w-4 h-4 text-[#BFA980] mb-0.5" />
-          <span>진료예약</span>
-        </button>
+          <span>실시간예약</span>
+        </a>
         <a
           href="tel:041-352-3994"
           className="py-3 text-[#151515] flex flex-col items-center justify-center cursor-pointer"

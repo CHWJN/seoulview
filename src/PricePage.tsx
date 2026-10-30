@@ -728,7 +728,7 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
         onNavigateColumn={() => (onNavigateColumn ? onNavigateColumn() : onNavigateHome('sec-column'))}
         onBook={handleBooking}
       />
-      <MobileBottomBar onNavigateHome={onNavigateHome} onNavigateEvent={onNavigateEvent} onBook={handleBooking} />
+      <MobileBottomBar onNavigateHome={onNavigateHome} onNavigateEvent={onNavigateEvent} />
     </div>
   );
 }

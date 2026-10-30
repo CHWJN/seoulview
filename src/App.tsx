@@ -4,6 +4,7 @@ import EventPage from './EventPage.tsx';
 import PricePage from './PricePage.tsx';
 import ColumnPage from './ColumnPage.tsx';
 import EventBoard from './EventBoard.tsx';
+import { NAVER_BOOKING_URL, NAVER_MAP_URL } from './clinicLinks.ts';
 import { COLUMNS_DATA } from './data/columnsData.ts';
 import {
   Sparkles,
@@ -1885,6 +1886,7 @@ export default function App() {
                   <span>AM 10:00 ~ PM 08:00</span>
                 </div>
                 <p className="text-[11px] text-zinc-400 pt-1 text-right">주말은 점심시간 없이 진료합니다.</p>
+                <p className="text-xs text-[#C5A880] font-semibold pt-2">※ 추석·설날 연휴를 제외하고 연중무휴로 진료합니다.</p>
               </div>
             </div>
 
@@ -1909,18 +1911,22 @@ export default function App() {
             <div>
               <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-[#111111]">서울뷰의원 당진점 약도 및 주차 안내</h3>
-                  <p className="text-xs text-zinc-500">건물 내 대형 지하주차장 및 전용 주차타워 무료 이용 가능</p>
+                  <h3 className="text-lg font-bold text-[#111111]">서울뷰의원 당진점 위치 및 주차 안내</h3>
+                  <p className="text-xs text-zinc-500">충청남도 당진시 시청2로 49-30, 7층</p>
                 </div>
                 <span className="bg-[#0F2B22] text-white text-xs px-3 py-1 rounded font-medium">
-                  무료 발렛/주차 지원
+                  진료시간 무료주차
                 </span>
               </div>
 
-              <div className="w-full h-64 sm:h-72 bg-[#E9ECEA] rounded-xl border border-[#E5E5E8] relative overflow-hidden flex items-center justify-center">
+              {/* 네이버 지도 연결 */}
+              <a
+                href={NAVER_MAP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group w-full h-64 sm:h-72 bg-[#E9ECEA] rounded-xl border border-[#E5E5E8] relative overflow-hidden flex flex-col items-center justify-center gap-4 cursor-pointer"
+              >
                 <div className="absolute inset-0 opacity-40 bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] [background-size:32px_32px]"></div>
-                <div className="absolute w-full h-6 bg-white/90 top-1/2 -translate-y-1/2 border-y border-zinc-300"></div>
-                <div className="absolute h-full w-6 bg-white/90 left-1/2 -translate-x-1/2 border-x border-zinc-300"></div>
                 <div className="relative z-10 bg-[#0F2B22] text-white px-5 py-3 rounded-xl shadow-lg border-2 border-[#C5A880] flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-[#C5A880] text-[#111111] flex items-center justify-center font-bold">
                     <MapPin className="w-5 h-5" />
@@ -1930,17 +1936,17 @@ export default function App() {
                     <p className="text-sm font-bold">서울뷰의원 당진점 (7F)</p>
                   </div>
                 </div>
-              </div>
+                <span className="relative z-10 inline-flex items-center gap-1.5 bg-[#03C75A] group-hover:bg-[#02b350] text-white text-sm font-bold px-5 py-2.5 rounded-lg shadow-md transition">
+                  네이버 지도에서 위치·길찾기 보기
+                  <ExternalLink className="w-4 h-4" />
+                </span>
+              </a>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4 mt-6 text-xs">
+            <div className="mt-6 text-xs">
               <div className="bg-white p-4 rounded-lg border border-[#E5E5E8]">
                 <p className="font-bold text-[#111111] mb-1">자가용 및 주차 안내</p>
-                <p className="text-zinc-600">네비게이션에 '서울뷰의원 당진점' 검색 후 건물 지하 1~3층 주차장 이용 (진료 시간 동안 무료 주차 등록)</p>
-              </div>
-              <div className="bg-white p-4 rounded-lg border border-[#E5E5E8]">
-                <p className="font-bold text-[#111111] mb-1">대중교통 이용 시</p>
-                <p className="text-zinc-600">당진시청 / 버스터미널 방면 주요 시내버스 정류장 하차 후 도보 2분 거리</p>
+                <p className="text-zinc-600">건물 지하 1~2층 주차장 또는 건물 바로 옆 옥외 주차장을 이용하실 수 있으며, 진료시간 동안 무료로 주차하실 수 있습니다.</p>
               </div>
             </div>
           </div>
@@ -1996,13 +2002,15 @@ export default function App() {
 
       {/* ================= MOBILE BOTTOM FIXED BAR ================= */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E5E8] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
-        <button
-          onClick={() => handleOpenBooking('모바일 하단바 빠른예약')}
+        <a
+          href={NAVER_BOOKING_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="py-3 bg-[#0F2B22] text-white flex flex-col items-center justify-center cursor-pointer"
         >
           <CalendarCheck className="w-4 h-4 text-[#C5A880] mb-0.5" />
           <span>실시간예약</span>
-        </button>
+        </a>
         <a
           href={KAKAO_CHAT_URL}
           target="_blank"
