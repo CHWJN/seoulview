@@ -92,7 +92,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 - 메인 영상 위 문구: 제목 "당신의 자연스러운 아름다움을 봅니다."(고운바탕 Gowun Batang, `.font-serif-kr`, PC는 한 줄) + 금색 영어 "SEOULVIEW CLINIC"(Cormorant Garamond, `.font-en-serif`). 영상 화면이 나올 때마다 서서히 나타남(`.hero-fade-1/2`). 진료 예약하기 버튼은 사용자 요청으로 삭제.
 - 전후사진 사진 칸을 4:5 비율로 크게(PC 약 300px 높이). 실제 사진이 오면 이 칸을 사진으로 채운다.
 - 섹션 번호·영어 소제목 삭제(사용자 확인 후): 홈의 "01 / ABOUT…", "02 / DOCTOR'S COLUMN", "03 / LOCATION & HOURS"와 하위 페이지 배지(SPECIAL EVENT, PRICE LIST, DOCTOR'S CLINICAL COLUMN, PROCEDURE GUIDE) 삭제. 하단 상호명 표기는 사용자 요청으로 그대로 둠. 메인 영상 "SEOULVIEW CLINIC", 이벤트 카드 "EVENT 01", 전후사진 BEFORE/AFTER는 유지.
-- 홈 소개 첫 탭: "수준 높은 시술을 위해~" 문장 칸에 원장 누끼 사진(카드 오른쪽 아래 모서리에 붙임, 뒤에 은은한 금색 원). PC는 문장 왼쪽·사진 오른쪽, 모바일은 인용문 배경에 원장 사진을 옅게(투명도 25%, 아래쪽 흐려짐) 깔고, 글자에 크림색 테두리 빛(text-shadow)을 줘 가독성 유지. 홈 칼럼 섹션의 회색 설명 문장 삭제. 문장은 모든 화면에서 구절 단위 다섯 줄.
+- 홈 소개 첫 탭(인용문 카드): 모바일은 짙은 초록 칸에 원장 누끼 사진을 75%로 깔고 흰 글씨 인용문 → 아래 설명 문단. PC는 인용문을 카드 위 전체 너비에 두 줄(글자 크기는 카드 너비에 맞춰 `3.1cqw`, 최대 38px) → 아래 왼쪽 설명, 오른쪽 사진. 홈 칼럼 섹션의 회색 설명 문장 삭제.
 - 대표원장 소개: 홈 "서울뷰의원 당진점 소개"의 두 번째 탭(`aboutTab === 'doctor'`)으로 넣음. 사진 `public/assets/doctor_park.webp`(사용자가 준 사진을 4:5로 잘라 800×1000), 약력은 원문 그대로 `DOCTOR_CAREER`. 소개 탭 4개(병원 소개·대표원장·보유 장비·원내 시설)는 모바일에서 짧은 이름으로 한 줄. 상단 메뉴 '서울뷰의원' 드롭다운에도 '대표원장 소개'. 홈 섹션 번호: 01 소개, 02 칼럼, 03 오시는 길.
 - 디자인 통일: 하위 페이지 색(#0E2920·#9E8A63·#BFA980 등)을 홈 색으로 맞추고 타자기 글꼴(font-mono)을 Oswald로 통일. 홈의 영어 장식 문구(SEOUL VIEW DANGJIN, SEOUL VIEW PRINCIPLES, CUSTOMER CENTER→대표번호) 정리. PC 퀵메뉴 아이콘을 금색으로 통일.
 - 홈 소개: "PREMIUM CLINIC ENVIRONMENT" 원내 공간 사진 칸 삭제 (사진 파일이 없어 깨져 보이던 칸).

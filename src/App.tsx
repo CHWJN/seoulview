@@ -733,37 +733,43 @@ export default function App() {
         {/* 1-1. Brand Philosophy */}
         {aboutTab === 'brand' && (
           <div className="space-y-12 animate-in fade-in">
-            {/* Top Philosophy Intro Banner: 문장 + 원장 사진 (PC는 문장 왼쪽·사진 오른쪽, 모바일은 인용문 배경에 사진을 옅게) */}
-            {/* 원장 사진은 배경을 따낸(누끼) 이미지라 카드 오른쪽 아래 모서리에 붙여(잘린 어깨선이 카드 테두리와 겹치게) 세우고, 뒤에 은은한 금색 원을 깔아 텍스트와 어울리게 함 */}
-            <div className="bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl shadow-xs overflow-hidden grid md:grid-cols-12">
-              <div className="hidden md:block relative order-last md:min-h-[440px] md:col-span-5">
-                <div className="absolute right-[8%] bottom-[-14%] w-[85%] max-w-[440px] aspect-square rounded-full bg-[radial-gradient(circle,rgba(197,168,128,0.30)_0%,rgba(197,168,128,0.12)_55%,transparent_72%)]" />
+            {/* Top Philosophy Intro Banner: 인용문 + 설명 + 원장 사진(배경을 따낸 누끼 이미지) */}
+            {/* 모바일: 짙은 초록 칸에 사진을 진하게 깔고 흰 글씨 인용문 → 아래 설명 문단 */}
+            {/* PC: 인용문을 카드 위쪽 전체 너비에 두 줄로 → 아래 왼쪽 설명, 오른쪽 사진(카드 오른쪽 아래 모서리에 붙임) */}
+            <div className="bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl shadow-xs overflow-hidden">
+              <div className="md:hidden relative bg-[#0F2B22] px-6 pt-10 pb-10 sm:px-10 overflow-hidden">
                 <img
                   src={ABOUT_PHOTO_SRC}
-                  alt="박상덕 대표원장"
-                  className="absolute bottom-0 right-0 h-[96%] w-auto max-w-none object-contain object-bottom"
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute bottom-0 right-0 h-full w-auto max-w-none object-contain object-bottom opacity-75 [mask-image:linear-gradient(to_left,black_45%,transparent_95%)]"
                   loading="lazy"
                 />
+                <h3 className="relative text-[19px] min-[380px]:text-[22px] sm:text-3xl font-bold text-white leading-normal tracking-tight break-keep [text-shadow:0_1px_10px_rgba(0,0,0,0.55)]">
+                  “수준 높은 시술을 위해<br /> 굳이 멀리 떠나실 필요 없도록,<br />
+                  당진 서울뷰의원에서<br /> 타협 없는 실력과 정성으로<br /> 증명해 보이겠습니다.”
+                </h3>
               </div>
-              <div className="md:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-center">
-                {/* 인용문. 모바일에서는 원장 사진을 옅게 깔아 배경으로 사용 (PC는 오른쪽에 사진이 따로 있음) */}
-                <div className="relative -mx-6 -mt-6 px-6 pt-8 pb-8 sm:-mx-10 sm:-mt-10 sm:px-10 sm:pt-12 md:m-0 md:p-0 overflow-hidden md:overflow-visible">
-                  <img
-                    src={ABOUT_PHOTO_SRC}
-                    alt=""
-                    aria-hidden="true"
-                    className="md:hidden absolute bottom-0 right-0 h-full w-auto max-w-none object-contain object-bottom opacity-25 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
-                    loading="lazy"
-                  />
-                  {/* 뜻이 끊기지 않는 곳에서 줄바꿈 (break-keep: 단어 중간에서 안 끊김) */}
-                  <h3 className="relative [text-shadow:0_0_6px_#FAF8F5,0_0_12px_#FAF8F5] md:[text-shadow:none] text-xl sm:text-3xl md:text-[22px] lg:text-[28px] xl:text-[32px] font-bold text-[#0F2B22] leading-normal sm:leading-snug tracking-tight break-keep">
-                    “수준 높은 시술을 위해<br /> 굳이 멀리 떠나실 필요 없도록,<br />
-                    당진 서울뷰의원에서<br /> 타협 없는 실력과 정성으로<br /> 증명해 보이겠습니다.”
-                  </h3>
-                </div>
-                <p className="text-sm sm:text-base text-zinc-700 leading-relaxed mt-2 md:mt-6 font-normal break-keep">
+
+              <h3 className="@container hidden md:block px-10 lg:px-12 pt-10 lg:pt-12 font-bold text-[#0F2B22] leading-snug tracking-tight break-keep">
+                {/* 카드 너비에 맞춰 글자 크기 자동 조절(긴 둘째 줄이 약 31글자 폭이라 3.1cqw) → 어떤 PC 화면에서도 두 줄 */}
+                <span className="block whitespace-nowrap text-[min(3.1cqw,38px)]">“수준 높은 시술을 위해 굳이 멀리 떠나실 필요 없도록,</span>
+                <span className="block whitespace-nowrap text-[min(3.1cqw,38px)]">당진 서울뷰의원에서 타협 없는 실력과 정성으로 증명해 보이겠습니다.”</span>
+              </h3>
+
+              <div className="md:grid md:grid-cols-12">
+                <p className="md:col-span-7 self-center px-6 py-6 sm:px-10 sm:py-8 md:py-10 lg:px-12 text-sm sm:text-base text-zinc-700 leading-relaxed break-keep">
                   당진 서울뷰의원은 나와 내 가족에게도 자신 있게 권할 수 있는 꼭 필요한 시술만을 정직하게 추천합니다. 또한, 친절함을 넘어 최상의 결과를 만들어내는 탄탄한 실력과 끊임없는 연구로 여러분의 건강한 아름다움을 책임지겠습니다.
                 </p>
+                <div className="hidden md:block relative md:col-span-5 h-[300px] lg:h-[360px]">
+                  <div className="absolute right-[8%] bottom-[-18%] w-[85%] max-w-[420px] aspect-square rounded-full bg-[radial-gradient(circle,rgba(197,168,128,0.30)_0%,rgba(197,168,128,0.12)_55%,transparent_72%)]" />
+                  <img
+                    src={ABOUT_PHOTO_SRC}
+                    alt="박상덕 대표원장"
+                    className="absolute bottom-0 right-0 h-full w-auto max-w-none object-contain object-bottom"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             </div>
 
