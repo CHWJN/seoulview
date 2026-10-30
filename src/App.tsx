@@ -249,7 +249,7 @@ export default function App() {
 
   // 대표원장 사진·약력 (약력은 원장님이 주신 원문 그대로)
   const DOCTOR_PHOTO_SRC = "/assets/doctor_park.webp";
-  const ABOUT_PHOTO_SRC = "/assets/about_doctor.webp";
+  const ABOUT_PHOTO_SRC = "/assets/about_doctor_cutout.webp";
   const DOCTOR_CAREER = [
     '공주 한일고 졸업',
     '충남대학교 의과대학 졸업',
@@ -733,17 +733,19 @@ export default function App() {
         {/* 1-1. Brand Philosophy */}
         {aboutTab === 'brand' && (
           <div className="space-y-12 animate-in fade-in">
-            {/* Top Philosophy Intro Banner: 문장 + 원장 사진 (PC는 문장 왼쪽·사진 오른쪽, 모바일은 사진 위·문장 아래) */}
+            {/* Top Philosophy Intro Banner: 문장 + 원장 사진 (PC는 문장 왼쪽·사진 오른쪽, 모바일은 문장 위·사진 아래) */}
+            {/* 원장 사진은 배경을 따낸(누끼) 이미지라 카드 오른쪽 아래 모서리에 붙여(잘린 어깨선이 카드 테두리와 겹치게) 세우고, 뒤에 은은한 금색 원을 깔아 텍스트와 어울리게 함 */}
             <div className="bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl shadow-xs overflow-hidden grid md:grid-cols-12">
-              <div className="relative aspect-[4/3] md:aspect-auto md:col-span-5 md:order-last">
+              <div className="relative order-last h-72 sm:h-96 md:h-auto md:min-h-[440px] md:col-span-5">
+                <div className="absolute right-[8%] bottom-[-14%] w-[85%] max-w-[440px] aspect-square rounded-full bg-[radial-gradient(circle,rgba(197,168,128,0.30)_0%,rgba(197,168,128,0.12)_55%,transparent_72%)]" />
                 <img
                   src={ABOUT_PHOTO_SRC}
-                  alt="서울뷰의원 당진 원내 모습"
-                  className="absolute inset-0 w-full h-full object-cover object-[50%_30%]"
+                  alt="박상덕 대표원장"
+                  className="absolute bottom-0 right-0 h-[96%] w-auto max-w-none object-contain object-bottom"
                   loading="lazy"
                 />
               </div>
-              <div className="md:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-center">
+              <div className="md:col-span-7 p-6 pb-2 sm:p-10 lg:p-12 flex flex-col justify-center">
                 {/* 뜻이 끊기지 않는 곳에서 줄바꿈 (break-keep: 단어 중간에서 안 끊김) */}
                 <h3 className="text-xl sm:text-3xl md:text-[22px] lg:text-[28px] xl:text-[32px] font-bold text-[#0F2B22] leading-normal sm:leading-snug tracking-tight break-keep">
                   “수준 높은 시술을 위해<br /> 굳이 멀리 떠나실 필요 없도록,<br />
@@ -946,7 +948,6 @@ export default function App() {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <h2 className="text-2xl sm:text-4xl font-bold text-[#111111]">대표원장 진료 칼럼</h2>
-              <p className="text-xs sm:text-sm text-zinc-600 mt-1">시술을 결정하시기 전 꼭 한 번 읽어보시면 도움 되는 대표원장의 솔직한 의학 칼럼입니다.</p>
             </div>
             <button
               onClick={() => navigateTo('column')}
