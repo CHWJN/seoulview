@@ -567,7 +567,7 @@ export default function App() {
   };
 
   const copyAddress = () => {
-    const addr = "충청남도 당진시 시청1로 서울뷰타워 4층 서울뷰의원 당진점";
+    const addr = "충청남도 당진시 시청2로 49-30, 7층 서울뷰의원 당진점";
     navigator.clipboard?.writeText(addr);
     showToast("병원 주소가 클립보드에 복사되었습니다.");
   };
@@ -670,10 +670,10 @@ export default function App() {
                     onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
                     className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg bg-white focus:outline-none focus:border-[#0F2B22]"
                   >
-                    <option>오전 (10:00 ~ 12:30)</option>
+                    <option>오전 (10:00 ~ 13:00)</option>
                     <option>오후 (14:00 ~ 18:00)</option>
-                    <option>야간진료 (화·금 18:00~20:30)</option>
-                    <option>토요일 진료 (09:30~16:00)</option>
+                    <option>저녁 (18:00 ~ 20:00)</option>
+                    <option>주말 (10:00 ~ 20:00)</option>
                   </select>
                 </div>
               </div>
@@ -1866,29 +1866,25 @@ export default function App() {
             <div className="space-y-6">
               <div>
                 <span className="text-xs font-en-cond tracking-widest text-[#C5A880]">CUSTOMER CENTER</span>
-                <p className="font-en-cond text-3xl sm:text-4xl font-bold text-white mt-1">041-350-0000</p>
-                <p className="text-xs text-zinc-300 mt-1">충청남도 당진시 시청1로 (수청동/읍내동 중심상권) 서울뷰타워 4층</p>
+                <a href="tel:041-352-3994" className="block font-en-cond text-3xl sm:text-4xl font-bold text-white mt-1 hover:text-[#C5A880] transition">041-352-3994</a>
+                <p className="text-xs text-zinc-300 mt-1">충청남도 당진시 시청2로 49-30, 7층</p>
               </div>
 
               <div className="border-t border-white/15 pt-5 space-y-2.5 text-xs sm:text-sm">
                 <h3 className="font-bold text-[#C5A880] mb-3">진료시간 안내</h3>
                 <div className="flex justify-between">
-                  <span className="text-zinc-300">월 · 수 · 목</span>
-                  <span className="font-semibold">AM 10:00 ~ PM 07:30</span>
+                  <span className="text-zinc-300">평 일</span>
+                  <span className="font-semibold">AM 10:00 ~ PM 08:00</span>
                 </div>
-                <div className="flex justify-between text-[#C5A880] font-bold">
-                  <span>화 · 금 (야간진료)</span>
-                  <span>AM 10:00 ~ PM 08:30</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-300">토 요 일</span>
-                  <span className="font-semibold">AM 09:30 ~ PM 04:00 (점심시간 없음)</span>
-                </div>
-                <div className="flex justify-between text-zinc-400 pt-1">
+                <div className="flex justify-between text-zinc-400">
                   <span>평일 점심시간</span>
                   <span>PM 01:00 ~ PM 02:00</span>
                 </div>
-                <p className="text-[11px] text-zinc-400 pt-2">※ 일요일 및 법정 공휴일은 휴진입니다.</p>
+                <div className="flex justify-between text-[#C5A880] font-bold">
+                  <span>주 말</span>
+                  <span>AM 10:00 ~ PM 08:00</span>
+                </div>
+                <p className="text-[11px] text-zinc-400 pt-1 text-right">주말은 점심시간 없이 진료합니다.</p>
               </div>
             </div>
 
@@ -1931,7 +1927,7 @@ export default function App() {
                   </div>
                   <div>
                     <p className="text-xs text-[#C5A880] font-en-cond tracking-wider">SEOUL VIEW DANGJIN</p>
-                    <p className="text-sm font-bold">서울뷰의원 당진점 (4F)</p>
+                    <p className="text-sm font-bold">서울뷰의원 당진점 (7F)</p>
                   </div>
                 </div>
               </div>
@@ -1964,8 +1960,8 @@ export default function App() {
                 />
               </div>
               <p className="text-zinc-400 leading-relaxed">
-                상호명: 서울뷰의원 당진점 | 대표자: 홍길동 | 사업자등록번호: 312-00-00000<br />
-                주소: 충청남도 당진시 시청1로 서울뷰타워 4층 | 대표전화: 041-350-0000
+                상호명: 서울뷰의원 당진점 | 대표자: 박상덕 | 사업자등록번호: 109-26-65111<br />
+                주소: 충청남도 당진시 시청2로 49-30, 7층 | 대표전화: 041-352-3994
               </p>
             </div>
             <div className="flex flex-wrap gap-4 items-start text-zinc-300">

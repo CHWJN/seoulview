@@ -589,7 +589,7 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
             <li>모든 시술은 개인에 따라 일시적인 붉은기, 멍, 부기, 미세 통증, 색소침착 등의 반응이 나타날 수 있으므로 시술 전 담당 의료진과의 충분한 진료 및 상담을 거친 후 진행됩니다.</li>
           </ul>
           <div className="pt-2 flex flex-wrap gap-4 items-center justify-between text-xs text-zinc-500 border-t border-[#E5E5E8]">
-            <span>문의 및 예약: 041-356-8275</span>
+            <span>문의 및 예약: 041-352-3994</span>
             <div className="flex gap-3">
               <button
                 onClick={() => onNavigateEvent()}
@@ -678,9 +678,10 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
                     onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
                     className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22] bg-white"
                   >
-                    <option value="오전 (10:00 ~ 12:00)">오전 (10:00 ~ 12:00)</option>
+                    <option value="오전 (10:00 ~ 13:00)">오전 (10:00 ~ 13:00)</option>
                     <option value="오후 (14:00 ~ 18:00)">오후 (14:00 ~ 18:00)</option>
-                    <option value="야간진료 (18:00 ~ 20:00)">야간진료 (18:00 ~ 20:00)</option>
+                    <option value="저녁 (18:00 ~ 20:00)">저녁 (18:00 ~ 20:00)</option>
+                    <option value="주말 (10:00 ~ 20:00)">주말 (10:00 ~ 20:00)</option>
                   </select>
                 </div>
               </div>
@@ -710,7 +711,8 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
             <span className="text-[11px] text-zinc-400">당진 서울뷰의원 비급여 수가 공시 센터</span>
           </div>
           <p className="text-[11px] text-zinc-500 text-center sm:text-right">
-            충청남도 당진시 시청1로 서울뷰타워 4층 · 대표전화 041-356-8275<br />
+            대표자 박상덕 · 사업자등록번호 109-26-65111<br />
+            충청남도 당진시 시청2로 49-30, 7층 · 대표전화 041-352-3994<br />
             © 2026 SEOUL VIEW CLINIC DANGJIN. All Rights Reserved.
           </p>
         </div>

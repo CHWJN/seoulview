@@ -124,7 +124,7 @@ export default function ColumnPage({
               "worksFor": {
                 "@type": "MedicalOrganization",
                 "name": currentArticle.author.clinic,
-                "address": "충청남도 당진시 시청1로 서울뷰타워 4층"
+                "address": "충청남도 당진시 시청2로 49-30, 7층"
               }
             },
             "publisher": {
@@ -812,8 +812,8 @@ export default function ColumnPage({
                 />
               </div>
               <p className="text-zinc-400 leading-relaxed">
-                상호명: 서울뷰의원 당진점 | 대표자: 홍길동 | 사업자등록번호: 312-00-00000<br />
-                주소: 충청남도 당진시 시청1로 서울뷰타워 4층 | 대표전화: 041-350-0000<br />
+                상호명: 서울뷰의원 당진점 | 대표자: 박상덕 | 사업자등록번호: 109-26-65111<br />
+                주소: 충청남도 당진시 시청2로 49-30, 7층 | 대표전화: 041-352-3994<br />
                 본 칼럼의 모든 의학 정보 및 저작권은 서울뷰의원 당진점에 있으며 무단 전재 및 재배포를 금합니다.
               </p>
             </div>

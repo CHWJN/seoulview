@@ -550,8 +550,8 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
                 />
               </div>
               <p className="mt-2 text-zinc-400 leading-relaxed">
-                상호명: 서울뷰의원 당진점 | 대표자: 홍길동 | 사업자등록번호: 312-00-00000<br />
-                주소: 충청남도 당진시 시청1로 서울뷰타워 4층 | 대표전화: 041-350-0000
+                상호명: 서울뷰의원 당진점 | 대표자: 박상덕 | 사업자등록번호: 109-26-65111<br />
+                주소: 충청남도 당진시 시청2로 49-30, 7층 | 대표전화: 041-352-3994
               </p>
             </div>
             <div className="flex flex-wrap gap-4 items-start text-zinc-300">
@@ -594,7 +594,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
           <span>진료예약</span>
         </button>
         <a
-          href="tel:041-350-0000"
+          href="tel:041-352-3994"
           className="py-3 text-[#151515] flex flex-col items-center justify-center cursor-pointer"
         >
           <PhoneCall className="w-4 h-4 text-[#9E8A63] mb-0.5" />
@@ -684,10 +684,10 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
                     onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
                     className="w-full px-3.5 py-2.5 border border-[#E8E3DD] rounded-lg bg-white focus:outline-none focus:border-[#9E8A63]"
                   >
-                    <option>오전 (10:00 ~ 12:30)</option>
+                    <option>오전 (10:00 ~ 13:00)</option>
                     <option>오후 (14:00 ~ 18:00)</option>
-                    <option>야간진료 (화·금 18:00~20:30)</option>
-                    <option>토요일 (09:30 ~ 16:00)</option>
+                    <option>저녁 (18:00 ~ 20:00)</option>
+                    <option>주말 (10:00 ~ 20:00)</option>
                   </select>
                 </div>
               </div>
