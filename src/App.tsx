@@ -1154,7 +1154,8 @@ export default function App() {
 
       {/* ================= FOOTER ================= */}
       <footer className="bg-[#071510] text-zinc-400 py-14 border-t border-[#C5A880]/20 text-xs pb-24 lg:pb-14">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        {/* lg:pr-28 — 오른쪽 고정 퀵메뉴에 푸터 링크가 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
           <div className="flex flex-col md:flex-row justify-between gap-8 pb-8 border-b border-white/10">
             <div>
               <div className="flex items-center gap-3 mb-3">
@@ -1172,14 +1173,14 @@ export default function App() {
             <div className="flex flex-wrap gap-4 items-start text-zinc-300">
               <button
                 onClick={() => navigateTo('prices')}
-                className="hover:text-[#C5A880] underline underline-offset-4 cursor-pointer"
+                className="hover:text-[#C5A880] cursor-pointer"
               >
                 비급여 진료비용 안내
               </button>
               <span>|</span>
               <button
                 onClick={() => navigateTo('privacy')}
-                className="hover:text-[#C5A880] cursor-pointer font-bold text-zinc-100"
+                className="hover:text-[#C5A880] cursor-pointer"
               >
                 개인정보 처리방침
               </button>
