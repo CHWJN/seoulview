@@ -27,13 +27,14 @@ const PricePage = lazy(() => import('./PricePage.tsx'));
 const ColumnPage = lazy(() => import('./ColumnPage.tsx'));
 const GuidePage = lazy(() => import('./GuidePage.tsx'));
 const BeforeAfterPage = lazy(() => import('./BeforeAfterPage.tsx'));
+const PrivacyPage = lazy(() => import('./PrivacyPage.tsx'));
 
 export default function App() {
   // Brand Logo Path from user attachment
 
   // ===== 페이지 라우팅 (react-router: 정식 경로 방식) =====
   // /  /event  /prices  /column  /column/:slug
-  type PageName = 'home' | 'event' | 'prices' | 'column' | 'guide' | 'ba';
+  type PageName = 'home' | 'event' | 'prices' | 'column' | 'guide' | 'ba' | 'privacy';
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname.replace(/\/+$/, '') || '/';
@@ -44,6 +45,8 @@ export default function App() {
     ? 'guide'
     : pathname === '/before-after' || pathname.startsWith('/before-after/')
     ? 'ba'
+    : pathname === '/privacy'
+    ? 'privacy'
     : pathname === '/event'
     ? 'event'
     : pathname === '/prices'
@@ -73,6 +76,9 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (page === 'event') {
       navigate('/event');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (page === 'privacy') {
+      navigate('/privacy');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (page === 'ba') {
       navigate(targetId ? `/before-after/${targetId}` : '/before-after');
@@ -115,7 +121,7 @@ export default function App() {
 
   // 알 수 없는 경로는 홈으로
   useEffect(() => {
-    const known = pathname === '/' || pathname === '/event' || pathname === '/prices' || pathname.startsWith('/column') || pathname === '/guide' || pathname.startsWith('/guide/') || pathname === '/before-after' || pathname.startsWith('/before-after/');
+    const known = pathname === '/' || pathname === '/event' || pathname === '/prices' || pathname.startsWith('/column') || pathname === '/guide' || pathname.startsWith('/guide/') || pathname === '/before-after' || pathname.startsWith('/before-after/') || pathname === '/privacy';
     if (!known) navigate('/', { replace: true });
   }, [pathname]);
 
@@ -424,6 +430,14 @@ export default function App() {
           <PricePage
             onNavigateHome={(sec) => navigateTo('home', sec)}
             onNavigateEvent={() => navigateTo('event')}
+            onNavigateColumn={() => navigateTo('column')}
+          />
+        )}
+        {currentPage === 'privacy' && (
+          <PrivacyPage
+            onNavigateHome={(sec) => navigateTo('home', sec)}
+            onNavigateEvent={() => navigateTo('event')}
+            onNavigatePrices={() => navigateTo('prices')}
             onNavigateColumn={() => navigateTo('column')}
           />
         )}
@@ -1164,10 +1178,10 @@ export default function App() {
               </button>
               <span>|</span>
               <button
-                onClick={() => navigateTo('column')}
-                className="hover:text-[#C5A880] cursor-pointer font-medium"
+                onClick={() => navigateTo('privacy')}
+                className="hover:text-[#C5A880] cursor-pointer font-bold text-zinc-100"
               >
-                대표원장 칼럼
+                개인정보 처리방침
               </button>
               <span>|</span>
               <button
