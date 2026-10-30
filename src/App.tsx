@@ -435,24 +435,23 @@ export default function App() {
         </div>
 
         {/* TAB 1: 영상 위 메인 문구 (사용자가 정한 문구 그대로). 엑셀웨이브 배너(z-10)가 나타나면 그 아래로 가려진다 */}
-        <div inert={heroTab !== 'video'} className="absolute inset-0 z-[5] bg-black/30 sm:bg-transparent bg-gradient-to-r from-black/50 via-black/15 to-transparent sm:from-black/55 sm:via-black/20">
+        <div inert={heroTab !== 'video'} className="absolute inset-0 z-[5] bg-black/30 sm:bg-transparent bg-gradient-to-r from-black/50 via-black/15 to-transparent sm:from-black/65 sm:via-black/30">
           <div className="h-full max-w-7xl mx-auto px-6 md:px-24 lg:px-28 flex flex-col justify-center">
-            {/* 가는 명조체 제목 + 얇은 금색 선과 병원 이름 + 테두리 버튼 (그림자·굵은 글씨 없이 단정하게) */}
-            <h1 className="font-serif-kr font-light text-[30px] leading-[1.45] sm:text-[52px] sm:leading-[1.3] text-white tracking-[-0.02em] break-keep">
-              당신의 자연스러운<br />
-              아름다움을 봅니다.
-            </h1>
-            <p className="mt-6 sm:mt-8 flex items-center gap-3 text-sm sm:text-base font-medium tracking-[0.2em] text-white/90">
-              <span className="w-8 sm:w-10 h-px bg-[#C5A880]" />
-              서울뷰의원 당진
-            </p>
-            <button
-              onClick={openNaverBooking}
-              className="mt-8 sm:mt-10 self-start inline-flex items-center gap-2 border border-white/70 text-white hover:bg-white hover:text-[#0F2B22] px-6 py-3 sm:px-7 rounded-full text-sm tracking-wide transition cursor-pointer"
+            {/* 바탕체 제목(PC는 한 줄) + 금색 영어 병원 이름. 영상 화면이 나올 때마다 서서히 나타남 */}
+            <h1
+              className={`font-serif-kr text-[30px] leading-[1.45] sm:text-[44px] lg:text-[54px] lg:leading-tight lg:whitespace-nowrap text-white tracking-[-0.01em] break-keep ${
+                heroTab === 'video' ? 'hero-fade-1' : 'opacity-0 transition-opacity duration-700'
+              }`}
             >
-              <span>진료 예약하기</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
+              당신의 자연스러운<br className="lg:hidden" /> 아름다움을 봅니다.
+            </h1>
+            <p
+              className={`mt-5 sm:mt-7 font-en-serif uppercase text-base sm:text-xl tracking-[0.35em] text-[#D9C29A] ${
+                heroTab === 'video' ? 'hero-fade-2' : 'opacity-0 transition-opacity duration-700'
+              }`}
+            >
+              Seoulview Clinic
+            </p>
           </div>
         </div>
 
@@ -629,39 +628,38 @@ export default function App() {
             className="flex md:grid md:grid-cols-2 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 scroll-px-4"
           >
             {(BA_DATA[baCat] || []).map((item, idx) => (
-              <div key={idx} className="w-[86%] shrink-0 snap-start md:w-auto bg-white border border-[#E5E5E8] shadow-xs rounded-xl p-5 sm:p-6 flex flex-col justify-between">
+              <div key={idx} className="w-[90%] shrink-0 snap-start md:w-auto bg-white border border-[#E5E5E8] shadow-xs rounded-2xl p-4 sm:p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-4">
-                    <h3 className="text-base sm:text-lg font-bold text-[#111111] break-keep">{item.title}</h3>
+                    <h3 className="text-base sm:text-xl font-bold text-[#111111] break-keep">{item.title}</h3>
                     <span className="shrink-0 whitespace-nowrap mt-0.5 text-[11px] bg-[#C5A880]/15 text-[#85734F] px-2.5 py-0.5 rounded">
                       {item.period}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 mb-4 relative">
+                  {/* 사진 칸: 세로가 조금 긴 4:5 비율로 크게 (실제 사진이 오면 이 칸을 사진으로 채운다) */}
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 relative">
                     {/* BEFORE */}
-                    <div className="bg-[#F7F7F8] border border-[#E5E5E8] rounded-lg p-5 text-center">
-                      <span className="inline-block text-[10px] font-en-cond tracking-widest bg-zinc-200 text-zinc-700 px-2 py-0.5 rounded mb-3">
+                    <div className="relative aspect-[4/5] bg-gradient-to-b from-zinc-100 to-zinc-200 border border-[#E5E5E8] rounded-xl overflow-hidden flex flex-col items-center justify-center p-4 text-center">
+                      <span className="absolute top-3 left-3 text-[10px] sm:text-[11px] font-en-cond tracking-widest bg-white/90 text-zinc-700 px-2 py-0.5 rounded">
                         BEFORE
                       </span>
-                      <div className="h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-zinc-100 to-zinc-200 p-3">
-                        <p className="text-xs font-semibold text-zinc-700">{item.beforeMetric}</p>
-                        <p className="text-[10px] text-zinc-500 mt-1">마크뷰 정밀 촬영 원본</p>
-                      </div>
+                      <p className="text-xs sm:text-sm font-semibold text-zinc-700 break-keep">{item.beforeMetric}</p>
+                      <p className="text-[10px] sm:text-[11px] text-zinc-500 mt-1">마크뷰 정밀 촬영 원본</p>
                     </div>
 
                     {/* AFTER */}
-                    <div className="bg-[#FAF8F5] border border-[#C5A880]/50 rounded-lg p-5 text-center relative overflow-hidden">
-                      <span className="inline-block text-[10px] font-en-cond tracking-widest bg-[#C5A880] text-[#111111] font-bold px-2 py-0.5 rounded mb-3">
+                    <div className="relative aspect-[4/5] bg-[#FAF8F5] border border-[#C5A880]/50 rounded-xl overflow-hidden text-center">
+                      <span className="absolute z-10 top-3 left-3 text-[10px] sm:text-[11px] font-en-cond tracking-widest bg-[#C5A880] text-[#111111] font-bold px-2 py-0.5 rounded">
                         AFTER
                       </span>
                       <div
-                        className={`h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-[#0F2B22]/10 to-[#FAF8F5] p-3 ${
+                        className={`h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#0F2B22]/10 to-[#FAF8F5] p-4 ${
                           isBaUnlocked ? 'ba-unlocked' : 'ba-locked'
                         }`}
                       >
-                        <p className="text-xs font-bold text-[#0F2B22]">{item.afterMetric}</p>
-                        <p className="text-[10px] text-zinc-500 mt-1">무보정 동일 조건 촬영</p>
+                        <p className="text-xs sm:text-sm font-bold text-[#0F2B22] break-keep">{item.afterMetric}</p>
+                        <p className="text-[10px] sm:text-[11px] text-zinc-500 mt-1">무보정 동일 조건 촬영</p>
                       </div>
                       {!isBaUnlocked && (
                         <div className="absolute inset-0 bg-white/50 flex flex-col items-center justify-center p-3">
@@ -670,7 +668,7 @@ export default function App() {
                               setIsBaUnlocked(true);
                               showToast("의료법 준수 전후사진 열람 동의가 확인되었습니다.");
                             }}
-                            className="bg-[#C5A880] text-[#111111] font-bold text-[11px] px-3 py-1.5 rounded shadow cursor-pointer"
+                            className="whitespace-nowrap bg-[#C5A880] text-[#111111] font-bold text-[11px] sm:text-xs px-3 py-1.5 sm:px-4 sm:py-2 rounded shadow cursor-pointer"
                           >
                             클릭하여 After 확인
                           </button>
@@ -679,7 +677,7 @@ export default function App() {
                     </div>
                   </div>
 
-                  <p className="text-xs text-zinc-600 leading-relaxed">{item.desc}</p>
+                  <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
