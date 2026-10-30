@@ -571,37 +571,42 @@ export default function App() {
             </div>
           </div>
 
-          {/* 6 BA Tabs */}
-          <div className="flex flex-wrap gap-2 mb-10">
-            {[
-              { id: 'melasma', label: '기미 / 난치성색소' },
-              { id: 'filler', label: '필러' },
-              { id: 'acne', label: '여드름 / 모공, 흉터 / 홍조' },
-              { id: 'hair', label: '레이저 제모' },
-              { id: 'tattoo', label: '문신제거' }
-            ].map((tab) => (
+          {/* 5 BA Tabs (모바일은 짧은 이름으로 한 줄에 5개) */}
+          <div className="grid grid-cols-5 gap-1.5 sm:flex sm:flex-wrap sm:gap-2 mb-10">
+            {([
+              { id: 'melasma', label: '기미 / 난치성색소', short: '기미·색소' },
+              { id: 'filler', label: '필러', short: '필러' },
+              { id: 'acne', label: '여드름 / 모공, 흉터 / 홍조', short: '여드름·모공' },
+              { id: 'hair', label: '레이저 제모', short: '제모' },
+              { id: 'tattoo', label: '문신제거', short: '문신제거' }
+            ] as const).map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setBaCat(tab.id as any)}
-                className={`px-4 py-2.5 rounded text-xs sm:text-sm transition cursor-pointer ${
+                onClick={() => setBaCat(tab.id)}
+                aria-label={tab.label}
+                className={`px-1 py-2.5 sm:px-4 rounded text-[11px] sm:text-sm leading-tight break-keep transition cursor-pointer ${
                   baCat === tab.id
                     ? 'font-bold bg-[#C5A880] text-[#111111]'
                     : 'font-medium bg-white/10 text-zinc-300 hover:text-white'
                 }`}
               >
-                {tab.label}
+                <span className="sm:hidden">{tab.short}</span>
+                <span className="hidden sm:inline">{tab.label}</span>
               </button>
             ))}
           </div>
 
-          {/* BA Cards Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+          {/* BA Cards: 모바일은 옆으로 넘겨 보기 (다음 카드가 살짝 보임), PC는 2열 */}
+          <div
+            key={baCat}
+            className="flex md:grid md:grid-cols-2 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 scroll-px-4"
+          >
             {(BA_DATA[baCat] || []).map((item, idx) => (
-              <div key={idx} className="bg-white/5 border border-white/15 rounded-xl p-6 flex flex-col justify-between">
+              <div key={idx} className="w-[86%] shrink-0 snap-start md:w-auto bg-white/5 border border-white/15 rounded-xl p-5 sm:p-6 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-base sm:text-lg font-bold text-white">{item.title}</h3>
-                    <span className="text-[11px] bg-[#C5A880]/20 text-[#C5A880] px-2.5 py-0.5 rounded">
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <h3 className="text-base sm:text-lg font-bold text-white break-keep">{item.title}</h3>
+                    <span className="shrink-0 whitespace-nowrap mt-0.5 text-[11px] bg-[#C5A880]/20 text-[#C5A880] px-2.5 py-0.5 rounded">
                       {item.period}
                     </span>
                   </div>
