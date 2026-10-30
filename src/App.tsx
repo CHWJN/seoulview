@@ -144,6 +144,11 @@ export default function App() {
 
   // Hero Multi-Tab State
   const [heroTab, setHeroTab] = useState<'video' | 'excelwave'>('video');
+  // 영상 화면으로 돌아온 횟수 (문구 등장 효과를 매번 다시 보여 주기 위해)
+  const [heroRound, setHeroRound] = useState<number>(0);
+  useEffect(() => {
+    if (heroTab === 'video') setHeroRound((n) => n + 1);
+  }, [heroTab]);
 
   // 메인 배너: 10초마다 영상 ↔ 엑셀웨이브 자동 전환 (화살표·막대를 누르면 그때부터 다시 10초)
   useEffect(() => {
@@ -435,30 +440,28 @@ export default function App() {
 
         {/* TAB 1: 영상 위 메인 문구 (사용자가 정한 문구 그대로). 엑셀웨이브 배너(z-10)가 나타나면 그 아래로 가려진다 */}
         <div inert={heroTab !== 'video'} className="absolute inset-0 z-[5] bg-black/30 sm:bg-transparent bg-gradient-to-r from-black/50 via-black/15 to-transparent sm:from-black/65 sm:via-black/30">
-          <div className="h-full max-w-7xl mx-auto px-6 md:px-24 lg:px-28 flex flex-col justify-center">
-            {/* 바탕체 제목(PC는 한 줄) + 금색 영어 병원 이름. 영상 화면이 나올 때마다 서서히 나타남 */}
-            <h1
-              className={`font-serif-kr text-[30px] leading-[1.45] sm:text-[44px] lg:text-[54px] lg:leading-tight lg:whitespace-nowrap text-white tracking-[-0.01em] break-keep ${
-                heroTab === 'video' ? 'hero-fade-1' : 'opacity-0 transition-opacity duration-700'
-              }`}
-            >
+          {/* 배너로 넘어갈 때는 문구 전체가 서서히 사라지고, 영상으로 돌아오면 key가 바뀌어 다시 떠오르며 나타남 */}
+          <div
+            key={`hero-text-${heroRound}`}
+            className={`h-full max-w-7xl mx-auto px-6 md:px-24 lg:px-28 flex flex-col justify-center transition-opacity duration-[1500ms] ease-in-out ${
+              heroTab === 'video' ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            {/* 바탕체 제목(PC는 한 줄) + 금색 영어 병원 이름 */}
+            <h1 className={`font-serif-kr text-[30px] leading-[1.45] sm:text-[44px] lg:text-[54px] lg:leading-tight lg:whitespace-nowrap text-white tracking-[-0.01em] break-keep ${heroTab === 'video' ? 'hero-fade-1' : ''}`}>
               당신의 자연스러운<br className="lg:hidden" /> 아름다움을 봅니다.
             </h1>
-            <p
-              className={`mt-5 sm:mt-7 font-en-serif uppercase text-base sm:text-xl tracking-[0.35em] text-[#D9C29A] ${
-                heroTab === 'video' ? 'hero-fade-2' : 'opacity-0 transition-opacity duration-700'
-              }`}
-            >
+            <p className={`mt-5 sm:mt-7 font-en-serif uppercase text-base sm:text-xl tracking-[0.35em] text-[#D9C29A] ${heroTab === 'video' ? 'hero-fade-2' : ''}`}>
               Seoulview Clinic
             </p>
           </div>
         </div>
 
-        {/* TAB 2: 엑셀웨이브 신규 도입 배너 이미지 + 상담/이벤트 버튼 (영상 위에서 1초 동안 서서히 나타나고 사라짐) */}
+        {/* TAB 2: 엑셀웨이브 신규 도입 배너 이미지 + 상담/이벤트 버튼 (영상 위에서 1.5초 동안 서서히 나타나고 사라짐) */}
         <div
           inert={heroTab !== 'excelwave'}
           aria-hidden={heroTab !== 'excelwave'}
-          className={`absolute inset-0 z-10 bg-[#F3DFD0] transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
+          className={`absolute inset-0 z-10 bg-[#F3DFD0] transition-opacity duration-[1500ms] ease-in-out will-change-[opacity] motion-reduce:transition-none ${
             heroTab === 'excelwave' ? 'opacity-100' : 'opacity-0'
           }`}
         >
