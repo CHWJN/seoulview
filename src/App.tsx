@@ -1264,32 +1264,26 @@ export default function App() {
           <ChevronRight className="w-5 h-5 text-white" />
         </button>
 
-        {/* Bottom Multi-Tab Switcher Navigation */}
-        <div className="absolute bottom-6 left-0 right-0 z-30 flex items-center justify-center px-4">
-          <div className="bg-[#071510]/85 backdrop-blur-md border border-[#C5A880]/40 rounded-full p-1.5 flex items-center gap-1.5 shadow-lg">
+        {/* Bottom Slide Indicator (얇은 막대 2개, 눌러서 전환) */}
+        <div className="absolute bottom-5 left-0 right-0 z-30 flex items-center justify-center gap-2">
+          {([
+            { id: 'video', label: '서울뷰 시그니처 영상' },
+            { id: 'excelwave', label: '2.45GHz 엑셀웨이브 신규 도입' }
+          ] as const).map((tab) => (
             <button
-              onClick={() => setHeroTab('video')}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition-all cursor-pointer flex items-center gap-2 ${
-                heroTab === 'video'
-                  ? 'bg-[#C5A880] text-[#111111] font-bold shadow-md'
-                  : 'text-zinc-300 hover:text-white hover:bg-white/10'
-              }`}
+              key={tab.id}
+              onClick={() => setHeroTab(tab.id)}
+              aria-label={tab.label}
+              aria-current={heroTab === tab.id}
+              className="py-3 px-1 cursor-pointer group"
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${heroTab === 'video' ? 'bg-[#111111]' : 'bg-zinc-400'}`}></span>
-              <span>01 서울뷰 시그니처 영상</span>
+              <span
+                className={`block h-1 w-10 sm:w-12 rounded-full transition-colors shadow-[0_0_0_1px_rgba(0,0,0,0.12)] ${
+                  heroTab === tab.id ? 'bg-[#C5A880]' : 'bg-white/70 group-hover:bg-white'
+                }`}
+              />
             </button>
-            <button
-              onClick={() => setHeroTab('excelwave')}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition-all cursor-pointer flex items-center gap-2 ${
-                heroTab === 'excelwave'
-                  ? 'bg-[#C5A880] text-[#111111] font-bold shadow-md'
-                  : 'text-zinc-300 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              <span className={`w-1.5 h-1.5 rounded-full ${heroTab === 'excelwave' ? 'bg-[#111111]' : 'bg-zinc-400'}`}></span>
-              <span>02 2.45GHz 엑셀웨이브 신규 도입</span>
-            </button>
-          </div>
+          ))}
         </div>
       </section>
 
