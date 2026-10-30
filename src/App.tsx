@@ -434,7 +434,22 @@ export default function App() {
           <div className="absolute inset-0 bg-[radial-gradient(#C5A880_1px,transparent_1px)] [background-size:32px_32px] opacity-15 pointer-events-none"></div>
         </div>
 
-        {/* TAB 1: 배경 영상만 보임 (위에 아무 내용 없이, 사용자 요청) */}
+        {/* TAB 1: 영상 위 메인 문구 (사용자가 정한 문구 그대로). 엑셀웨이브 배너(z-10)가 나타나면 그 아래로 가려진다 */}
+        <div inert={heroTab !== 'video'} className="absolute inset-0 z-[5] bg-black/30 sm:bg-transparent bg-gradient-to-r from-black/50 via-black/15 to-transparent sm:from-black/55 sm:via-black/20">
+          <div className="h-full max-w-7xl mx-auto px-6 md:px-24 lg:px-28 flex flex-col justify-center">
+            <h1 className="text-[28px] leading-snug sm:text-5xl sm:leading-tight font-bold text-white tracking-tight break-keep drop-shadow-md">
+              당신의 자연스러운<br className="sm:hidden" /> 아름다움을 봅니다.
+            </h1>
+            <p className="mt-3 sm:mt-4 text-lg sm:text-2xl font-semibold text-[#C5A880] drop-shadow">서울뷰의원 당진</p>
+            <button
+              onClick={openNaverBooking}
+              className="mt-7 sm:mt-9 self-start inline-flex items-center gap-2 bg-[#C5A880] hover:bg-[#A6895E] text-[#111111] font-bold px-6 py-3 sm:px-7 sm:py-3.5 rounded-lg text-sm transition shadow-lg cursor-pointer"
+            >
+              <CalendarCheck className="w-4 h-4" />
+              <span>진료 예약하기</span>
+            </button>
+          </div>
+        </div>
 
         {/* TAB 2: 엑셀웨이브 신규 도입 배너 이미지 + 상담/이벤트 버튼 (영상 위에서 1초 동안 서서히 나타나고 사라짐) */}
         <div
@@ -672,7 +687,8 @@ export default function App() {
       </section>
 
       {/* ================= SECTION 1: ABOUT ================= */}
-      <section id="sec-about" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8">
+      {/* lg:pr-28 — 오른쪽 탭(원내 시설 소개)이 고정 퀵메뉴에 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
+      <section id="sec-about" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-[#E5E5E8] pb-6">
           <div>
             <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
@@ -839,7 +855,7 @@ export default function App() {
         {/* 1-2. Devices */}
         {aboutTab === 'devices' && (
           // 모바일은 옆으로 넘겨 보기, 태블릿 2열·PC 3열
-          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 lg:pr-24 2xl:pr-0 animate-in fade-in">
+          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 animate-in fade-in">
             {DEVICES.map((device) => (
               <div
                 key={device.name}
@@ -869,29 +885,13 @@ export default function App() {
           </div>
         )}
 
-        {/* 1-3. Facility */}
+        {/* 1-3. Facility (사용자가 사실로 확인한 항목만) */}
         {aboutTab === 'facility' && (
-          // 모바일은 옆으로 넘겨 보기, 태블릿 2열·PC 4열
-          <div className="flex sm:grid sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 animate-in fade-in">
-            <div className="w-[78%] shrink-0 snap-start sm:w-auto bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
+          <div className="animate-in fade-in">
+            <div className="sm:max-w-md bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
               <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 01</span>
-              <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">호텔 라운지형 대기 공간</h4>
-              <p className="text-xs text-zinc-600 leading-relaxed">방문하시는 순간부터 편안함을 느끼실 수 있도록 딥그린 & 웜 우드 톤의 여유로운 대기 라운지와 파우더룸을 마련했습니다.</p>
-            </div>
-            <div className="w-[78%] shrink-0 snap-start sm:w-auto bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
-              <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 02</span>
-              <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">남·여 분리 1인 전용 제모실</h4>
-              <p className="text-xs text-zinc-600 leading-relaxed">레이저 제모 시 환자분의 프라이버시를 완벽히 보호하기 위해 독립된 1인 제모 전용 룸에서 시술합니다.</p>
-            </div>
-            <div className="w-[78%] shrink-0 snap-start sm:w-auto bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
-              <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 03</span>
               <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">1인 프라이빗 메디컬 관리실</h4>
               <p className="text-xs text-zinc-600 leading-relaxed">마취 크림 도포부터 레이저 후 진정 관리까지 다른 환자분과 마주치지 않는 쾌적한 1인 관리 베드를 운영합니다.</p>
-            </div>
-            <div className="w-[78%] shrink-0 snap-start sm:w-auto bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
-              <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 04</span>
-              <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">대학병원급 멸균 소독 시스템</h4>
-              <p className="text-xs text-zinc-600 leading-relaxed">1회용 소모품 사용 후 즉시 폐기 원칙과 고압증기멸균기·UV 소독 시스템을 통해 감염 걱정 없는 안전한 진료 환경을 유지합니다.</p>
             </div>
           </div>
         )}

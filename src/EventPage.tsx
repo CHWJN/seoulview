@@ -105,7 +105,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
             <div className="inline-flex items-center gap-2 border border-[#A6895E]/50 bg-[#A6895E]/15 px-3.5 py-1 rounded-full">
               <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
               <span className="font-en-cond text-xs tracking-widest text-[#C5A880] uppercase">
-                100% TRANSPARENT PRICING
+                SPECIAL EVENT
               </span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
@@ -113,14 +113,11 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
               <span className="text-[#C5A880]">진행 중인 이벤트</span>
             </h1>
             <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light">
-              정직한 의료 원칙으로 모든 시술 항목의 1회 및 패키지 수가를 100% 공개합니다. 상담실장의 불필요한 과잉 권유 없이, 대표원장이 직접 피부 상태를 진단하고 가장 적합한 시술을 제안해 드립니다.
+              상담실장의 불필요한 과잉 권유 없이, 대표원장이 직접 피부 상태를 진단하고 가장 적합한 시술을 제안해 드립니다.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 정품·정량 인증서 발급
-              </span>
-              <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 1인 프라이빗 제모·관리실
+                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 1인 프라이빗 관리실
               </span>
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 의료법 규정 부가세(VAT) 별도 고지
