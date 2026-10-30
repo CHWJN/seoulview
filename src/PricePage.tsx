@@ -43,7 +43,6 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
     return all.filter((g) => g.cat === activeCategory);
   }, [activeCategory, searchQuery]);
 
-  const visibleRowCount = visibleGroups.reduce((n, g) => n + g.rows.length, 0);
 
   const optionLabel = (option: string, type: string) => {
     if (!PRODUCT_TYPES.includes(type)) return option || '-';
@@ -121,26 +120,6 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
               {cat.name}
             </button>
           ))}
-        </div>
-
-        {/* Current Category Banner */}
-        <div className="bg-[#FAF8F5] border-l-4 border-[#C5A880] p-4 rounded-r-xl border border-[#E5E5E8] mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
-          <div>
-            <h3 className="font-bold text-[#0F2B22] text-sm sm:text-base">
-              {searchQuery ? `검색 결과: "${searchQuery}"` : activeCategory}
-            </h3>
-            <p className="text-xs text-zinc-600 mt-0.5">
-              {searchQuery
-                ? '전체 비급여 항목 중 일치하는 결과를 표시합니다.'
-                : '단위: 원 · 시술 금액에는 부가세(VAT 10%)가 별도로 부과됩니다.'}
-            </p>
-          </div>
-          <div className="shrink-0 flex items-center gap-2 text-xs">
-            <span className="text-zinc-500">항목수:</span>
-            <strong className="bg-[#0F2B22] text-[#C5A880] px-2.5 py-0.5 rounded font-en-cond font-bold">
-              {visibleRowCount}개
-            </strong>
-          </div>
         </div>
 
         {/* Price List (모바일: 카드형) */}

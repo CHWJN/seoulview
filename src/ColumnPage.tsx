@@ -428,6 +428,10 @@ export default function ColumnPage({
                   서울뷰의원 당진점<br />
                   <span className="text-[#C5A880]">대표원장 의학 칼럼</span>
                 </h1>
+                {/* 상단 배너 설명 문장 (이벤트·수가표 페이지와 같은 양식) */}
+                <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light break-keep">
+                  진료실에서 미처 다 전하지 못한 이야기, 시술에 대한 고민과 진심을 이곳에 담았습니다.
+                </p>
                 <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
                   <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
                     <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 대표원장 100% 직접 집필
