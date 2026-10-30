@@ -7,8 +7,7 @@ import {
   Search,
   X,
   Check,
-  Info,
-  FileSpreadsheet
+  Info
 } from 'lucide-react';
 
 interface PricePageProps {
@@ -28,11 +27,6 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, []);
-
-  const totalRows = PRICE_CATEGORIES.reduce(
-    (sum, c) => sum + c.groups.reduce((n, g) => n + g.rows.length, 0),
-    0
-  );
 
   // 검색어가 있으면 전체 분류에서, 없으면 선택한 분류에서 시술 묶음을 고른다
   const visibleGroups = useMemo(() => {
@@ -78,9 +72,6 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
               서울뷰의원 당진점<br />
               <span className="text-[#C5A880]">상세 비급여 수가표</span>
             </h1>
-            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light">
-              상담실장의 불필요한 과잉 권유 없이, 대표원장이 직접 피부 상태를 진단하고 가장 적합한 시술을 제안해 드립니다.
-            </p>
             <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 1인 프라이빗 관리실
@@ -95,36 +86,26 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 sm:py-16">
-        {/* Search & Stats Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h2 className="text-lg sm:text-xl font-bold text-[#111111] flex items-center gap-2">
-              <FileSpreadsheet className="w-5 h-5 text-[#A6895E]" />
-              <span>전체 {PRICE_CATEGORIES.length}개 분류 · {totalRows}개 비급여 수가 안내</span>
-            </h2>
-            <p className="text-xs text-zinc-500 mt-0.5">
-              원하시는 시술명을 검색창에 입력하시면 전체 분류에서 바로 찾아 드립니다.
-            </p>
-          </div>
-
-          <div className="relative w-full md:w-80">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="시술명 검색 (예: 보톡스, 리쥬란, 제모)"
-              className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm border border-[#E5E5E8] rounded-lg bg-white focus:outline-none focus:border-[#0F2B22] shadow-xs"
-            />
-            <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+        {/* 시술 검색 (예전 '전체 ○개 분류 · ○개 비급여 수가 안내' 문구 자리) */}
+        <div className="relative w-full md:max-w-xl mb-8">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="시술명 검색 (예: 보톡스, 리쥬란, 제모)"
+            aria-label="비급여 시술명 검색"
+            className="w-full pl-12 pr-11 py-3.5 text-sm border border-[#E5E5E8] rounded-xl bg-white focus:outline-none focus:border-[#0F2B22] shadow-xs"
+          />
+          <Search className="w-5 h-5 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              aria-label="검색어 지우기"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         {/* Category Tabs */}
