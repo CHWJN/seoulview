@@ -1156,7 +1156,7 @@ export default function App() {
         </button>
         <button
           onClick={() => setHeroTab(prev => prev === 'video' ? 'excelwave' : 'video')}
-          className="hidden md:flex absolute right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/40 hover:bg-[#0F2B22] border border-white/20 hover:border-[#C5A880] text-white items-center justify-center transition shadow-lg cursor-pointer"
+          className="hidden md:flex absolute right-28 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/40 hover:bg-[#0F2B22] border border-white/20 hover:border-[#C5A880] text-white items-center justify-center transition shadow-lg cursor-pointer"
           aria-label="다음 탭"
         >
           <ChevronRight className="w-5 h-5 text-white" />
