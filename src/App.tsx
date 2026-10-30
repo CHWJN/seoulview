@@ -726,12 +726,12 @@ export default function App() {
             </div>
 
             {/* 4 Core Promises Section (서울뷰의원의 약속 - 브랜드 시그니처 딥그린 & 골드 톤) */}
-            <div className="bg-[#FAF8F5] border border-[#C5A880]/40 rounded-2xl p-8 sm:p-12 shadow-xs">
-              <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="bg-[#FAF8F5] border border-[#C5A880]/40 rounded-2xl py-8 px-6 sm:p-12 shadow-xs">
+              <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
                 <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase block mb-1">
                   SEOUL VIEW PRINCIPLES
                 </span>
-                <h3 className="text-3xl sm:text-4xl font-bold text-[#0F2B22] tracking-tight">
+                <h3 className="text-2xl sm:text-4xl font-bold text-[#0F2B22] tracking-tight">
                   서울뷰의원의 약속
                 </h3>
                 <p className="text-sm sm:text-base text-zinc-600 font-medium mt-3 leading-relaxed">
@@ -740,12 +740,12 @@ export default function App() {
                 </p>
               </div>
 
-              {/* 4 Columns Grid with Vertical Dividers */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#C5A880]/25">
+              {/* 4가지 원칙: 모바일은 옆으로 넘겨 보기, 태블릿 2열·PC 4열 (세로 구분선) */}
+              <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-0 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar -mx-6 px-6 scroll-px-6 sm:mx-0 sm:px-0 sm:divide-x divide-[#C5A880]/25">
                 {/* 1. 정확한 진단 */}
-                <div className="text-center px-4 py-6 sm:py-2 flex flex-col items-center group">
-                  <div className="h-24 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-                    <svg viewBox="0 0 100 100" className="w-20 h-20 text-[#A6895E] stroke-current" fill="none" strokeWidth="1.6">
+                <div className="w-[70%] shrink-0 snap-start sm:w-auto bg-white sm:bg-transparent border border-[#C5A880]/30 sm:border-0 rounded-xl sm:rounded-none text-center px-4 py-6 sm:py-2 flex flex-col items-center group">
+                  <div className="h-16 sm:h-24 flex items-center justify-center mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                    <svg viewBox="0 0 100 100" className="w-14 h-14 sm:w-20 sm:h-20 text-[#A6895E] stroke-current" fill="none" strokeWidth="1.6">
                       <circle cx="50" cy="50" r="30" />
                       <circle cx="38" cy="42" r="22" />
                       <circle cx="62" cy="42" r="22" />
@@ -755,32 +755,32 @@ export default function App() {
                       <circle cx="50" cy="66" r="22" />
                     </svg>
                   </div>
-                  <h4 className="text-lg font-bold text-[#0F2B22] mb-3">정확한 진단</h4>
-                  <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed max-w-[220px]">
+                  <h4 className="text-base sm:text-lg font-bold text-[#0F2B22] mb-2 sm:mb-3">정확한 진단</h4>
+                  <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed max-w-[220px] break-keep">
                     전문 피부 진단기로 색소의 깊이, 탄력까지 세밀하게 분석하여 진짜 원인부터 찾습니다.
                   </p>
                 </div>
 
                 {/* 2. 근본적인 치료 */}
-                <div className="text-center px-4 py-6 sm:py-2 flex flex-col items-center group">
-                  <div className="h-24 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-                    <svg viewBox="0 0 100 100" className="w-20 h-20 text-[#A6895E] stroke-current" fill="none" strokeWidth="2.2" strokeLinecap="round">
+                <div className="w-[70%] shrink-0 snap-start sm:w-auto bg-white sm:bg-transparent border border-[#C5A880]/30 sm:border-0 rounded-xl sm:rounded-none text-center px-4 py-6 sm:py-2 flex flex-col items-center group">
+                  <div className="h-16 sm:h-24 flex items-center justify-center mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                    <svg viewBox="0 0 100 100" className="w-14 h-14 sm:w-20 sm:h-20 text-[#A6895E] stroke-current" fill="none" strokeWidth="2.2" strokeLinecap="round">
                       <path d="M 22 46 A 30 30 0 0 1 78 46" />
                       <path d="M 28 55 A 24 24 0 0 1 72 55" />
                       <path d="M 35 64 A 17 17 0 0 1 65 64" />
                       <path d="M 42 72 A 10 10 0 0 1 58 72" />
                     </svg>
                   </div>
-                  <h4 className="text-lg font-bold text-[#0F2B22] mb-3">근본적인 치료</h4>
-                  <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed max-w-[220px]">
+                  <h4 className="text-base sm:text-lg font-bold text-[#0F2B22] mb-2 sm:mb-3">근본적인 치료</h4>
+                  <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed max-w-[220px] break-keep">
                     일시적 개선이 아닌 건강한 피부를 위한 맞춤 솔루션을 제공해드립니다.
                   </p>
                 </div>
 
                 {/* 3. 정직한 프리미엄 */}
-                <div className="text-center px-4 py-6 sm:py-2 flex flex-col items-center group">
-                  <div className="h-24 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-                    <svg viewBox="0 0 120 100" className="w-24 h-20 text-[#A6895E] stroke-current" fill="none" strokeWidth="1.8" strokeLinecap="round">
+                <div className="w-[70%] shrink-0 snap-start sm:w-auto bg-white sm:bg-transparent border border-[#C5A880]/30 sm:border-0 rounded-xl sm:rounded-none text-center px-4 py-6 sm:py-2 flex flex-col items-center group">
+                  <div className="h-16 sm:h-24 flex items-center justify-center mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                    <svg viewBox="0 0 120 100" className="w-16 h-14 sm:w-24 sm:h-20 text-[#A6895E] stroke-current" fill="none" strokeWidth="1.8" strokeLinecap="round">
                       {/* Left floret */}
                       <g transform="translate(26, 50)">
                         <line x1="0" y1="-13" x2="0" y2="13" />
@@ -807,16 +807,16 @@ export default function App() {
                       </g>
                     </svg>
                   </div>
-                  <h4 className="text-lg font-bold text-[#0F2B22] mb-3">정직한 프리미엄</h4>
-                  <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed max-w-[220px]">
+                  <h4 className="text-base sm:text-lg font-bold text-[#0F2B22] mb-2 sm:mb-3">정직한 프리미엄</h4>
+                  <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed max-w-[220px] break-keep">
                     정품 · 정량의 오리지널 장비를 사용한 프리미엄 진료를 경험해보세요.
                   </p>
                 </div>
 
                 {/* 4. 본연의 아름다움 */}
-                <div className="text-center px-4 py-6 sm:py-2 flex flex-col items-center group">
-                  <div className="h-24 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-                    <svg viewBox="0 0 100 100" className="w-20 h-20 text-[#A6895E] stroke-current" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <div className="w-[70%] shrink-0 snap-start sm:w-auto bg-white sm:bg-transparent border border-[#C5A880]/30 sm:border-0 rounded-xl sm:rounded-none text-center px-4 py-6 sm:py-2 flex flex-col items-center group">
+                  <div className="h-16 sm:h-24 flex items-center justify-center mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                    <svg viewBox="0 0 100 100" className="w-14 h-14 sm:w-20 sm:h-20 text-[#A6895E] stroke-current" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M 52 84 Q 48 50 62 18" />
                       <path d="M 50 70 C 36 68 32 58 46 54 C 48 60 49 66 50 70 Z" />
                       <path d="M 52 58 C 66 56 70 46 56 42 C 54 48 53 54 52 58 Z" />
@@ -825,8 +825,8 @@ export default function App() {
                       <path d="M 62 18 C 64 12 59 10 57 12 C 56 15 59 17 62 18 Z" />
                     </svg>
                   </div>
-                  <h4 className="text-lg font-bold text-[#0F2B22] mb-3">본연의 아름다움</h4>
-                  <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed max-w-[220px]">
+                  <h4 className="text-base sm:text-lg font-bold text-[#0F2B22] mb-2 sm:mb-3">본연의 아름다움</h4>
+                  <p className="text-xs sm:text-[13px] text-zinc-600 leading-relaxed max-w-[220px] break-keep">
                     피부 문제의 근본적인 치료를 통해, 내가 가진 본연의 아름다움을 찾아갑니다.
                   </p>
                 </div>
@@ -855,11 +855,12 @@ export default function App() {
 
         {/* 1-2. Devices */}
         {aboutTab === 'devices' && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:pr-24 2xl:pr-0 animate-in fade-in">
+          // 모바일은 옆으로 넘겨 보기, 태블릿 2열·PC 3열
+          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 lg:pr-24 2xl:pr-0 animate-in fade-in">
             {DEVICES.map((device) => (
               <div
                 key={device.name}
-                className="border border-[#E5E5E8] rounded-xl p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between"
+                className="w-[82%] shrink-0 snap-start sm:w-auto border border-[#E5E5E8] rounded-xl p-5 sm:p-6 bg-white hover:border-[#C5A880] transition shadow-xs flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
@@ -887,23 +888,24 @@ export default function App() {
 
         {/* 1-3. Facility */}
         {aboutTab === 'facility' && (
-          <div className="grid md:grid-cols-4 gap-6 animate-in fade-in">
-            <div className="bg-[#F7F7F8] rounded-xl p-6 border border-[#E5E5E8]">
+          // 모바일은 옆으로 넘겨 보기, 태블릿 2열·PC 4열
+          <div className="flex sm:grid sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 animate-in fade-in">
+            <div className="w-[78%] shrink-0 snap-start sm:w-auto bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
               <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 01</span>
               <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">호텔 라운지형 대기 공간</h4>
               <p className="text-xs text-zinc-600 leading-relaxed">방문하시는 순간부터 편안함을 느끼실 수 있도록 딥그린 & 웜 우드 톤의 여유로운 대기 라운지와 파우더룸을 마련했습니다.</p>
             </div>
-            <div className="bg-[#F7F7F8] rounded-xl p-6 border border-[#E5E5E8]">
+            <div className="w-[78%] shrink-0 snap-start sm:w-auto bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
               <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 02</span>
               <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">남·여 분리 1인 전용 제모실</h4>
               <p className="text-xs text-zinc-600 leading-relaxed">레이저 제모 시 환자분의 프라이버시를 완벽히 보호하기 위해 독립된 1인 제모 전용 룸에서 시술합니다.</p>
             </div>
-            <div className="bg-[#F7F7F8] rounded-xl p-6 border border-[#E5E5E8]">
+            <div className="w-[78%] shrink-0 snap-start sm:w-auto bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
               <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 03</span>
               <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">1인 프라이빗 메디컬 관리실</h4>
               <p className="text-xs text-zinc-600 leading-relaxed">마취 크림 도포부터 레이저 후 진정 관리까지 다른 환자분과 마주치지 않는 쾌적한 1인 관리 베드를 운영합니다.</p>
             </div>
-            <div className="bg-[#F7F7F8] rounded-xl p-6 border border-[#E5E5E8]">
+            <div className="w-[78%] shrink-0 snap-start sm:w-auto bg-[#F7F7F8] rounded-xl p-5 sm:p-6 border border-[#E5E5E8]">
               <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 04</span>
               <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">대학병원급 멸균 소독 시스템</h4>
               <p className="text-xs text-zinc-600 leading-relaxed">1회용 소모품 사용 후 즉시 폐기 원칙과 고압증기멸균기·UV 소독 시스템을 통해 감염 걱정 없는 안전한 진료 환경을 유지합니다.</p>
