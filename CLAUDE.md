@@ -60,7 +60,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 | `src/data/columnsData.ts` | 칼럼 5편. 최신 글이 맨 앞. 본문은 문단 블록(p / quote / item / list / match) |
 | `src/clinicLinks.ts` | 네이버 예약·지도, 카카오톡 채팅, 구글 지도 링크, 로고 경로. 모든 예약 버튼은 `openNaverBooking()`으로 네이버 예약을 연다 |
 | `public/og-image.jpg` | 카톡 등 링크 미리보기 썸네일(1200×630, 메인 영상 첫 화면). `index.html`의 `og:image`. 바꾼 뒤에는 카카오 공유 디버거(developers.kakao.com/tool/debugger/sharing)에서 캐시 초기화 필요 |
-| `public/assets/` | 메인 영상(`main_video.mp4`), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형), 대표원장 사진(`doctor_park.webp`), 소개 문장 옆 원장 누끼 사진(`about_doctor_cutout.webp`, 흰 배경을 투명하게 따내고 셔츠 위 별 모양 표시는 지움) |
+| `public/assets/` | 메인 영상(`main_video.mp4`)과 첫 장면 이미지(`main_video_poster.webp`, 영상 로딩 중 검은 화면 대신 표시·`index.html`에서 미리 받음), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형), 대표원장 사진(`doctor_park.webp`), 소개 문장 옆 원장 누끼 사진(`about_doctor_cutout.webp`, 흰 배경을 투명하게 따내고 셔츠 위 별 모양 표시는 지움) |
 | `.claude/skills/ui-ux-pro-max/` | 디자인 참고 스킬 (외부 MIT 자료, 출처는 `SOURCE.md`) |
 
 로컬 실행: `npm install` 후 `npm run dev` (Windows PowerShell은 `npm.cmd install`, `npm.cmd run dev`).

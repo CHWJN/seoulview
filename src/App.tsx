@@ -163,6 +163,7 @@ export default function App() {
 
   // Media Assets attached by user
   const MAIN_VIDEO_SRC = "/assets/main_video.mp4";
+  const MAIN_VIDEO_POSTER_SRC = "/assets/main_video_poster.webp"; // 영상 첫 장면 (로딩 중 표시)
   const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner.webp";
   const EXCELWAVE_BANNER_MOBILE_SRC = "/assets/excelwave_banner_mobile.webp";
 
@@ -553,15 +554,20 @@ export default function App() {
       <section
         className="relative bg-[#071510] text-white overflow-hidden min-h-[580px] sm:min-h-[640px] lg:min-h-[700px] flex items-center"
       >
-        {/* Background Video Element */}
-        <div className="absolute inset-0 overflow-hidden">
+        {/* Background Video Element — 영상이 준비되기 전에도 첫 장면(poster)이 바로 보이게 해서 검은 화면이 뜨지 않도록 함 */}
+        <div
+          className="absolute inset-0 overflow-hidden bg-cover bg-center"
+          style={{ backgroundImage: `url(${MAIN_VIDEO_POSTER_SRC})` }}
+        >
           <video
             ref={heroVideoRef}
             src={MAIN_VIDEO_SRC}
+            poster={MAIN_VIDEO_POSTER_SRC}
             autoPlay
             loop
             muted
             playsInline
+            preload="auto"
             className="w-full h-full object-cover object-center scale-100"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
