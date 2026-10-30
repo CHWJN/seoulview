@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import EventBoard from './EventBoard.tsx';
 import { MobileDrawer } from './MobileNav.tsx';
-import { NAVER_BOOKING_URL } from './clinicLinks.ts';
+import { NAVER_BOOKING_URL, KAKAO_CHAT_URL, openNaverBooking } from './clinicLinks.ts';
 import { EVENTS } from './data/pricingData.ts';
 import {
   Calendar,
   CalendarCheck,
   Search,
-  X,
   ShieldCheck,
   Check,
   Menu,
@@ -16,7 +15,6 @@ import {
   ChevronUp,
   ChevronDown,
   PhoneCall,
-  CheckCircle2,
   ChevronRight,
   Info
 } from 'lucide-react';
@@ -31,37 +29,11 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
   const LOGO_SRC = "/assets/aistudio/____________c4c3a0ad.png";
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [bookingModalOpen, setBookingModalOpen] = useState<boolean>(false);
-  const [selectedProcedure, setSelectedProcedure] = useState<string>('비급여 수가표 / 이달의 이벤트 상담');
-  const [bookingForm, setBookingForm] = useState({
-    name: '',
-    phone: '',
-    date: new Date(Date.now() + 86400000).toISOString().slice(0, 10),
-    time: '오후 (14:00 ~ 18:00)'
-  });
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, []);
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 3800);
-  };
-
-  const handleOpenBooking = (procName?: string) => {
-    setSelectedProcedure(procName || '비급여 시술 및 이벤트 맞춤 상담');
-    setBookingModalOpen(true);
-  };
-
-  const handleBookingSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setBookingModalOpen(false);
-    showToast(`[예약 접수 완료] ${bookingForm.name}님, '${selectedProcedure}' 상담 신청이 접수되었습니다.`);
-  };
+  const handleOpenBooking = (_procName?: string) => openNaverBooking();
 
   // 상세 비급여 수가표는 전용 페이지로 이동
   const scrollToPrice = () => {
@@ -205,12 +177,6 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
                   onClick={() => onNavigateHome('sec-guide')}
                   className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
                 >
-                  피코슈어 피코프락셀
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
                   리프팅
                 </button>
                 <button
@@ -321,7 +287,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       />
 
       {/* ================= RIGHT FLOATING QUICK BAR ================= */}
-      <aside className="hidden md:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E8E3DD] rounded-xl shadow-md overflow-hidden divide-y divide-[#E8E3DD] w-20 text-center">
+      <aside className="hidden lg:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E8E3DD] rounded-xl shadow-md overflow-hidden divide-y divide-[#E8E3DD] w-20 text-center">
         <button
           onClick={() => handleOpenBooking('우측 퀵바 예약')}
           className="py-3.5 px-2 bg-[#0E2920] text-white hover:bg-[#184033] transition flex flex-col items-center justify-center group cursor-pointer"
@@ -330,10 +296,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
           <span className="text-[11px] font-bold">진료예약</span>
         </button>
         <button
-          onClick={() => {
-            handleOpenBooking('카카오톡 상담 문의');
-            showToast("카카오톡 상담 신청 창으로 연결되었습니다.");
-          }}
+          onClick={() => window.open(KAKAO_CHAT_URL, '_blank', 'noopener,noreferrer')}
           className="py-3.5 px-2 hover:bg-[#FEE500]/20 transition flex flex-col items-center justify-center text-[#151515] cursor-pointer"
         >
           <MessageCircle className="w-5 h-5 text-[#3C1E1E] fill-[#FEE500] mb-1" />
@@ -455,7 +418,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       </main>
 
       {/* ================= FOOTER ================= */}
-      <footer className="bg-[#0E2920] text-zinc-400 py-14 border-t border-white/10 text-xs pb-24 md:pb-14">
+      <footer className="bg-[#0E2920] text-zinc-400 py-14 border-t border-white/10 text-xs pb-24 lg:pb-14">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between gap-8 pb-8 border-b border-white/10">
             <div>
@@ -502,7 +465,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       </footer>
 
       {/* ================= MOBILE FIXED BOTTOM BAR ================= */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E8E3DD] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E8E3DD] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
         <a
           href={NAVER_BOOKING_URL}
           target="_blank"
@@ -535,99 +498,6 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
         </button>
       </div>
 
-      {/* ================= BOOKING MODAL ================= */}
-      {bookingModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-lg border border-[#9E8A63]/40 animate-in fade-in zoom-in-95">
-            <button
-              onClick={() => setBookingModalOpen(false)}
-              className="absolute top-5 right-5 text-zinc-400 hover:text-[#151515] cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <span className="font-mono text-xs tracking-widest text-[#9E8A63] font-bold uppercase">
-              RESERVATION / INQUIRY
-            </span>
-            <h3 className="text-2xl font-bold text-[#151515] mt-1">서울뷰의원 당진점 예약 신청</h3>
-            <p className="text-xs text-zinc-500 mt-1 mb-6">
-              원하시는 시술 또는 상담 항목을 남겨주시면 빠르게 안내해 드립니다.
-            </p>
-
-            <form onSubmit={handleBookingSubmit} className="space-y-4 text-xs sm:text-sm">
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">성함 *</label>
-                <input
-                  type="text"
-                  required
-                  value={bookingForm.name}
-                  onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
-                  placeholder="고객님의 성함을 입력해주세요"
-                  className="w-full px-3.5 py-2.5 border border-[#E8E3DD] rounded-lg focus:outline-none focus:border-[#9E8A63]"
-                />
-              </div>
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">연락처 *</label>
-                <input
-                  type="tel"
-                  required
-                  value={bookingForm.phone}
-                  onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                  placeholder="010-0000-0000"
-                  className="w-full px-3.5 py-2.5 border border-[#E8E3DD] rounded-lg focus:outline-none focus:border-[#9E8A63]"
-                />
-              </div>
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">선택 시술 / 관심 프로그램</label>
-                <input
-                  type="text"
-                  value={selectedProcedure}
-                  onChange={(e) => setSelectedProcedure(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-[#E8E3DD] rounded-lg bg-[#F4EFEB] font-semibold text-[#0E2920] focus:outline-none"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-zinc-700 mb-1">희망 예약일 *</label>
-                  <input
-                    type="date"
-                    required
-                    value={bookingForm.date}
-                    onChange={(e) => setBookingForm({ ...bookingForm, date: e.target.value })}
-                    className="w-full px-3.5 py-2.5 border border-[#E8E3DD] rounded-lg focus:outline-none focus:border-[#9E8A63]"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-zinc-700 mb-1">희망 시간대</label>
-                  <select
-                    value={bookingForm.time}
-                    onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
-                    className="w-full px-3.5 py-2.5 border border-[#E8E3DD] rounded-lg bg-white focus:outline-none focus:border-[#9E8A63]"
-                  >
-                    <option>오전 (10:00 ~ 13:00)</option>
-                    <option>오후 (14:00 ~ 18:00)</option>
-                    <option>저녁 (18:00 ~ 20:00)</option>
-                    <option>주말 (10:00 ~ 20:00)</option>
-                  </select>
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-[#0E2920] hover:bg-[#184033] text-white font-bold py-3.5 rounded-lg text-sm transition mt-2 cursor-pointer"
-              >
-                예약 및 상담 신청 완료
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ================= TOAST NOTIFICATION ================= */}
-      {toastMessage && (
-        <div className="fixed bottom-20 md:bottom-8 right-6 z-50 bg-[#0E2920] text-white px-5 py-3.5 rounded-xl shadow-lg border border-[#9E8A63] flex items-center gap-3 text-xs sm:text-sm animate-in fade-in slide-in-from-bottom-5">
-          <CheckCircle2 className="w-5 h-5 text-[#BFA980] shrink-0" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
     </div>
   );
 }

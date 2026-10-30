@@ -94,16 +94,16 @@ export const EVENTS: EventGroup[] = [
     "note": "이벤트 기간 ~12/31"
   },
   {
-    "name": "뉴비쥬 런칭 이벤트",
+    "name": "뉴비주 런칭 이벤트",
     "items": [
       {
-        "name": "뉴비쥬 이중턱 파괴주사 1vial",
+        "name": "뉴비주 이중턱 파괴주사 1vial",
         "option": "1회",
         "orig": 270000,
         "price": 190000
       },
       {
-        "name": "뉴비쥬 이중턱 파괴주사 1vial",
+        "name": "뉴비주 이중턱 파괴주사 1vial",
         "option": "3회",
         "orig": 700000,
         "price": 490000
@@ -127,6 +127,29 @@ export const EVENTS: EventGroup[] = [
     "items": [
       {
         "name": "리투오(1EA) + 물광주사 2.5cc",
+        "option": "1회",
+        "orig": 590000,
+        "price": 390000
+      },
+      {
+        "name": "[변경] 더마샤인 시술로 변경",
+        "option": "추가금",
+        "price": 30000,
+        "note": "기본 구성가에 추가되는 금액"
+      },
+      {
+        "name": "[변경] 캐뉼라 시술로 변경",
+        "option": "추가금",
+        "price": 100000,
+        "note": "기본 구성가에 추가되는 금액"
+      }
+    ]
+  },
+  {
+    "name": "셀르디엠 런칭 이벤트",
+    "items": [
+      {
+        "name": "셀르디엠(1EA) + 물광주사 2.5cc",
         "option": "1회",
         "orig": 590000,
         "price": 390000

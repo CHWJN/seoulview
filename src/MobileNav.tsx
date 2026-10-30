@@ -1,9 +1,8 @@
 import React from 'react';
 import { X, ChevronRight, CalendarCheck, MessageCircle, Sparkles, MapPin } from 'lucide-react';
-import { NAVER_BOOKING_URL } from './clinicLinks.ts';
+import { NAVER_BOOKING_URL, KAKAO_CHAT_URL } from './clinicLinks.ts';
 
 const LOGO_SRC = "/assets/aistudio/____________c4c3a0ad.png";
-const KAKAO_CHAT_URL = "https://pf.kakao.com/_gIJQG/chat";
 
 interface MobileNavProps {
   onNavigateHome: (sectionId?: string) => void;
@@ -83,7 +82,7 @@ export function MobileDrawer({
 // 모바일 하단 고정 메뉴바 (홈 화면과 같은 구성)
 export function MobileBottomBar({ onNavigateHome, onNavigateEvent }: Pick<MobileNavProps, 'onNavigateHome' | 'onNavigateEvent'>) {
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E5E8] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E5E8] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
       <a
         href={NAVER_BOOKING_URL}
         target="_blank"

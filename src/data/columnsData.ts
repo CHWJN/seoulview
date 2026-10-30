@@ -270,15 +270,15 @@ export const COLUMNS_DATA: ColumnArticle[] = [
   {
     "id": "col-newbiju",
     "slug": "newbiju-double-chin",
-    "title": "이중턱 파괴주사 뉴비쥬, 붓기와 통증을 줄인 콜산 주사의 원리",
-    "seoTitle": "이중턱 파괴주사 뉴비쥬, 붓기와 통증을 줄인 콜산 주사의 원리",
+    "title": "이중턱 파괴주사 뉴비주, 붓기와 통증을 줄인 콜산 주사의 원리",
+    "seoTitle": "이중턱 파괴주사 뉴비주, 붓기와 통증을 줄인 콜산 주사의 원리",
     "preview": "체중 감량을 해도 유독 턱 밑에 두툼하게 남아있는 이중턱살은 턱선 경계를 흐리게 만들고 얼굴을 더 커 보이게 만드는 주요 원인 중 하나입니다.",
     "date": "2026. 10. 06",
     "readTime": "3분 읽기",
     "author": CLINIC_AUTHOR,
     "keywords": [
       "뉴비주",
-      "뉴비쥬",
+      "뉴비주",
       "이중턱 주사",
       "브이올렛",
       "콜산",

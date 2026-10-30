@@ -1,24 +1,17 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { PRICE_CATEGORIES, formatWon } from './data/pricingData.ts';
 import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
+import { openNaverBooking } from './clinicLinks.ts';
 import {
-  Calendar,
   CalendarCheck,
   Search,
   X,
   ShieldCheck,
   Check,
-  ChevronRight,
   ChevronDown,
   Info,
-  ArrowLeft,
-  Sparkles,
-  PhoneCall,
   Menu,
-  CheckCircle2,
-  FileSpreadsheet,
-  SlidersHorizontal,
-  Home
+  FileSpreadsheet
 } from 'lucide-react';
 
 interface PricePageProps {
@@ -37,46 +30,13 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
   const [activeCategory, setActiveCategory] = useState<string>(PRICE_CATEGORIES[0].name);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [bookingModalOpen, setBookingModalOpen] = useState<boolean>(false);
-  const [selectedItemName, setSelectedItemName] = useState<string>('비급여 수가 진료 상담');
-  const [bookingForm, setBookingForm] = useState({
-    name: '',
-    phone: '',
-    date: new Date(Date.now() + 86400000).toISOString().slice(0, 10),
-    time: '오후 (14:00 ~ 18:00)'
-  });
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, []);
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 3500);
-  };
-
   const handleBooking = (itemName: string) => {
-    if (onOpenBooking) {
-      onOpenBooking(itemName);
-    } else {
-      setSelectedItemName(itemName);
-      setBookingModalOpen(true);
-    }
-  };
-
-  const handleBookingSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setBookingModalOpen(false);
-    showToast(`[예약 접수 완료] ${bookingForm.name || '고객'}님, '${selectedItemName}' 예약 신청이 접수되었습니다.`);
-    setBookingForm({
-      name: '',
-      phone: '',
-      date: new Date(Date.now() + 86400000).toISOString().slice(0, 10),
-      time: '오후 (14:00 ~ 18:00)'
-    });
+    if (onOpenBooking) onOpenBooking(itemName);
+    else openNaverBooking();
   };
 
   const totalRows = PRICE_CATEGORIES.reduce(
@@ -108,15 +68,7 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F6] text-[#111111] selection:bg-[#0F2B22] selection:text-white flex flex-col justify-between pb-14 md:pb-0">
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#0F2B22] text-white px-5 py-3.5 rounded-lg shadow-lg border border-[#C5A880]/50 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-3 duration-300">
-          <CheckCircle2 className="w-5 h-5 text-[#C5A880] shrink-0" />
-          <span className="text-xs sm:text-sm font-medium">{toastMessage}</span>
-        </div>
-      )}
-
+    <div className="min-h-screen bg-[#FBF9F6] text-[#111111] selection:bg-[#0F2B22] selection:text-white flex flex-col justify-between pb-14 lg:pb-0">
       {/* ================= MAIN HEADER & NAVIGATION (메인화면과 100% 동일) ================= */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5E5E8] shadow-xs">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
@@ -247,12 +199,6 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
                   className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
                 >
                   레이저토닝 / 잡티제거
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  피코슈어 피코프락셀
                 </button>
                 <button
                   onClick={() => onNavigateHome('sec-guide')}
@@ -607,97 +553,6 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
           </div>
         </div>
       </main>
-
-      {/* Booking Modal */}
-      {bookingModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-lg border border-[#E5E5E8] relative animate-in zoom-in-95 duration-200">
-            <button
-              onClick={() => setBookingModalOpen(false)}
-              className="absolute right-4 top-4 text-zinc-400 hover:text-zinc-700 p-1 cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="mb-5">
-              <span className="font-en-cond text-xs tracking-wider text-[#A6895E] font-bold uppercase">
-                FAST RESERVATION
-              </span>
-              <h3 className="text-xl font-bold text-[#111111] mt-0.5">비급여 시술 상담 예약</h3>
-              <p className="text-xs text-zinc-500 mt-1">
-                신청하신 항목에 맞춰 전담 상담 실장이 확인 후 신속하게 연락드립니다.
-              </p>
-            </div>
-
-            <div className="mb-4 p-3 bg-[#FAF8F5] border border-[#C5A880]/30 rounded-lg">
-              <span className="text-[11px] text-zinc-500 block">선택하신 시술 항목</span>
-              <strong className="text-xs sm:text-sm text-[#0F2B22] font-semibold block mt-0.5">
-                {selectedItemName}
-              </strong>
-            </div>
-
-            <form onSubmit={handleBookingSubmit} className="space-y-3.5 text-xs">
-              <div>
-                <label className="block text-zinc-700 font-medium mb-1">성함 *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="예: 홍길동"
-                  value={bookingForm.name}
-                  onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
-                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-zinc-700 font-medium mb-1">연락처 *</label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="예: 010-1234-5678"
-                  value={bookingForm.phone}
-                  onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-zinc-700 font-medium mb-1">희망 예약일</label>
-                  <input
-                    type="date"
-                    value={bookingForm.date}
-                    onChange={(e) => setBookingForm({ ...bookingForm, date: e.target.value })}
-                    className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-zinc-700 font-medium mb-1">희망 시간대</label>
-                  <select
-                    value={bookingForm.time}
-                    onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
-                    className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22] bg-white"
-                  >
-                    <option value="오전 (10:00 ~ 13:00)">오전 (10:00 ~ 13:00)</option>
-                    <option value="오후 (14:00 ~ 18:00)">오후 (14:00 ~ 18:00)</option>
-                    <option value="저녁 (18:00 ~ 20:00)">저녁 (18:00 ~ 20:00)</option>
-                    <option value="주말 (10:00 ~ 20:00)">주말 (10:00 ~ 20:00)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  className="w-full bg-[#0F2B22] hover:bg-[#173F32] text-white py-3 rounded-lg font-bold text-xs sm:text-sm transition cursor-pointer shadow-md"
-                >
-                  상담 예약 신청 완료
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Footer */}
       <footer className="bg-[#071510] text-zinc-400 text-xs py-10 border-t border-white/10 mt-16">

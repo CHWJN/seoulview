@@ -12,8 +12,8 @@ interface EventBoardProps {
 
 export default function EventBoard({ onBook, previewCount, onMore, events = EVENTS }: EventBoardProps) {
   return (
-    // md:pr-24 — 오른쪽 고정 퀵메뉴에 가격이 가려지지 않도록 (화면이 넓은 2xl부터는 여백 불필요)
-    <div className={`grid gap-6 md:pr-24 2xl:pr-0 ${previewCount ? 'sm:grid-cols-2 lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
+    // lg:pr-24 — 오른쪽 고정 퀵메뉴에 가격이 가려지지 않도록 (화면이 넓은 2xl부터는 여백 불필요)
+    <div className={`grid gap-6 lg:pr-24 2xl:pr-0 ${previewCount ? 'sm:grid-cols-2 lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
       {events.map((ev, evIdx) => {
         const items = previewCount ? ev.items.slice(0, previewCount) : ev.items;
         const hidden = ev.items.length - items.length;

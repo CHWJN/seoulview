@@ -250,7 +250,7 @@ export default function ColumnPage({
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] text-[#111111] selection:bg-[#0F2B22] selection:text-white font-sans pb-14 md:pb-0">
+    <div className="min-h-screen bg-[#FDFDFD] text-[#111111] selection:bg-[#0F2B22] selection:text-white font-sans pb-14 lg:pb-0">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-[#0F2B22] text-[#C5A880] px-6 py-3 rounded-xl shadow-lg border border-[#C5A880]/30 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-top-4 flex items-center gap-2">
@@ -389,12 +389,6 @@ export default function ColumnPage({
                   className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
                 >
                   레이저토닝 / 잡티제거
-                </button>
-                <button
-                  onClick={() => onNavigateHome('sec-guide')}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  피코슈어 피코프락셀
                 </button>
                 <button
                   onClick={() => onNavigateHome('sec-guide')}

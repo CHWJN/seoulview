@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import EventPage from './EventPage.tsx';
 import PricePage from './PricePage.tsx';
 import ColumnPage from './ColumnPage.tsx';
 import EventBoard from './EventBoard.tsx';
 import { MobileDrawer } from './MobileNav.tsx';
-import { NAVER_BOOKING_URL, NAVER_MAP_URL, GOOGLE_MAP_EMBED_URL } from './clinicLinks.ts';
+import { NAVER_BOOKING_URL, NAVER_MAP_URL, GOOGLE_MAP_EMBED_URL, KAKAO_CHAT_URL, openNaverBooking } from './clinicLinks.ts';
 import { COLUMNS_DATA } from './data/columnsData.ts';
 import {
   Sparkles,
@@ -16,30 +16,14 @@ import {
   CalendarCheck,
   Calendar,
   Menu,
-  X,
   CheckCircle2,
-  Search,
   MessageCircle,
   Instagram,
   MapPin,
-  ShieldCheck,
-  Award,
-  Phone,
-  Clock,
-  Copy,
-  ExternalLink,
-  BookOpen
+  ExternalLink
 } from 'lucide-react';
 
 // Data Types
-interface PriceItem {
-  cat: string;
-  group: string;
-  name: string;
-  once: string;
-  multi: string;
-}
-
 interface BaItem {
   title: string;
   period: string;
@@ -56,13 +40,6 @@ interface GuideItem {
   cycle: string;
   downtime: string;
   precautions: string[];
-}
-
-interface ColumnItem {
-  tag: string;
-  title: string;
-  preview: string;
-  paragraphs: string[];
 }
 
 export default function App() {
@@ -163,29 +140,11 @@ export default function App() {
 
   // Section Tabs
   const [aboutTab, setAboutTab] = useState<'brand' | 'devices' | 'facility'>('brand');
-  const [priceCat, setPriceCat] = useState<string>('pigment');
-  const [priceSearch, setPriceSearch] = useState<string>('');
   const [baCat, setBaCat] = useState<'melasma' | 'filler' | 'acne' | 'hair' | 'tattoo'>('melasma');
   const [isBaUnlocked, setIsBaUnlocked] = useState<boolean>(false);
   const [guideCat, setGuideCat] = useState<string>('toning');
 
-  // Modals & Notifications
-  const [bookingModalOpen, setBookingModalOpen] = useState<boolean>(false);
-  const [selectedBookingItem, setSelectedBookingItem] = useState<string>('1:1 맞춤 진료 상담');
-  const [bookingForm, setBookingForm] = useState({
-    name: '',
-    phone: '',
-    date: '',
-    time: '오후 (14:00 ~ 18:00)'
-  });
-
-  const [columnModalOpen, setColumnModalOpen] = useState<boolean>(false);
-  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number>(0);
-
-  const [adminModalOpen, setAdminModalOpen] = useState<boolean>(false);
-  const [quickTitle, setQuickTitle] = useState<string>('');
-  const [quickOnce, setQuickOnce] = useState<string>('');
-
+  // Notifications
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Hero Multi-Tab State
@@ -194,7 +153,6 @@ export default function App() {
   // Media Assets attached by user
   const MAIN_IMAGE_SRC = "/assets/aistudio/main_image_2f557015.jpg";
   const MAIN_VIDEO_SRC = "/assets/main_video.mp4";
-  const KAKAO_CHAT_URL = "https://pf.kakao.com/_gIJQG/chat";
   const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner.webp";
   const EXCELWAVE_BANNER_MOBILE_SRC = "/assets/excelwave_banner_mobile.webp";
 
@@ -215,72 +173,6 @@ export default function App() {
   }, [currentPage]);
 
   // Price Data State (allows adding items)
-  const [priceList, setPriceList] = useState<PriceItem[]>([
-    // 1. 기미 / 모공 / 문신제거 (pigment)
-    { cat: "pigment", group: "피코슈어 (755nm)", name: "피코슈어 토닝 + 진정관리", once: "90,000원", multi: "5회 390,000원 / 10회 690,000원" },
-    { cat: "pigment", group: "피코슈어 (755nm)", name: "피코슈어 프락셀 (포커스 모공/흉터) + 크라이오", once: "150,000원", multi: "3회 390,000원 / 5회 590,000원" },
-    { cat: "pigment", group: "레블라이트 SI", name: "레블라이트 SI PTP 듀얼토닝 + 비타민관리", once: "80,000원", multi: "10회 590,000원" },
-    { cat: "pigment", group: "흑자 / 잡티 제거", name: "피코슈어 흑자 / 검버섯 원데이 집중 제거 (개당/크기별)", once: "30,000원~", multi: "얼굴 전체 패키지 290,000원~" },
-    { cat: "pigment", group: "포텐자 (Potenza)", name: "포텐자 마이크로니들 (모공/흉터/홍조) 1회 (팁 포함)", once: "180,000원", multi: "3회 450,000원" },
-    { cat: "pigment", group: "포텐자 (Potenza)", name: "포텐자 펌핑팁 + 쥬베룩 스킨 2cc", once: "290,000원", multi: "3회 790,000원" },
-    { cat: "pigment", group: "문신제거", name: "피코슈어 눈썹 반영구 문신제거", once: "80,000원", multi: "3회 190,000원" },
-    { cat: "pigment", group: "문신제거", name: "피코슈어 레터링 / 컬러 타투 제거 (명함 1/2 크기 기준)", once: "100,000원", multi: "5회 390,000원" },
-
-    // 2. 리프팅 (lifting) - Includes Excelwave
-    { cat: "lifting", group: "엑셀웨이브 (Excelwave)", name: "엑셀웨이브 2.45GHz 극초단파 리프팅 풀페이스", once: "450,000원", multi: "3회 1,190,000원" },
-    { cat: "lifting", group: "엑셀웨이브 (Excelwave)", name: "엑셀웨이브 이중턱 + 심부볼 집중 컨투어링", once: "290,000원", multi: "3회 750,000원" },
-    { cat: "lifting", group: "울쎄라 (Ultherapy)", name: "울쎄라 오리지널 리프팅 100샷 (정품인증)", once: "290,000원", multi: "300샷 750,000원" },
-    { cat: "lifting", group: "울쎄라 (Ultherapy)", name: "울쎄라 오리지널 리프팅 400샷 + LDM 재생", once: "950,000원", multi: "600샷 1,350,000원" },
-    { cat: "lifting", group: "인모드 (InMode)", name: "인모드 FX (지방감소) 1부위 (이중턱 또는 심부볼)", once: "69,000원", multi: "3회 180,000원" },
-    { cat: "lifting", group: "인모드 (InMode)", name: "인모드 FX + FORMA 풀페이스 2단계 올인원", once: "129,000원", multi: "3회 330,000원" },
-    { cat: "lifting", group: "슈링크 유니버스", name: "슈링크 유니버스 300샷 (울트라F + 부스터 펜타입)", once: "119,000원", multi: "600샷 210,000원" },
-    { cat: "lifting", group: "올리지오 (Oligio)", name: "올리지오 RF 고주파 타이트닝 300샷", once: "420,000원", multi: "600샷 750,000원" },
-    { cat: "lifting", group: "젠틀맥스 리프팅", name: "젠틀맥스 프로 플러스 롱펄스 제네시스 탄력 리프팅", once: "99,000원", multi: "5회 390,000원" },
-
-    // 3. 여성 제모 (hair-w)
-    { cat: "hair-w", group: "젠틀맥스 프로 플러스", name: "여성 겨드랑이 레이저 제모", once: "15,000원", multi: "5회 49,000원" },
-    { cat: "hair-w", group: "젠틀맥스 프로 플러스", name: "여성 인중 + 겨드랑이 세트", once: "25,000원", multi: "5회 59,000원" },
-    { cat: "hair-w", group: "젠틀맥스 프로 플러스", name: "여성 얼굴 전체 (이마+볼+구렛나루+인중+턱) 솜털제모", once: "60,000원", multi: "5회 220,000원" },
-    { cat: "hair-w", group: "젠틀맥스 프로 플러스", name: "여성 팔 하완 (팔꿈치 아래 + 손등 + 손가락)", once: "50,000원", multi: "5회 169,000원" },
-    { cat: "hair-w", group: "젠틀맥스 프로 플러스", name: "여성 종아리 + 무릎 전체", once: "60,000원", multi: "5회 199,000원" },
-    { cat: "hair-w", group: "젠틀맥스 프로 플러스", name: "여성 브라질리언 올누드/디자인 (1인 프라이빗룸)", once: "90,000원", multi: "5회 350,000원" },
-
-    // 4. 남성 제모 (hair-m)
-    { cat: "hair-m", group: "젠틀맥스 프로 플러스", name: "남성 인중 + 턱수염 (마취크림 + 진정팩 포함)", once: "60,000원", multi: "5회 240,000원" },
-    { cat: "hair-m", group: "젠틀맥스 프로 플러스", name: "남성 수염 전체 (인중+턱+턱밑+볼+구렛나루+목)", once: "99,000원", multi: "5회 390,000원 / 10회 690,000원" },
-    { cat: "hair-m", group: "젠틀맥스 프로 플러스", name: "남성 눈썹 위/미간/광대 라인 정리", once: "30,000원", multi: "5회 110,000원" },
-    { cat: "hair-m", group: "젠틀맥스 프로 플러스", name: "남성 겨드랑이 제모", once: "25,000원", multi: "5회 89,000원" },
-    { cat: "hair-m", group: "젠틀맥스 프로 플러스", name: "남성 종아리 + 무릎 제모", once: "90,000원", multi: "5회 340,000원" },
-    { cat: "hair-m", group: "젠틀맥스 프로 플러스", name: "남성 다리 전체 (허벅지 + 무릎 + 종아리 + 발등)", once: "170,000원", multi: "5회 650,000원" },
-
-    // 5. 스킨부스터 (booster)
-    { cat: "booster", group: "리쥬란 (Rejuran)", name: "리쥬란 힐러 2cc (정품 박스 개봉 확인)", once: "199,000원", multi: "3회 540,000원" },
-    { cat: "booster", group: "리쥬란 (Rejuran)", name: "리쥬란 HB 플러스 (무통 리쥬란) 1cc / 2cc", once: "140,000원", multi: "2cc 259,000원" },
-    { cat: "booster", group: "리쥬란 (Rejuran)", name: "리쥬란 아이 (눈가 잔주름/다크서클 전용) 1cc", once: "130,000원", multi: "3회 350,000원" },
-    { cat: "booster", group: "쥬베룩 (Juvelook)", name: "쥬베룩 스킨 (모공·결·잔주름) 2cc / 4cc", once: "130,000원", multi: "4cc 220,000원" },
-    { cat: "booster", group: "쥬베룩 (Juvelook)", name: "쥬베룩 볼륨 (콜라겐 볼륨 부스터) 4cc / 1병(8cc)", once: "250,000원", multi: "1병(8cc) 450,000원" },
-    { cat: "booster", group: "엑소좀 / 물광", name: "ASCE+ 줄기세포 엑소좀 5cc 풀페이스", once: "230,000원", multi: "3회 590,000원" },
-
-    // 6. 필러 (filler)
-    { cat: "filler", group: "국산 프리미엄 필러", name: "아띠에르 / 뉴라미스 필러 1cc (이마/관자/볼/팔자/턱끝)", once: "99,000원", multi: "3cc 270,000원" },
-    { cat: "filler", group: "수입 하이엔드 필러", name: "독일 벨로테로 / 스웨덴 레스틸렌 1cc", once: "240,000원", multi: "2cc 440,000원" },
-    { cat: "filler", group: "특수 부위 디자인", name: "입술 디자인 필러 (입꼬리 보톡스 포함) 국산/수입", once: "150,000원", multi: "수입 270,000원" },
-    { cat: "filler", group: "필러 제거", name: "히알루로니다제 필러 녹이는 주사 (부위당)", once: "80,000원", multi: "타원 시술 포함 정밀 용해" },
-
-    // 7. 보톡스 / 윤곽주사 (botox)
-    { cat: "botox", group: "주름 보톡스", name: "이마 / 미간 / 눈가 / 콧등 / 자갈턱 보톡스 (국산 1부위)", once: "19,000원", multi: "3부위 패키지 49,000원" },
-    { cat: "botox", group: "사각턱 보톡스", name: "사각턱 보톡스 50U (국산 정품 / 코어톡스 / 제오민)", once: "25,000원", multi: "코어톡스 49,000원 / 제오민 69,000원" },
-    { cat: "botox", group: "스킨보톡스", name: "풀페이스 더모톡신 (모공·잔주름 리프팅)", once: "79,000원", multi: "제오민 스킨보톡스 149,000원" },
-    { cat: "botox", group: "바디보톡스", name: "승모근 / 종아리 / 겨드랑이 다한증 100U", once: "79,000원", multi: "200U 140,000원" },
-    { cat: "botox", group: "윤곽주사", name: "브이올렛 (식약처 허가 이중턱 지방파괴 주사) 1병(2cc)", once: "230,000원", multi: "2병(4cc) 420,000원" },
-
-    // 8. 메디컬 스킨케어 (skincare)
-    { cat: "skincare", group: "프리미엄 초음파", name: "LDM 물방울 리프팅 (홍조/보습/재생/트러블 모드)", once: "60,000원", multi: "5회 250,000원" },
-    { cat: "skincare", group: "모공 / 여드름", name: "아쿠아필 3단계 모공 딥클렌징 + 수분진정팩", once: "40,000원", multi: "5회 160,000원" },
-    { cat: "skincare", group: "필링 / 광채", name: "라라필 (LHA 4세대 저자극 필링) + 진정관리", once: "80,000원", multi: "3회 210,000원" },
-    { cat: "skincare", group: "미백 / 진정", name: "크라이오 냉각이온침투 / 비타민 이온자임 관리", once: "40,000원", multi: "10회 300,000원" }
-  ]);
-
   // 보유 장비 소개
   const DEVICES: { badge: string; area: string; name: string; sub: string; desc: string; link: 'event' | 'prices' }[] = [
     {
@@ -309,10 +201,10 @@ export default function App() {
     },
     {
       badge: "LASER",
-      area: "색소 · 피부톤",
+      area: "표재성 · 진피성 색소",
       name: "루카스 (LUCAS)",
-      sub: "레이저 토닝",
-      desc: "피부 상태에 맞춰 색소와 피부톤 개선에 활용하는 레이저 장비입니다.",
+      sub: "Q-Switched Nd:YAG 레이저 (1064/532nm)",
+      desc: "루카스(LUCAS) 레이저는 엔디야그(Q-Switched Nd:YAG) 레이저로 1064/532nm 두 가지 파장을 활용하여 피부의 표재성·진피성 색소 질환을 효과적으로 치료하는 고출력 색소 레이저 장비입니다.",
       link: 'prices'
     },
     {
@@ -352,24 +244,24 @@ export default function App() {
   // Before & After Data
   const BA_DATA: Record<string, BaItem[]> = {
     melasma: [
-      { title: "피코슈어 755nm + 레블라이트SI 복합 토닝 10회", period: "시술 후 12주 경과", desc: "양 볼에 넓게 퍼진 혼합형 난치성 기미와 잡티를 열 손상 없이 안전하게 분해하여 전체 피부 톤을 밝힌 사례입니다.", beforeMetric: "시술 전: 진피성 기미 및 불균일한 톤", afterMetric: "시술 후: 멜라닌 지수 62% 감소" },
-      { title: "피코슈어 흑자(검버섯) 원데이 제거", period: "시술 후 3주 경과", desc: "일반 레이저 토닝으로 지워지지 않던 광대 부위 흑자를 피코슈어 755nm 스팟 조사로 1회 시술 만에 깨끗하게 제거했습니다.", beforeMetric: "시술 전: 짙은 갈색 흑자 병변", afterMetric: "시술 후: 흉터 없이 정상 피부톤 회복" }
+      { title: "색소 레이저 복합 토닝 10회", period: "시술 후 12주 경과", desc: "양 볼에 넓게 퍼진 혼합형 난치성 기미와 잡티를 열 손상 없이 안전하게 분해하여 전체 피부 톤을 밝힌 사례입니다.", beforeMetric: "시술 전: 진피성 기미 및 불균일한 톤", afterMetric: "시술 후: 멜라닌 지수 62% 감소" },
+      { title: "흑자(검버섯) 원데이 제거", period: "시술 후 3주 경과", desc: "일반 레이저 토닝으로 지워지지 않던 광대 부위 흑자를 레이저 스팟 조사로 1회 시술 만에 깨끗하게 제거했습니다.", beforeMetric: "시술 전: 짙은 갈색 흑자 병변", afterMetric: "시술 후: 흉터 없이 정상 피부톤 회복" }
     ],
     filler: [
       { title: "벨로테로 팔자주름 + 앞볼 커스텀 필러 2cc", period: "시술 직후 및 2주 경과", desc: "과하게 부풀어 오르는 느낌 없이 코 옆 꺼진 삼각존(귀족 부위)을 자연스럽게 채워 인상을 부드럽게 개선했습니다.", beforeMetric: "시술 전: 깊은 팔자 고랑", afterMetric: "시술 후: 이물감 없는 자연스러운 윤곽" },
       { title: "입술 디자인 필러 + 입꼬리 보톡스", period: "시술 후 1주 경과", desc: "말려 들어가고 비대칭이던 윗입술 라인에 입체감을 부여하고 자연스럽게 올라간 입꼬리를 디자인했습니다.", beforeMetric: "시술 전: 얇고 비대칭인 입술", afterMetric: "시술 후: 볼륨 및 입꼬리 대칭 개선" }
     ],
     acne: [
-      { title: "피코슈어 프락셀 + 포텐자 쥬베룩 3회", period: "시술 후 10주 경과", desc: "나비존(볼·코 옆)의 늘어진 세로 모공과 패인 여드름 롤링성 흉터를 진피 재생 유도로 촘촘하게 메운 케이스입니다.", beforeMetric: "시술 전: 확장된 모공 및 요철", afterMetric: "시술 후: 모공 면적 축소 및 피부결 매끈화" },
-      { title: "젠틀맥스 프로+ 혈관/홍조 모드 + LDM 5회", period: "시술 후 6주 경과", desc: "만성적인 양 볼 안면홍조와 여드름 붉은 자국을 개선하고 얇아진 피부 장벽을 튼튼하게 복원했습니다.", beforeMetric: "시술 전: 여드름 홍반 및 모세혈관 확장", afterMetric: "시술 후: 붉은기 진정 및 장벽 강화" }
+      { title: "모공·흉터 레이저 + 쥬베룩 3회", period: "시술 후 10주 경과", desc: "나비존(볼·코 옆)의 늘어진 세로 모공과 패인 여드름 롤링성 흉터를 진피 재생 유도로 촘촘하게 메운 케이스입니다.", beforeMetric: "시술 전: 확장된 모공 및 요철", afterMetric: "시술 후: 모공 면적 축소 및 피부결 매끈화" },
+      { title: "홍조 레이저 + LDM 5회", period: "시술 후 6주 경과", desc: "만성적인 양 볼 안면홍조와 여드름 붉은 자국을 개선하고 얇아진 피부 장벽을 튼튼하게 복원했습니다.", beforeMetric: "시술 전: 여드름 홍반 및 모세혈관 확장", afterMetric: "시술 후: 붉은기 진정 및 장벽 강화" }
     ],
     hair: [
-      { title: "젠틀맥스 프로 플러스 남성 수염 전체 5회", period: "5회 시술 완료 후 4주 경과", desc: "매일 아침 면도 독(모낭염)과 푸른 수염 자국으로 스트레스받던 남성 환자분의 인중·턱·목 수염을 90% 이상 반영구 제거했습니다.", beforeMetric: "시술 전: 굵고 빽빽한 수염 및 모낭염", afterMetric: "시술 후: 푸른 자국 소실 및 매끈한 턱선" },
-      { title: "젠틀맥스 프로 플러스 여성 종아리/겨드랑이 5회", period: "5회 시술 완료 후", desc: "26mm 대구경 스팟과 DCD 냉각 시스템으로 통증 없이 모공 각화증과 체모를 동시에 깔끔하게 정리했습니다.", beforeMetric: "시술 전: 잦은 면도로 인한 색소침착", afterMetric: "시술 후: 체모 제거 및 피부결 개선" }
+      { title: "남성 수염 전체 레이저 제모 5회", period: "5회 시술 완료 후 4주 경과", desc: "매일 아침 면도 독(모낭염)과 푸른 수염 자국으로 스트레스받던 남성 환자분의 인중·턱·목 수염을 90% 이상 반영구 제거했습니다.", beforeMetric: "시술 전: 굵고 빽빽한 수염 및 모낭염", afterMetric: "시술 후: 푸른 자국 소실 및 매끈한 턱선" },
+      { title: "여성 종아리/겨드랑이 레이저 제모 5회", period: "5회 시술 완료 후", desc: "모공 각화증과 체모를 동시에 깔끔하게 정리했습니다.", beforeMetric: "시술 전: 잦은 면도로 인한 색소침착", afterMetric: "시술 후: 체모 제거 및 피부결 개선" }
     ],
     tattoo: [
-      { title: "피코슈어 눈썹 반영구 문신 잔흔 제거 3회", period: "3회 시술 후 6주 경과", desc: "오래되어 붉고 푸르게 변색된 눈썹 문신 색소를 눈썹 모근 손상 없이 깨끗하게 지워낸 케이스입니다.", beforeMetric: "시술 전: 비대칭 붉은/푸른 잔흔", afterMetric: "시술 후: 눈썹 털 손상 없이 색소 제거" },
-      { title: "피코슈어 팔목 레터링 & 컬러 타투 제거 5회", period: "5회 시술 후", desc: "나노 레이저로 지워지지 않던 미세 잉크 입자를 피코초 단위로 잘게 쪼개어 흉터 없이 배출시켰습니다.", beforeMetric: "시술 전: 짙은 블랙 및 컬러 타투", afterMetric: "시술 후: 정상 피부 조직 복원" }
+      { title: "눈썹 반영구 문신 잔흔 제거 3회", period: "3회 시술 후 6주 경과", desc: "오래되어 붉고 푸르게 변색된 눈썹 문신 색소를 눈썹 모근 손상 없이 깨끗하게 지워낸 케이스입니다.", beforeMetric: "시술 전: 비대칭 붉은/푸른 잔흔", afterMetric: "시술 후: 눈썹 털 손상 없이 색소 제거" },
+      { title: "팔목 레터링 & 컬러 타투 제거 5회", period: "5회 시술 후", desc: "나노 레이저로 지워지지 않던 미세 잉크 입자를 피코초 단위로 잘게 쪼개어 흉터 없이 배출시켰습니다.", beforeMetric: "시술 전: 짙은 블랙 및 컬러 타투", afterMetric: "시술 후: 정상 피부 조직 복원" }
     ]
   };
 
@@ -377,7 +269,7 @@ export default function App() {
   const GUIDE_DATA: Record<string, GuideItem> = {
     toning: {
       title: "01. 레이저토닝 / 잡티제거 시술안내 및 주의사항",
-      subtitle: "레블라이트 SI · 피코토닝 · 흑자/잡티 레이저",
+      subtitle: "피코토닝 · 레이저토닝 · 흑자/잡티 레이저",
       time: "약 15~20분",
       anesthesia: "무마취 또는 연고마취",
       cycle: "1~2주 간격 5~10회 권장",
@@ -389,37 +281,23 @@ export default function App() {
         "시술 후 약 1주일간 사우나, 찜질방, 격한 운동, 음주 등 피부에 열감을 주는 활동은 삼가 주세요."
       ]
     },
-    picosure: {
-      title: "02. 피코슈어 피코프락셀 시술안내 및 주의사항",
-      subtitle: "755nm 포커스 렌즈 모공 · 흉터 · 피부결 리모델링",
-      time: "약 20~30분",
-      anesthesia: "마취크림 도포 (30분)",
-      cycle: "3~4주 간격 3~5회 권장",
-      downtime: "붉은기 및 열감 1~3일 지속 (각질 탈락 없음)",
-      precautions: [
-        "피코슈어 프락셀은 표피를 깎지 않고 진피층에만 미세 공기방울(LIOB)을 만들어 콜라겐을 재생하므로 진물이나 딱지가 거의 생기지 않습니다.",
-        "시술 직후 얼굴이 붉어지고 화끈거릴 수 있으며 보통 2~3일 내에 자연스럽게 가라앉습니다.",
-        "시술 후 피부가 일시적으로 건조해질 수 있으므로 수분·재생 크림을 평소보다 2배 이상 충분히 발라주세요.",
-        "레티놀, 비타민C 고함량 앰플, AHA/BHA 성분 화장품은 붉은기가 완전히 가라앉은 뒤 사용해 주세요."
-      ]
-    },
     lifting: {
-      title: "03. 리프팅 (울쎄라 / 인모드 / 슈링크 / 올리지오) 주의사항",
+      title: "02. 리프팅 (인모드 / 슈링크) 주의사항",
       subtitle: "초음파(HIFU) 및 고주파(RF) 안티에이징 리프팅",
       time: "약 30~50분",
       anesthesia: "마취크림 도포",
-      cycle: "울쎄라·올리지오 6~12개월 / 인모드·슈링크 1~3개월",
+      cycle: "인모드·슈링크 1~3개월",
       downtime: "즉시 일상 복귀 (인모드 FX는 3~7일 부항 자국 발생 가능)",
       precautions: [
         "리프팅 시술 후 진피 내 콜라겐 재생을 위해 차가운 얼음찜질은 피해주시고, 미온수로 세안해 주세요.",
-        "울쎄라·슈링크 시술 후 턱선이나 광대 부위에 뻐근함, 욱신거림, 미세한 부기가 1~2주간 느껴질 수 있으며 이는 정상적인 근막 수축 과정입니다.",
+        "슈링크 시술 후 턱선이나 광대 부위에 뻐근함, 욱신거림, 미세한 부기가 1~2주간 느껴질 수 있으며 이는 정상적인 근막 수축 과정입니다.",
         "인모드 FX 모드는 음압으로 지방층을 당겨 고주파를 조사하므로 붉은 멍(부항 자국)이 3~7일 정도 남을 수 있습니다.",
         "시술 후 2주간은 경락 마사지나 얼굴을 강하게 문지르는 행동을 피해 주세요."
       ]
     },
     hair: {
-      title: "04. 레이저 제모 (젠틀맥스 프로 플러스) 주의사항",
-      subtitle: "755nm / 1064nm 비접촉식 냉각 프리미엄 레이저 제모",
+      title: "03. 레이저 제모 주의사항",
+      subtitle: "레이저 제모",
       time: "약 5~20분",
       anesthesia: "부위별 마취크림 (남성수염 등)",
       cycle: "4~5주 간격 5회 이상 권장",
@@ -432,8 +310,8 @@ export default function App() {
       ]
     },
     booster: {
-      title: "05. 스킨부스터 (리쥬란 힐러 / 쥬베룩 / 물광) 주의사항",
-      subtitle: "진피층 직접 주사 및 포텐자 펌핑 스킨부스터",
+      title: "04. 스킨부스터 (리쥬란 힐러 / 쥬베룩 / 물광) 주의사항",
+      subtitle: "진피층 직접 주사 스킨부스터",
       time: "약 30~40분",
       anesthesia: "마취크림 + 통증완화 시스템",
       cycle: "3~4주 간격 3회 이상 권장",
@@ -445,7 +323,7 @@ export default function App() {
       ]
     },
     botox: {
-      title: "06. 보톡스 / 윤곽주사 (브이올렛) 주의사항",
+      title: "05. 보톡스 / 윤곽주사 (브이올렛) 주의사항",
       subtitle: "주름·사각턱·바디 보톡스 및 이중턱 지방파괴술",
       time: "약 5~15분",
       anesthesia: "아이스 쿨링 또는 연고마취",
@@ -458,7 +336,7 @@ export default function App() {
       ]
     },
     filler: {
-      title: "07. 필러 / 실리프팅 / 쥬베룩 볼륨 주의사항",
+      title: "06. 필러 / 실리프팅 / 쥬베룩 볼륨 주의사항",
       subtitle: "자연스러운 볼륨 채움 및 윤곽 고정 시술",
       time: "약 20~40분",
       anesthesia: "국소마취 및 연고마취",
@@ -472,8 +350,8 @@ export default function App() {
       ]
     },
     mole: {
-      title: "08. 점 / 사마귀 / 쥐젖 / 비립종 / 편평사마귀 제거 주의사항",
-      subtitle: "CO2 레이저 및 어븀야그 정밀 제거술",
+      title: "07. 점 / 사마귀 / 쥐젖 / 비립종 / 편평사마귀 제거 주의사항",
+      subtitle: "레이저 정밀 제거술",
       time: "약 10~20분",
       anesthesia: "마취크림 도포",
       cycle: "깊은 점은 4~6주 후 2차 리터치 권장",
@@ -485,7 +363,7 @@ export default function App() {
       ]
     },
     diet: {
-      title: "09. 다이어트 / 체형관리 주사 및 처방 주의사항",
+      title: "08. 다이어트 / 체형관리 주사 및 처방 주의사항",
       subtitle: "삭센다 · 위고비 · 바디 인모드 · 지방분해주사",
       time: "약 15~30분",
       anesthesia: "아이스 쿨링",
@@ -499,57 +377,6 @@ export default function App() {
     }
   };
 
-  // Dr. Column Data
-  const COLUMN_DATA: ColumnItem[] = [
-    {
-      tag: "레이저 제모 칼럼",
-      title: "젠틀맥스 프로 플러스, 일반 레이저 제모와 무엇이 결정적으로 다를까?",
-      preview: "5회 이상 제모를 받았는데도 수염이나 잔털이 그대로 남는 이유, 레이저 파장의 도달 깊이와 스팟 사이즈의 차이를 명쾌하게 설명해 드립니다.",
-      paragraphs: [
-        "안녕하세요, 서울뷰의원 당진점 대표원장입니다. 진료실에서 레이저 제모 상담을 하다 보면 “타 병원에서 5회, 10회 패키지를 다 받았는데도 수염이 그대로 나요”라고 토로하시는 환자분들을 정말 자주 뵙습니다.",
-        "레이저 제모의 성패를 가르는 핵심은 ① 파장의 멜라닌 흡수율, ② 모낭 깊이까지 도달하는 스팟 사이즈, ③ 표피를 보호하는 냉각 시스템 이 세 가지입니다.",
-        "저희 서울뷰의원 당진점에 도입한 미국 칸델라사의 최신 플래그십 장비 ‘젠틀맥스 프로 플러스(GentleMax Pro Plus)’는 기존 젠틀맥스 프로 대비 최대 출력이 38% 향상되었고, 스팟 사이즈가 무려 26mm까지 확대되었습니다. 스팟 크기가 클수록 레이저 빔이 피부 진피층에서 산란되지 않고 깊숙한 남성 수염 모근까지 수직으로 도달합니다.",
-        "또한 2ms(밀리초)의 짧은 펄스 폭을 지원해 기존 레이저가 놓치기 쉬웠던 얇은 여성 인중 솜털이나 잔털까지 정교하게 타깃합니다. 남·여 분리된 1인 전용 프라이빗 제모실에서 위생적인 비접촉식 DCD 냉각 가스로 통증 걱정 없이 편안한 제모를 경험해 보시기 바랍니다."
-      ]
-    },
-    {
-      tag: "기미·흑자·색소 칼럼",
-      title: "기미와 흑자(검버섯)를 구분하지 않고 레이저를 쏘면 생기는 일",
-      preview: "겉보기엔 비슷한 갈색 반점이지만 기미와 흑자는 치료 파라미터가 정반대입니다. 755nm 피코슈어와 1064nm 레블라이트 병행 치료의 핵심 원리.",
-      paragraphs: [
-        "30~50대 여성 환자분들이 가장 많이 고민하시는 질환이 바로 양 볼과 광대에 올라오는 갈색 색소입니다. 많은 분들이 이를 모두 ‘기미’라고 생각하시지만, 실제로는 기미, 일광흑자(검버섯), 주근깨, 오타양모반이 복합적으로 섞여 있는 경우가 대부분입니다.",
-        "문제는 기미와 흑자의 치료 에너지가 완전히 다르다는 점입니다. 흑자는 멜라닌 세포가 뭉쳐 있는 표피 병변이므로 755nm 피코슈어 레이저로 타깃하여 한두 번에 또렷하게 파괴해야 잘 지워집니다. 반면, 기미는 자극에 매우 예민한 색소 질환이라 강한 에너지를 조사하면 오히려 더 시커멓게 올라오는 부작용이 발생합니다.",
-        "따라서 서울뷰의원 당진점은 시술 전 마크뷰 피부진단기를 통해 색소의 종류와 깊이를 먼저 분류하고, 흑자에는 피코슈어(755nm)를, 깊은 진피 기미에는 레블라이트 SI(1064nm PTP)를 조합하는 맞춤형 파장 치료를 원칙으로 합니다."
-      ]
-    },
-    {
-      tag: "스킨부스터·리프팅 칼럼",
-      title: "리쥬란 힐러 vs 쥬베룩 스킨/볼륨, 내 피부에 꼭 맞는 선택 기준은?",
-      preview: "속건조와 얇아진 피부 장벽이 고민일 때와 모공·패인 볼살이 고민일 때 선택해야 할 스킨부스터는 다릅니다. 실패 없는 스킨부스터 가이드.",
-      paragraphs: [
-        "스킨부스터의 대명사인 ‘리쥬란 힐러’와 ‘쥬베룩’ 중 어떤 시술을 받아야 할지 고민하시는 분들을 위해 명확한 선택 기준을 정리해 드립니다.",
-        "1. 리쥬란 힐러 (PN 성분): 세안 후 얼굴이 쉽게 당기고, 피부가 얇고 예민해 홍조나 잔주름이 잘 생기는 분께 가장 추천합니다. 손상된 진피 환경을 재생시키고 유수분 밸런스를 즉각적으로 회복시켜 줍니다.",
-        "2. 쥬베룩 스킨 & 볼륨 (PDLLA + HA): 모공이 세로로 늘어져 있거나 여드름 흉터 요철이 고민이시라면 ‘쥬베룩 스킨’이 적합하며, 나이가 들면서 앞볼이나 팔자주름, 옆볼이 푹 꺼져 보이는데 필러는 부담스러우신 분께는 자가 콜라겐을 채워주는 ‘쥬베룩 볼륨’이 최상의 선택이 됩니다.",
-        "서울뷰의원 당진점에서는 환자분의 피부 두께와 고민에 맞춰 두 약제를 부위별로 하이브리드 디자인하여 시술하고 있습니다."
-      ]
-    }
-  ];
-
-
-
-  // Filtered Price Table
-  const filteredPrices = useMemo(() => {
-    const q = priceSearch.trim().toLowerCase();
-    if (q) {
-      return priceList.filter(
-        (item) =>
-          item.name.toLowerCase().includes(q) ||
-          item.group.toLowerCase().includes(q)
-      );
-    }
-    return priceList.filter((item) => item.cat === priceCat);
-  }, [priceList, priceCat, priceSearch]);
-
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -557,43 +384,13 @@ export default function App() {
     }, 3500);
   };
 
-  const handleOpenBooking = (itemName: string) => {
-    setSelectedBookingItem(itemName || '1:1 맞춤 진료 상담');
-    setBookingModalOpen(true);
-  };
-
-  const handleBookingSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setBookingModalOpen(false);
-    showToast(`[예약 접수 완료] ${bookingForm.name || '고객'}님, '${selectedBookingItem}' 예약 신청이 접수되었습니다.`);
-    setBookingForm({ name: '', phone: '', date: '', time: '오후 (14:00 ~ 18:00)' });
-  };
+  // 예약 버튼은 모두 네이버 예약으로 연결 (시술명은 쓰지 않음)
+  const handleOpenBooking = (_itemName?: string) => openNaverBooking();
 
   const copyAddress = () => {
     const addr = "충청남도 당진시 시청2로 49-30, 7층 서울뷰의원 당진점";
     navigator.clipboard?.writeText(addr);
     showToast("병원 주소가 클립보드에 복사되었습니다.");
-  };
-
-  const addQuickPrice = () => {
-    if (!quickTitle || !quickOnce) {
-      showToast("시술명과 1회 가격을 입력해 주세요.");
-      return;
-    }
-    setPriceList((prev) => [
-      {
-        cat: priceCat,
-        group: "신규 등록",
-        name: quickTitle,
-        once: quickOnce,
-        multi: "원내 문의"
-      },
-      ...prev
-    ]);
-    setAdminModalOpen(false);
-    setQuickTitle('');
-    setQuickOnce('');
-    showToast(`'${quickTitle}' 항목이 비급여 수가표에 즉시 추가되었습니다.`);
   };
 
   const scrollToSection = (id: string) => {
@@ -604,95 +401,12 @@ export default function App() {
     setMobileMenuOpen(false);
   };
 
-  // 예약 신청 창과 알림은 홈·수가표·칼럼 페이지에서 함께 사용
+  // 알림은 홈·수가표·칼럼 페이지에서 함께 사용
   const sharedOverlays = (
     <>
-      {/* ================= MODAL 1: RESERVATION ================= */}
-      {bookingModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-lg border border-[#C5A880]/40 animate-in fade-in zoom-in-95">
-            <button
-              onClick={() => setBookingModalOpen(false)}
-              className="absolute top-5 right-5 text-zinc-400 hover:text-[#111111] cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <span className="font-en-cond text-xs tracking-widest text-[#A6895E] font-bold uppercase">
-              ONLINE RESERVATION
-            </span>
-            <h3 className="text-2xl font-bold text-[#111111] mt-1">서울뷰의원 당진점 빠른 예약</h3>
-            <p className="text-xs text-zinc-500 mt-1 mb-6">원하시는 시술 또는 고민 부위를 남겨주시면 확인 후 신속히 안내해 드립니다.</p>
-
-            <form onSubmit={handleBookingSubmit} className="space-y-4 text-xs sm:text-sm">
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">환자분 성함 *</label>
-                <input
-                  type="text"
-                  required
-                  value={bookingForm.name}
-                  onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
-                  placeholder="성함을 입력해주세요"
-                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                />
-              </div>
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">연락처 *</label>
-                <input
-                  type="tel"
-                  required
-                  value={bookingForm.phone}
-                  onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                  placeholder="010-0000-0000"
-                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                />
-              </div>
-              <div>
-                <label className="block font-semibold text-zinc-700 mb-1">관심 시술 / 이벤트 항목</label>
-                <input
-                  type="text"
-                  value={selectedBookingItem}
-                  onChange={(e) => setSelectedBookingItem(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg bg-[#F7F7F8] font-medium text-[#0F2B22] focus:outline-none"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-zinc-700 mb-1">희망 날짜 *</label>
-                  <input
-                    type="date"
-                    required
-                    value={bookingForm.date}
-                    onChange={(e) => setBookingForm({ ...bookingForm, date: e.target.value })}
-                    className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg focus:outline-none focus:border-[#0F2B22]"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-zinc-700 mb-1">희망 시간대</label>
-                  <select
-                    value={bookingForm.time}
-                    onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
-                    className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg bg-white focus:outline-none focus:border-[#0F2B22]"
-                  >
-                    <option>오전 (10:00 ~ 13:00)</option>
-                    <option>오후 (14:00 ~ 18:00)</option>
-                    <option>저녁 (18:00 ~ 20:00)</option>
-                    <option>주말 (10:00 ~ 20:00)</option>
-                  </select>
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-[#0F2B22] hover:bg-[#173F32] text-white font-bold py-3.5 rounded-lg text-sm transition mt-2 cursor-pointer"
-              >
-                예약 신청 완료하기
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
       {/* ================= TOAST NOTIFICATION ================= */}
       {toastMessage && (
-        <div className="fixed bottom-20 md:bottom-8 right-6 z-50 bg-[#0F2B22] text-white px-5 py-3.5 rounded-xl shadow-lg border border-[#C5A880] flex items-center gap-3 text-xs sm:text-sm animate-in slide-in-from-bottom duration-300">
+        <div className="fixed bottom-20 lg:bottom-8 right-6 z-50 bg-[#0F2B22] text-white px-5 py-3.5 rounded-xl shadow-lg border border-[#C5A880] flex items-center gap-3 text-xs sm:text-sm animate-in slide-in-from-bottom duration-300">
           <CheckCircle2 className="w-5 h-5 text-[#C5A880] shrink-0" />
           <span>{toastMessage}</span>
         </div>
@@ -882,12 +596,6 @@ export default function App() {
                   레이저토닝 / 잡티제거
                 </button>
                 <button
-                  onClick={() => { scrollToSection('sec-guide'); setGuideCat('picosure'); }}
-                  className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
-                >
-                  피코슈어 피코프락셀
-                </button>
-                <button
                   onClick={() => { scrollToSection('sec-guide'); setGuideCat('lifting'); }}
                   className="w-full text-left px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-[#F7F7F8] hover:text-[#0F2B22] transition cursor-pointer"
                 >
@@ -1002,7 +710,7 @@ export default function App() {
       />
 
       {/* ================= RIGHT FLOATING QUICK BAR ================= */}
-      <aside className="hidden md:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E5E5E8] rounded-xl shadow-md overflow-hidden divide-y divide-[#E5E5E8] w-20 text-center">
+      <aside className="hidden lg:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E5E5E8] rounded-xl shadow-md overflow-hidden divide-y divide-[#E5E5E8] w-20 text-center">
         <button
           onClick={() => handleOpenBooking('우측 퀵바 빠른 예약')}
           className="py-3.5 px-2 bg-[#0F2B22] text-white hover:bg-[#173F32] transition flex flex-col items-center justify-center group cursor-pointer"
@@ -1025,10 +733,7 @@ export default function App() {
           <span className="text-[11px] font-medium text-zinc-700">원장칼럼</span>
         </button>
         <button
-          onClick={() => {
-            handleOpenBooking('카카오톡 채널 상담 문의');
-            showToast("카카오톡 실시간 상담 신청 창으로 연결되었습니다.");
-          }}
+          onClick={() => window.open(KAKAO_CHAT_URL, '_blank', 'noopener,noreferrer')}
           className="py-3.5 px-2 hover:bg-[#FEE500]/20 transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
           <MessageCircle className="w-5 h-5 text-[#3C1E1E] fill-[#FEE500] mb-1" />
@@ -1156,7 +861,7 @@ export default function App() {
         </button>
         <button
           onClick={() => setHeroTab(prev => prev === 'video' ? 'excelwave' : 'video')}
-          className="hidden md:flex absolute right-28 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/40 hover:bg-[#0F2B22] border border-white/20 hover:border-[#C5A880] text-white items-center justify-center transition shadow-lg cursor-pointer"
+          className="hidden md:flex absolute right-5 lg:right-28 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/40 hover:bg-[#0F2B22] border border-white/20 hover:border-[#C5A880] text-white items-center justify-center transition shadow-lg cursor-pointer"
           aria-label="다음 탭"
         >
           <ChevronRight className="w-5 h-5 text-white" />
@@ -1213,7 +918,7 @@ export default function App() {
                 더 많은 시술별 상세 비급여 수가와 이벤트가 궁금하신가요?
               </h3>
               <p className="text-zinc-300 text-xs sm:text-sm mt-1">
-                기미·모공, 안티에이징 리프팅, 젠틀맥스프로+ 제모, 필러, 보톡스 등 전체 수가표를 실시간 검색으로 편리하게 확인하세요.
+                기미·모공, 안티에이징 리프팅, 레이저 제모, 필러, 보톡스 등 전체 수가표를 실시간 검색으로 편리하게 확인하세요.
               </p>
             </div>
             <button
@@ -1417,7 +1122,7 @@ export default function App() {
 
         {/* 1-2. Devices */}
         {aboutTab === 'devices' && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:pr-24 2xl:pr-0 animate-in fade-in">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:pr-24 2xl:pr-0 animate-in fade-in">
             {DEVICES.map((device) => (
               <div
                 key={device.name}
@@ -1458,7 +1163,7 @@ export default function App() {
             <div className="bg-[#F7F7F8] rounded-xl p-6 border border-[#E5E5E8]">
               <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 02</span>
               <h4 className="text-base font-bold text-[#111111] mt-2 mb-2">남·여 분리 1인 전용 제모실</h4>
-              <p className="text-xs text-zinc-600 leading-relaxed">젠틀맥스 프로 플러스 레이저 제모 시 환자분의 프라이버시를 완벽히 보호하기 위해 독립된 1인 제모 전용 룸에서 시술합니다.</p>
+              <p className="text-xs text-zinc-600 leading-relaxed">레이저 제모 시 환자분의 프라이버시를 완벽히 보호하기 위해 독립된 1인 제모 전용 룸에서 시술합니다.</p>
             </div>
             <div className="bg-[#F7F7F8] rounded-xl p-6 border border-[#E5E5E8]">
               <span className="font-en-cond text-2xl font-bold text-[#A6895E]">SPACE 03</span>
@@ -1614,18 +1319,17 @@ export default function App() {
           <p className="text-xs sm:text-sm text-zinc-600 mt-1">안전하고 만족스러운 결과를 위해 시술 전·후 꼭 확인하셔야 할 안내사항입니다.</p>
         </div>
 
-        {/* 9 Procedure Guide Tabs */}
+        {/* 8 Procedure Guide Tabs */}
         <div className="flex flex-wrap gap-2 mb-8">
           {[
             { id: 'toning', label: '01. 레이저토닝 / 잡티제거' },
-            { id: 'picosure', label: '02. 피코슈어 피코프락셀' },
-            { id: 'lifting', label: '03. 리프팅' },
-            { id: 'hair', label: '04. 제모' },
-            { id: 'booster', label: '05. 스킨부스터' },
-            { id: 'botox', label: '06. 보톡스 / 윤곽주사' },
-            { id: 'filler', label: '07. 필러 / 실리프팅 / 쥬베룩 볼륨' },
-            { id: 'mole', label: '08. 점 / 사마귀 / 쥐젖제거' },
-            { id: 'diet', label: '09. 다이어트' }
+            { id: 'lifting', label: '02. 리프팅' },
+            { id: 'hair', label: '03. 제모' },
+            { id: 'booster', label: '04. 스킨부스터' },
+            { id: 'botox', label: '05. 보톡스 / 윤곽주사' },
+            { id: 'filler', label: '06. 필러 / 실리프팅 / 쥬베룩 볼륨' },
+            { id: 'mole', label: '07. 점 / 사마귀 / 쥐젖제거' },
+            { id: 'diet', label: '08. 다이어트' }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -1844,7 +1548,7 @@ export default function App() {
       </section>
 
       {/* ================= FOOTER ================= */}
-      <footer className="bg-[#071510] text-zinc-400 py-14 border-t border-[#C5A880]/20 text-xs pb-24 md:pb-14">
+      <footer className="bg-[#071510] text-zinc-400 py-14 border-t border-[#C5A880]/20 text-xs pb-24 lg:pb-14">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between gap-8 pb-8 border-b border-white/10">
             <div>
@@ -1891,7 +1595,7 @@ export default function App() {
       </footer>
 
       {/* ================= MOBILE BOTTOM FIXED BAR ================= */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E5E8] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E5E8] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
         <a
           href={NAVER_BOOKING_URL}
           target="_blank"
@@ -1925,101 +1629,6 @@ export default function App() {
           <span>오시는길</span>
         </button>
       </div>
-
-      {/* ================= MODAL 2: COLUMN READER ================= */}
-      {columnModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-10 relative shadow-lg max-h-[85vh] overflow-y-auto animate-in fade-in zoom-in-95">
-            <button
-              onClick={() => setColumnModalOpen(false)}
-              className="absolute top-5 right-5 text-zinc-400 hover:text-[#111111] cursor-pointer"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <div>
-              <span className="text-xs font-bold text-[#0F2B22] bg-[#0F2B22]/10 px-3 py-1 rounded">
-                {COLUMN_DATA[selectedColumnIndex]?.tag}
-              </span>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#111111] mt-3 mb-2">
-                {COLUMN_DATA[selectedColumnIndex]?.title}
-              </h3>
-              <p className="text-xs text-zinc-400 border-b border-[#E5E5E8] pb-4 mb-6">
-                집필: 서울뷰의원 당진점 대표원장
-              </p>
-              <div className="text-sm text-zinc-700 leading-relaxed space-y-4">
-                {COLUMN_DATA[selectedColumnIndex]?.paragraphs.map((p, pIdx) => (
-                  <p key={pIdx}>{p}</p>
-                ))}
-              </div>
-              <div className="mt-8 pt-4 border-t border-[#E5E5E8] flex justify-end">
-                <button
-                  onClick={() => {
-                    setColumnModalOpen(false);
-                    handleOpenBooking(`${COLUMN_DATA[selectedColumnIndex]?.tag} 관련 상담`);
-                  }}
-                  className="bg-[#0F2B22] text-white text-xs font-bold px-5 py-2.5 rounded cursor-pointer"
-                >
-                  칼럼 내용으로 상담 예약하기
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MODAL 3: ADMIN SHEET / QUICK PRICE ================= */}
-      {adminModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-xl w-full p-6 sm:p-8 relative shadow-lg animate-in fade-in zoom-in-95">
-            <button
-              onClick={() => setAdminModalOpen(false)}
-              className="absolute top-5 right-5 text-zinc-400 hover:text-[#111111] cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <span className="text-xs font-bold text-[#0F2B22] bg-[#0F2B22]/10 px-2.5 py-1 rounded">
-              원내 관리자 전용 기능
-            </span>
-            <h3 className="text-xl font-bold text-[#111111] mt-2">구글 스프레드시트 수가표 실시간 관리</h3>
-            <p className="text-xs text-zinc-600 mt-1 leading-relaxed">
-              구글 시트(CSV) 웹에 게시 링크 연동 및 원내에서 새로운 시술 수가 항목을 즉시 등록할 수 있습니다.
-            </p>
-            <div className="mt-4 space-y-3 text-xs">
-              <label className="block font-semibold text-zinc-700">구글 시트 CSV 웹 게시 URL</label>
-              <input
-                type="url"
-                placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv"
-                className="w-full px-3.5 py-2.5 border border-[#E5E5E8] rounded-lg"
-              />
-              <div className="bg-[#F7F7F8] p-3.5 rounded-lg border border-[#E5E5E8] text-zinc-600 space-y-2">
-                <p className="font-bold text-[#111111]">💡 즉시 새 수가 항목 추가하기</p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-                  <input
-                    type="text"
-                    value={quickTitle}
-                    onChange={(e) => setQuickTitle(e.target.value)}
-                    placeholder="시술명 (예: 울쎄라 600샷)"
-                    className="px-2.5 py-1.5 border rounded bg-white text-xs"
-                  />
-                  <input
-                    type="text"
-                    value={quickOnce}
-                    onChange={(e) => setQuickOnce(e.target.value)}
-                    placeholder="1회가 (예: 1,350,000원)"
-                    className="px-2.5 py-1.5 border rounded bg-white text-xs"
-                  />
-                  <button
-                    onClick={addQuickPrice}
-                    className="bg-[#0F2B22] text-white font-bold rounded px-3 py-1.5 text-xs hover:bg-[#173F32] transition cursor-pointer"
-                  >
-                    수가표에 추가
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {sharedOverlays}
     </div>
