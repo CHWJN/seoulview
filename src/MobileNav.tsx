@@ -51,8 +51,7 @@ export function MobileDrawer({
         <div>
           <div className="p-5 bg-[#0F2B22] text-white flex items-center justify-between">
             <div>
-              <img src={LOGO_SRC} alt="서울뷰의원 당진" className="h-9 w-auto object-contain mb-1 filter drop-shadow-sm" />
-              <p className="text-xs text-zinc-300">서울뷰의원 당진점 모바일 메뉴</p>
+              <img src={LOGO_SRC} alt="서울뷰의원 당진" className="h-9 w-auto object-contain filter drop-shadow-sm" />
             </div>
             <button onClick={onClose} className="text-white/80 hover:text-white p-1 cursor-pointer" aria-label="메뉴 닫기">
               <X className="w-6 h-6" />
