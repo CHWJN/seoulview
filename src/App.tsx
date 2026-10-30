@@ -153,7 +153,6 @@ export default function App() {
   }, [heroTab, heroPaused, currentPage]);
 
   // Media Assets attached by user
-  const MAIN_IMAGE_SRC = "/assets/aistudio/main_image_2f557015.jpg";
   const MAIN_VIDEO_SRC = "/assets/main_video.mp4";
   const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner.webp";
   const EXCELWAVE_BANNER_MOBILE_SRC = "/assets/excelwave_banner_mobile.webp";
@@ -827,24 +826,6 @@ export default function App() {
                     피부 문제의 근본적인 치료를 통해, 내가 가진 본연의 아름다움을 찾아갑니다.
                   </p>
                 </div>
-              </div>
-            </div>
-
-            {/* Seoul View Dangjin Interior Showcase with hover motion */}
-            <div className="relative rounded-2xl overflow-hidden border border-[#E5E5E8] shadow-md group">
-              <div className="image-zoom-container aspect-[21/9] sm:aspect-[24/9] w-full overflow-hidden bg-[#071510]">
-                <img
-                  src={MAIN_IMAGE_SRC}
-                  alt="서울뷰의원 당진점 원내 공간"
-                  className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#071510]/85 via-black/25 to-transparent flex flex-col justify-end p-6 sm:p-8 pointer-events-none">
-                <p className="text-[#C5A880] text-xs font-en-cond tracking-widest uppercase font-bold">PREMIUM CLINIC ENVIRONMENT</p>
-                <h4 className="text-white text-lg sm:text-2xl font-bold mt-1">꽃을 보듯 너를, 편안하고 프라이빗한 프리미엄 진료 공간</h4>
-                <p className="text-zinc-200 text-xs sm:text-sm mt-1 max-w-2xl font-light">
-                  당진 시민분들의 소중한 시간을 존중하며, 1:1 맞춤 상담부터 개별 프라이빗 룸 케어까지 안락한 힐링을 선사합니다.
-                </p>
               </div>
             </div>
           </div>
