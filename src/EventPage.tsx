@@ -9,7 +9,6 @@ import {
   CalendarCheck,
   Search,
   ShieldCheck,
-  Check,
   MessageCircle,
   Home,
   ChevronUp,
@@ -108,14 +107,10 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
               서울뷰의원 당진점<br />
               <span className="text-[#C5A880]">진행 중인 이벤트</span>
             </h1>
-            <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
-              <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 1인 프라이빗 관리실
-              </span>
-              <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 의료법 규정 부가세(VAT) 별도 고지
-              </span>
-            </div>
+            {/* 상단 배너 설명 문장 (시술안내 페이지 배너 설명과 같은 양식) */}
+            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light break-keep">
+              가장 나다운 아름다움, 지금 서울뷰의 특별한 혜택과 함께하세요.
+            </p>
           </div>
         </div>
       </section>
