@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import EventBoard from './EventBoard.tsx';
 import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
 import SiteHeader from './SiteHeader.tsx';
 import { NAVER_MAP_URL, GOOGLE_MAP_EMBED_URL, KAKAO_CHAT_URL, openNaverBooking, LOGO_SRC } from './clinicLinks.ts';
@@ -531,44 +530,132 @@ export default function App() {
         </div>
       </section>
 
-      {/* ================= SECTION: SPECIAL EVENTS (영상 바로 아래 & 당진점 소개 이전) ================= */}
-      <section id="sec-events" className="py-20 md:py-28 bg-[#F7F7F8] border-b border-[#E5E5E8]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-              SPECIAL PROMOTIONS
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">서울뷰의원 당진점 이벤트</h2>
-            <p className="text-xs sm:text-sm text-zinc-600 mt-2">현재 진행 중인 이벤트입니다. (이벤트가 VAT 10% 별도)</p>
-          </div>
-
-          {/* 이벤트 목록 (이벤트마다 대표 항목 3개, 나머지는 이벤트 페이지에서) */}
-          <EventBoard
-            previewCount={3}
-            onMore={() => navigateTo('event')}
-          />
-
-          {/* Link to Full Event Page Banner */}
-          <div className="mt-12 p-6 sm:p-8 bg-gradient-to-r from-[#0F2B22] to-[#173F32] rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-md border border-[#C5A880]/30">
+      {/* ================= SECTION: BEFORE & AFTER (영상 바로 아래) ================= */}
+      <section id="sec-ba" className="py-20 md:py-28 bg-[#111111] text-white">
+        {/* lg:pr-28 — 오른쪽 고정 퀵메뉴에 열람 동의 버튼·사진이 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
             <div>
-              <span className="text-[11px] font-bold text-[#C5A880] tracking-wider uppercase bg-[#C5A880]/20 px-2.5 py-1 rounded">
-                EXCLUSIVE EVENT PAGE
+              <span className="text-xs sm:text-sm text-[#C5A880] font-bold">
+                서울뷰의원 당진은 결과로 증명합니다.
               </span>
-              <h3 className="text-xl sm:text-2xl font-bold mt-2">
-                더 많은 시술별 상세 비급여 수가와 이벤트가 궁금하신가요?
-              </h3>
-              <p className="text-zinc-300 text-xs sm:text-sm mt-1">
-                기미·모공, 안티에이징 리프팅, 레이저 제모, 필러, 보톡스 등 전체 수가표를 실시간 검색으로 편리하게 확인하세요.
-              </p>
+              <h2 className="text-2xl sm:text-4xl font-bold mt-1">시술 전후사진</h2>
+              <p className="text-xs sm:text-sm text-zinc-400 mt-1">보정 없는 동일 조명·동일 각도 임상 전후 기록입니다.</p>
             </div>
-            <button
-              onClick={() => navigateTo('event')}
-              className="shrink-0 bg-[#C5A880] hover:bg-[#A6895E] text-[#111111] font-bold px-7 py-3.5 rounded-xl text-sm transition shadow-lg hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
-            >
-              <span>이벤트 전용 페이지 바로가기</span>
-              <ChevronRight className="w-4 h-4 text-[#111111]" />
-            </button>
+
+            {/* Medical Law Consent Toggle */}
+            <div className="flex items-center gap-3 bg-white/10 border border-[#C5A880]/40 px-4 py-2.5 rounded-lg">
+              <div className="text-xs">
+                <span className="text-[#C5A880] font-bold">
+                  {isBaUnlocked ? "열람 동의 완료 (전후사진 잠금 해제됨)" : "의료법 준수 블러 적용 중"}
+                </span>
+                <p className="text-[11px] text-zinc-300">
+                  {isBaUnlocked ? "동일 조건 무보정 임상 케이스입니다." : "동의를 누르시면 모든 전후사진이 선명하게 표시됩니다."}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setIsBaUnlocked(!isBaUnlocked);
+                  showToast(
+                    !isBaUnlocked
+                      ? "의료법 준수 전후사진 열람 동의가 확인되었습니다."
+                      : "블러 보호 모드가 다시 활성화되었습니다."
+                  );
+                }}
+                className={`font-bold text-xs px-3.5 py-2 rounded shrink-0 transition cursor-pointer ${
+                  isBaUnlocked ? 'bg-zinc-700 text-white' : 'bg-[#C5A880] text-[#111111]'
+                }`}
+              >
+                {isBaUnlocked ? "블러 다시 켜기" : "열람 동의 (잠금해제)"}
+              </button>
+            </div>
           </div>
+
+          {/* 6 BA Tabs */}
+          <div className="flex flex-wrap gap-2 mb-10">
+            {[
+              { id: 'melasma', label: '기미 / 난치성색소' },
+              { id: 'filler', label: '필러' },
+              { id: 'acne', label: '여드름 / 모공, 흉터 / 홍조' },
+              { id: 'hair', label: '레이저 제모' },
+              { id: 'tattoo', label: '문신제거' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setBaCat(tab.id as any)}
+                className={`px-4 py-2.5 rounded text-xs sm:text-sm transition cursor-pointer ${
+                  baCat === tab.id
+                    ? 'font-bold bg-[#C5A880] text-[#111111]'
+                    : 'font-medium bg-white/10 text-zinc-300 hover:text-white'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* BA Cards Grid */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {(BA_DATA[baCat] || []).map((item, idx) => (
+              <div key={idx} className="bg-white/5 border border-white/15 rounded-xl p-6 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-base sm:text-lg font-bold text-white">{item.title}</h3>
+                    <span className="text-[11px] bg-[#C5A880]/20 text-[#C5A880] px-2.5 py-0.5 rounded">
+                      {item.period}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 mb-4 relative">
+                    {/* BEFORE */}
+                    <div className="bg-zinc-900 border border-white/10 rounded-lg p-5 text-center">
+                      <span className="inline-block text-[10px] font-en-cond tracking-widest bg-zinc-700 text-zinc-200 px-2 py-0.5 rounded mb-3">
+                        BEFORE
+                      </span>
+                      <div className="h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-zinc-800 to-zinc-900 p-3">
+                        <p className="text-xs font-semibold text-zinc-300">{item.beforeMetric}</p>
+                        <p className="text-[10px] text-zinc-500 mt-1">마크뷰 정밀 촬영 원본</p>
+                      </div>
+                    </div>
+
+                    {/* AFTER */}
+                    <div className="bg-zinc-900 border border-[#C5A880]/40 rounded-lg p-5 text-center relative overflow-hidden">
+                      <span className="inline-block text-[10px] font-en-cond tracking-widest bg-[#C5A880] text-[#111111] font-bold px-2 py-0.5 rounded mb-3">
+                        AFTER
+                      </span>
+                      <div
+                        className={`h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-[#0F2B22] to-zinc-900 p-3 ${
+                          isBaUnlocked ? 'ba-unlocked' : 'ba-locked'
+                        }`}
+                      >
+                        <p className="text-xs font-bold text-[#C5A880]">{item.afterMetric}</p>
+                        <p className="text-[10px] text-zinc-300 mt-1">무보정 동일 조건 촬영</p>
+                      </div>
+                      {!isBaUnlocked && (
+                        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center p-3">
+                          <button
+                            onClick={() => {
+                              setIsBaUnlocked(true);
+                              showToast("의료법 준수 전후사진 열람 동의가 확인되었습니다.");
+                            }}
+                            className="bg-[#C5A880] text-[#111111] font-bold text-[11px] px-3 py-1.5 rounded shadow cursor-pointer"
+                          >
+                            클릭하여 After 확인
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-zinc-300 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-[11px] text-zinc-400 mt-6 border-t border-white/10 pt-4">
+            ※ 의료법 고지사항: 모든 시술은 개인의 피부 상태에 따라 붉은기, 부기, 멍, 색소침착, 염증 등의 부작용이 발생할 수 있으므로 시술 전 의료진과의 충분한 상담이 필요합니다.
+          </p>
         </div>
       </section>
 
@@ -821,141 +908,13 @@ export default function App() {
 
 
 
-      {/* ================= SECTION 4: BEFORE & AFTER ================= */}
-      <section id="sec-ba" className="py-20 md:py-28 bg-[#111111] text-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-            <div>
-              <span className="font-en-cond text-xs tracking-[0.25em] text-[#C5A880] font-bold uppercase">
-                04 / BEFORE & AFTER ARCHIVE
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-bold mt-1">시술 전후사진</h2>
-              <p className="text-xs sm:text-sm text-zinc-400 mt-1">보정 없는 동일 조명·동일 각도 임상 전후 기록입니다.</p>
-            </div>
-
-            {/* Medical Law Consent Toggle */}
-            <div className="flex items-center gap-3 bg-white/10 border border-[#C5A880]/40 px-4 py-2.5 rounded-lg">
-              <div className="text-xs">
-                <span className="text-[#C5A880] font-bold">
-                  {isBaUnlocked ? "열람 동의 완료 (전후사진 잠금 해제됨)" : "의료법 준수 블러 적용 중"}
-                </span>
-                <p className="text-[11px] text-zinc-300">
-                  {isBaUnlocked ? "동일 조건 무보정 임상 케이스입니다." : "동의를 누르시면 모든 전후사진이 선명하게 표시됩니다."}
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setIsBaUnlocked(!isBaUnlocked);
-                  showToast(
-                    !isBaUnlocked
-                      ? "의료법 준수 전후사진 열람 동의가 확인되었습니다."
-                      : "블러 보호 모드가 다시 활성화되었습니다."
-                  );
-                }}
-                className={`font-bold text-xs px-3.5 py-2 rounded shrink-0 transition cursor-pointer ${
-                  isBaUnlocked ? 'bg-zinc-700 text-white' : 'bg-[#C5A880] text-[#111111]'
-                }`}
-              >
-                {isBaUnlocked ? "블러 다시 켜기" : "열람 동의 (잠금해제)"}
-              </button>
-            </div>
-          </div>
-
-          {/* 6 BA Tabs */}
-          <div className="flex flex-wrap gap-2 mb-10">
-            {[
-              { id: 'melasma', label: '기미 / 난치성색소' },
-              { id: 'filler', label: '필러' },
-              { id: 'acne', label: '여드름 / 모공, 흉터 / 홍조' },
-              { id: 'hair', label: '레이저 제모' },
-              { id: 'tattoo', label: '문신제거' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setBaCat(tab.id as any)}
-                className={`px-4 py-2.5 rounded text-xs sm:text-sm transition cursor-pointer ${
-                  baCat === tab.id
-                    ? 'font-bold bg-[#C5A880] text-[#111111]'
-                    : 'font-medium bg-white/10 text-zinc-300 hover:text-white'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* BA Cards Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {(BA_DATA[baCat] || []).map((item, idx) => (
-              <div key={idx} className="bg-white/5 border border-white/15 rounded-xl p-6 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-base sm:text-lg font-bold text-white">{item.title}</h3>
-                    <span className="text-[11px] bg-[#C5A880]/20 text-[#C5A880] px-2.5 py-0.5 rounded">
-                      {item.period}
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 mb-4 relative">
-                    {/* BEFORE */}
-                    <div className="bg-zinc-900 border border-white/10 rounded-lg p-5 text-center">
-                      <span className="inline-block text-[10px] font-en-cond tracking-widest bg-zinc-700 text-zinc-200 px-2 py-0.5 rounded mb-3">
-                        BEFORE
-                      </span>
-                      <div className="h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-zinc-800 to-zinc-900 p-3">
-                        <p className="text-xs font-semibold text-zinc-300">{item.beforeMetric}</p>
-                        <p className="text-[10px] text-zinc-500 mt-1">마크뷰 정밀 촬영 원본</p>
-                      </div>
-                    </div>
-
-                    {/* AFTER */}
-                    <div className="bg-zinc-900 border border-[#C5A880]/40 rounded-lg p-5 text-center relative overflow-hidden">
-                      <span className="inline-block text-[10px] font-en-cond tracking-widest bg-[#C5A880] text-[#111111] font-bold px-2 py-0.5 rounded mb-3">
-                        AFTER
-                      </span>
-                      <div
-                        className={`h-28 flex flex-col items-center justify-center rounded bg-gradient-to-b from-[#0F2B22] to-zinc-900 p-3 ${
-                          isBaUnlocked ? 'ba-unlocked' : 'ba-locked'
-                        }`}
-                      >
-                        <p className="text-xs font-bold text-[#C5A880]">{item.afterMetric}</p>
-                        <p className="text-[10px] text-zinc-300 mt-1">무보정 동일 조건 촬영</p>
-                      </div>
-                      {!isBaUnlocked && (
-                        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center p-3">
-                          <button
-                            onClick={() => {
-                              setIsBaUnlocked(true);
-                              showToast("의료법 준수 전후사진 열람 동의가 확인되었습니다.");
-                            }}
-                            className="bg-[#C5A880] text-[#111111] font-bold text-[11px] px-3 py-1.5 rounded shadow cursor-pointer"
-                          >
-                            클릭하여 After 확인
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <p className="text-xs text-zinc-300 leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <p className="text-[11px] text-zinc-400 mt-6 border-t border-white/10 pt-4">
-            ※ 의료법 고지사항: 모든 시술은 개인의 피부 상태에 따라 붉은기, 부기, 멍, 색소침착, 염증 등의 부작용이 발생할 수 있으므로 시술 전 의료진과의 충분한 상담이 필요합니다.
-          </p>
-        </div>
-      </section>
-
-      {/* ================= SECTION 5: DR. COLUMN ================= */}
+      {/* ================= SECTION 2: DR. COLUMN ================= */}
       <section id="sec-column" className="py-20 md:py-28 bg-[#F7F7F8] border-t border-[#E5E5E8]">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-                05 / DOCTOR'S COLUMN
+                02 / DOCTOR'S COLUMN
               </span>
               <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">대표원장 진료 칼럼</h2>
               <p className="text-xs sm:text-sm text-zinc-600 mt-1">시술을 결정하시기 전 꼭 한 번 읽어보시면 도움 되는 대표원장의 솔직한 의학 칼럼입니다.</p>
@@ -1000,11 +959,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* ================= SECTION 7: LOCATION & HOURS ================= */}
+      {/* ================= SECTION 3: LOCATION & HOURS ================= */}
       <section id="sec-location" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8">
         <div className="mb-10">
           <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-            06 / LOCATION & HOURS
+            03 / LOCATION & HOURS
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">오시는 길 및 진료안내</h2>
         </div>
