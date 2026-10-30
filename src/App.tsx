@@ -149,6 +149,14 @@ export default function App() {
 
   // Hero Multi-Tab State
   const [heroTab, setHeroTab] = useState<'video' | 'excelwave'>('video');
+  const [heroPaused, setHeroPaused] = useState<boolean>(false);
+
+  // 메인 배너: 10초마다 영상 ↔ 엑셀웨이브 자동 전환 (화살표·막대를 누르면 그때부터 다시 10초)
+  useEffect(() => {
+    if (currentPage !== 'home' || heroPaused) return;
+    const timer = setTimeout(() => setHeroTab(prev => prev === 'video' ? 'excelwave' : 'video'), 10000);
+    return () => clearTimeout(timer);
+  }, [heroTab, heroPaused, currentPage]);
 
   // Media Assets attached by user
   const MAIN_IMAGE_SRC = "/assets/aistudio/main_image_2f557015.jpg";
@@ -508,7 +516,11 @@ export default function App() {
       </aside>
 
       {/* ================= MAIN HERO (멀티탭: 1번 영상 단독 뷰, 2번 엑셀웨이브 런칭 소개) ================= */}
-      <section className="relative bg-[#071510] text-white overflow-hidden min-h-[580px] sm:min-h-[640px] lg:min-h-[700px] flex items-center">
+      <section
+        onMouseEnter={() => setHeroPaused(true)}
+        onMouseLeave={() => setHeroPaused(false)}
+        className="relative bg-[#071510] text-white overflow-hidden min-h-[580px] sm:min-h-[640px] lg:min-h-[700px] flex items-center"
+      >
         {/* Background Video Element */}
         <div className="absolute inset-0 overflow-hidden">
           <video
@@ -520,81 +532,73 @@ export default function App() {
             playsInline
             className="w-full h-full object-cover object-center scale-100"
           />
-          {/* If video tab, minimal overlay so video is completely clean; if excelwave tab, luxury dark overlay */}
-          <div
-            className={`absolute inset-0 transition-opacity duration-700 ${
-              heroTab === 'video'
-                ? 'bg-gradient-to-t from-black/60 via-transparent to-black/20'
-                : 'bg-gradient-to-r from-[#071510]/95 via-[#0E241C]/85 to-[#071510]/80 backdrop-blur-[1px]'
-            }`}
-          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
           <div className="absolute inset-0 bg-[radial-gradient(#C5A880_1px,transparent_1px)] [background-size:32px_32px] opacity-15 pointer-events-none"></div>
         </div>
 
-        {/* TAB 1: Only Background Video is visible, no text content! */}
-        {heroTab === 'video' && (
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20 pointer-events-none">
-            {/* Intentionally blank per user request: "첫 화면에는 배경에 깔린 영상만 보이게 하는거야 위에 아무 내용없이." */}
-          </div>
-        )}
+        {/* TAB 1: 배경 영상만 보임 (위에 아무 내용 없이, 사용자 요청) */}
 
-        {/* TAB 2: 엑셀웨이브 신규 도입 배너 이미지 + 상담/이벤트 버튼 */}
-        {heroTab === 'excelwave' && (
-          <div className="absolute inset-0 z-10 bg-[#F3DFD0] animate-in fade-in duration-500">
-            {/* PC·태블릿: 가로 배너 */}
-            <div className="hidden md:flex h-full items-center justify-center">
-              <div className="relative w-full aspect-[2000/729]">
-                <img
-                  src={EXCELWAVE_BANNER_SRC}
-                  alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규 도입"
-                  className="w-full h-full object-contain [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
-                />
-                {/* 데스크톱: 배너 문구 아래에 버튼 배치 */}
-                <div className="hidden md:flex absolute left-[17.5%] top-[71%] flex-wrap gap-3">
-                  <button
-                    onClick={openNaverBooking}
-                    className="bg-[#4A2E24] hover:bg-[#2E1C16] text-white font-bold px-6 py-3 rounded-lg text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
-                  >
-                    <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
-                    <span>엑셀웨이브 런칭 특가 상담</span>
-                  </button>
-                  <button
-                    onClick={() => navigateTo('event')}
-                    className="bg-white/70 hover:bg-white text-[#4A2E24] border border-[#4A2E24]/25 px-5 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
-                  >
-                    <Sparkles className="w-4 h-4 text-[#9C6B52]" />
-                    <span>이달의 이벤트 전용 페이지로 이동</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* 모바일: 세로 배너, 버튼은 장비 왼쪽 빈 공간에 */}
-            <div className="md:hidden relative h-full">
+        {/* TAB 2: 엑셀웨이브 신규 도입 배너 이미지 + 상담/이벤트 버튼 (영상 위에서 1초 동안 서서히 나타나고 사라짐) */}
+        <div
+          inert={heroTab !== 'excelwave'}
+          aria-hidden={heroTab !== 'excelwave'}
+          className={`absolute inset-0 z-10 bg-[#F3DFD0] transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
+            heroTab === 'excelwave' ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          {/* PC·태블릿: 가로 배너 */}
+          <div className="hidden md:flex h-full items-center justify-center">
+            <div className="relative w-full aspect-[2000/729]">
               <img
-                src={EXCELWAVE_BANNER_MOBILE_SRC}
-                alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규도입"
-                className="w-full h-full object-cover object-center"
+                src={EXCELWAVE_BANNER_SRC}
+                alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규 도입"
+                className="w-full h-full object-contain [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
               />
-              <div className="absolute left-4 bottom-[13%] w-[52%] flex flex-col gap-2">
+              {/* 데스크톱: 배너 문구 아래에 버튼 배치 */}
+              <div className="hidden md:flex absolute left-[17.5%] top-[71%] flex-wrap gap-3">
                 <button
                   onClick={openNaverBooking}
-                  className="bg-[#4A2E24] text-white font-bold px-3 py-2.5 rounded-lg text-xs shadow-md cursor-pointer flex items-center justify-center gap-1.5"
+                  className="bg-[#4A2E24] hover:bg-[#2E1C16] text-white font-bold px-6 py-3 rounded-lg text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
                 >
-                  <CalendarCheck className="w-3.5 h-3.5 text-[#E8C9B5] shrink-0" />
-                  <span>런칭 특가 상담</span>
+                  <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
+                  <span>엑셀웨이브 런칭 특가 상담</span>
                 </button>
                 <button
                   onClick={() => navigateTo('event')}
-                  className="bg-white/80 text-[#4A2E24] border border-[#4A2E24]/25 px-3 py-2.5 rounded-lg text-xs font-semibold cursor-pointer flex items-center justify-center gap-1.5"
+                  className="bg-white/70 hover:bg-white text-[#4A2E24] border border-[#4A2E24]/25 px-5 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-[#9C6B52] shrink-0" />
-                  <span>이달의 이벤트 보기</span>
+                  <Sparkles className="w-4 h-4 text-[#9C6B52]" />
+                  <span>이달의 이벤트 전용 페이지로 이동</span>
                 </button>
               </div>
             </div>
           </div>
-        )}
+
+          {/* 모바일: 세로 배너, 버튼은 장비 왼쪽 빈 공간에 */}
+          <div className="md:hidden relative h-full">
+            <img
+              src={EXCELWAVE_BANNER_MOBILE_SRC}
+              alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규도입"
+              className="w-full h-full object-cover object-center"
+            />
+            <div className="absolute left-4 bottom-[13%] w-[52%] flex flex-col gap-2">
+              <button
+                onClick={openNaverBooking}
+                className="bg-[#4A2E24] text-white font-bold px-3 py-2.5 rounded-lg text-xs shadow-md cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <CalendarCheck className="w-3.5 h-3.5 text-[#E8C9B5] shrink-0" />
+                <span>런칭 특가 상담</span>
+              </button>
+              <button
+                onClick={() => navigateTo('event')}
+                className="bg-white/80 text-[#4A2E24] border border-[#4A2E24]/25 px-3 py-2.5 rounded-lg text-xs font-semibold cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#9C6B52] shrink-0" />
+                <span>이달의 이벤트 보기</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Prev / Next Slide Arrow Buttons */}
         <button
