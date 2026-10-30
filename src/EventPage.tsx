@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import EventBoard from './EventBoard.tsx';
+import { MobileDrawer } from './MobileNav.tsx';
 import { NAVER_BOOKING_URL } from './clinicLinks.ts';
 import { EVENTS } from './data/pricingData.ts';
 import {
@@ -308,101 +309,16 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
         </div>
       </header>
 
-      {/* ================= MOBILE DRAWER ================= */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex">
-          <div
-            onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-          />
-          <div className="relative ml-auto w-80 max-w-[85vw] bg-white shadow-lg flex flex-col justify-between overflow-y-auto z-10">
-            <div>
-              <div className="p-5 bg-[#0E2920] text-white flex items-center justify-between">
-                <div>
-                  <img
-                    src={LOGO_SRC}
-                    alt="서울뷰의원 당진"
-                    className="h-9 w-auto object-contain mb-1 filter drop-shadow-sm"
-                  />
-                  <p className="text-xs text-zinc-300">서울뷰의원 당진점 이벤트/수가표</p>
-                </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-white/80 hover:text-white p-1 cursor-pointer"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-              <div className="p-4 space-y-2 text-sm divide-y divide-[#E8E3DD]">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onNavigateHome();
-                  }}
-                  className="w-full text-left py-2.5 font-bold text-[#0E2920] flex items-center justify-between"
-                >
-                  <span>00. 메인 홈페이지로 이동</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-                <a
-                  href="#event-showcase"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2.5 font-bold text-[#9E8A63]"
-                >
-                  01. 진행 중인 이벤트
-                </a>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    scrollToPrice();
-                  }}
-                  className="w-full text-left py-2.5 font-bold text-[#151515]"
-                >
-                  02. 상세 비급여 수가표
-                </button>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onNavigateHome('sec-ba');
-                  }}
-                  className="w-full text-left py-2.5 text-zinc-700"
-                >
-                  03. 시술 전후사진 아카이브
-                </button>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onNavigateHome('sec-guide');
-                  }}
-                  className="w-full text-left py-2.5 text-zinc-700"
-                >
-                  04. 시술안내 및 주의사항
-                </button>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onNavigateHome('sec-location');
-                  }}
-                  className="w-full text-left py-2.5 text-zinc-700"
-                >
-                  05. 오시는 길 & 진료시간
-                </button>
-              </div>
-            </div>
-            <div className="p-4 bg-[#F8F8F9] border-t border-[#E8E3DD]">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleOpenBooking('모바일 빠른 진료 예약');
-                }}
-                className="w-full bg-[#0E2920] text-white py-3 rounded font-semibold text-xs tracking-wider cursor-pointer"
-              >
-                빠른 진료 예약 / 카톡 상담
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* ================= MOBILE DRAWER (모든 페이지 공용 메뉴) ================= */}
+      <MobileDrawer
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        onNavigateHome={onNavigateHome}
+        onNavigateEvent={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onNavigatePrices={scrollToPrice}
+        onNavigateColumn={() => (onNavigateToColumn ? onNavigateToColumn() : onNavigateHome('sec-column'))}
+        onBook={handleOpenBooking}
+      />
 
       {/* ================= RIGHT FLOATING QUICK BAR ================= */}
       <aside className="hidden md:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E8E3DD] rounded-xl shadow-md overflow-hidden divide-y divide-[#E8E3DD] w-20 text-center">

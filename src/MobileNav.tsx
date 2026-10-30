@@ -30,8 +30,7 @@ export function MobileDrawer({
     fn();
   };
 
-  const items: { label: string; onClick: () => void; strong?: boolean }[] = [
-    { label: '00. 메인 홈페이지로 이동', onClick: go(() => onNavigateHome()), strong: true },
+  const items: { label: string; onClick: () => void }[] = [
     { label: '01. 서울뷰의원 소개', onClick: go(() => onNavigateHome('sec-about')) },
     { label: '02. 이벤트', onClick: go(onNavigateEvent) },
     { label: '03. 상세 비급여 수가표', onClick: go(onNavigatePrices) },
@@ -60,9 +59,7 @@ export function MobileDrawer({
               <button
                 key={item.label}
                 onClick={item.onClick}
-                className={`w-full text-left py-3 flex items-center justify-between cursor-pointer ${
-                  item.strong ? 'font-bold text-[#0F2B22]' : 'font-medium text-zinc-700'
-                }`}
+                className="w-full text-left py-3 flex items-center justify-between cursor-pointer font-medium text-zinc-700"
               >
                 <span>{item.label}</span>
                 <ChevronRight className="w-4 h-4 text-zinc-400" />
