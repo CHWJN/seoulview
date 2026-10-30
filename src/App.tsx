@@ -243,6 +243,9 @@ export default function App() {
     }
   ];
 
+  // 홈에 보여 줄 최신 칼럼 3편 (날짜 "2026. 10. 29" 형식이라 글자 순 정렬 = 날짜 순)
+  const latestColumns = [...COLUMNS_DATA].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+
   // Before & After Data
   const BA_DATA: Record<string, BaItem[]> = {
     melasma: [
@@ -918,7 +921,8 @@ export default function App() {
 
       {/* ================= SECTION 2: DR. COLUMN ================= */}
       <section id="sec-column" className="py-20 md:py-28 bg-[#F7F7F8] border-t border-[#E5E5E8]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        {/* lg:pr-28 — 오른쪽 고정 퀵메뉴에 전체보기 버튼·카드가 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
@@ -936,19 +940,20 @@ export default function App() {
             </button>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {COLUMNS_DATA.map((col) => (
+          {/* 최신 칼럼 3편: 모바일은 옆으로 넘겨 보기, PC는 3열 */}
+          <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 md:mx-0 md:px-0">
+            {latestColumns.map((col) => (
               <article
                 key={col.id}
                 onClick={() => navigateTo('column', col.id)}
-                className="bg-white rounded-xl border border-[#E5E5E8] p-7 hover:border-[#C5A880] transition cursor-pointer flex flex-col justify-between group shadow-xs"
+                className="w-[82%] shrink-0 snap-start md:w-auto bg-white rounded-xl border border-[#E5E5E8] p-5 md:p-7 hover:border-[#C5A880] transition cursor-pointer flex flex-col justify-between group shadow-xs"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2 text-[11px] text-zinc-400">
                     <span>{col.date}</span>
                     <span>{col.readTime}</span>
                   </div>
-                  <h3 className="text-lg font-bold text-[#111111] mt-3 group-hover:text-[#0F2B22] transition leading-snug">
+                  <h3 className="text-base md:text-lg font-bold text-[#111111] mt-3 group-hover:text-[#0F2B22] transition leading-snug break-keep">
                     {col.title}
                   </h3>
                   <p className="text-xs text-zinc-500 mt-3 leading-relaxed line-clamp-3">
