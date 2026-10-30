@@ -108,9 +108,6 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
               서울뷰의원 당진점<br />
               <span className="text-[#C5A880]">진행 중인 이벤트</span>
             </h1>
-            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light">
-              상담실장의 불필요한 과잉 권유 없이, 대표원장이 직접 피부 상태를 진단하고 가장 적합한 시술을 제안해 드립니다.
-            </p>
             <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 1인 프라이빗 관리실
@@ -126,7 +123,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       {/* ================= EVENT LIST (가격표 엑셀 "이벤트 가격표" 시트) ================= */}
       <section id="event-showcase" className="py-12 md:py-16 bg-[#F7F7F8] border-b border-[#E5E5E8]">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3 lg:pr-24 2xl:pr-0">
             <div>
               <h2 className="text-2xl font-bold text-[#111111]">서울뷰의원 당진점 이벤트 {EVENTS.length}종</h2>
             </div>
