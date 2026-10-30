@@ -265,6 +265,70 @@ export default function App() {
   // 손으로 옆으로 밀 때만 자동 이동을 멈춘다 (페이지를 위아래로 스크롤하다 카드를 스친 것은 무시).
   const columnScrollRef = useRef<HTMLDivElement>(null);
   const baScrollRef = useRef<HTMLDivElement>(null);
+  // PC 화살표: 자동 흐름 중에도 한 번에 크게 이동 (아래 효과에서 실제 동작을 채움)
+  const baNudge = useRef<(dx: number) => void>(() => {});
+
+  // 홈 전후사진 자동 흐름: 화면에 보이는 동안 초당 약 35px씩 천천히 왼쪽으로 흘러가고,
+  // 첫 번째 묶음 끝에 닿으면 같은 모양의 두 번째 묶음 시작점에서 처음 위치로 되돌려 끊김 없이 순환.
+  // 손으로 밀거나 화살표를 누르면 2초 쉬었다가 그 위치에서 다시 흐른다.
+  useEffect(() => {
+    const el = baScrollRef.current;
+    if (!el || currentPage !== 'home') return;
+    const SPEED = 35; // px/초
+    let pos = el.scrollLeft;
+    let last = 0;
+    let raf = 0;
+    let visible = false;
+    let pausedUntil = 0;
+    let touching = false;
+    const loopWidth = () => {
+      const second = el.querySelector<HTMLElement>('[data-ba-copy="1"]');
+      const first = el.querySelector<HTMLElement>('[data-ba-copy="0"]');
+      return second && first ? second.offsetLeft - first.offsetLeft : 0;
+    };
+    const wrap = (x: number) => {
+      const w = loopWidth();
+      if (!w) return x;
+      if (x >= w) return x - w;
+      if (x < 0) return x + w;
+      return x;
+    };
+    const tick = (now: number) => {
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      if (Math.abs(el.scrollLeft - pos) > 2) pos = el.scrollLeft; // 손으로 민 위치를 따라감
+      if (visible && !touching && now > pausedUntil) {
+        pos = wrap(pos + SPEED * dt);
+        el.scrollLeft = pos;
+      } else if (!touching && now > pausedUntil) {
+        const w = wrap(el.scrollLeft);
+        if (w !== el.scrollLeft) { el.scrollLeft = w; pos = w; }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.2 });
+    io.observe(el);
+    const onDown = () => { touching = true; };
+    const onUp = () => { touching = false; pausedUntil = performance.now() + 2000; pos = el.scrollLeft; };
+    el.addEventListener('touchstart', onDown, { passive: true });
+    el.addEventListener('touchend', onUp, { passive: true });
+    el.addEventListener('touchcancel', onUp, { passive: true });
+    baNudge.current = (dx: number) => {
+      pausedUntil = performance.now() + 2600;
+      // 경계를 넘을 때는 같은 모양의 다른 묶음 위치로 먼저 옮긴 뒤 부드럽게 이동
+      const w = loopWidth();
+      if (dx < 0 && el.scrollLeft + dx < 0) el.scrollLeft += w;
+      if (dx > 0 && el.scrollLeft + dx >= w) el.scrollLeft -= w;
+      pos = el.scrollLeft;
+      el.scrollBy({ left: dx, behavior: 'smooth' });
+    };
+    return () => {
+      cancelAnimationFrame(raf); io.disconnect();
+      el.removeEventListener('touchstart', onDown); el.removeEventListener('touchend', onUp); el.removeEventListener('touchcancel', onUp);
+    };
+  }, [currentPage]);
   useEffect(() => {
     const el = columnScrollRef.current;
     if (!el || currentPage !== 'home') return;
@@ -613,10 +677,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
             <div>
-              <span className="text-xs sm:text-sm text-[#A6895E] font-bold">
+              <span className="text-base sm:text-xl text-[#A6895E] font-bold">
                 서울뷰의원 당진은 결과로 증명합니다.
               </span>
-              <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">시술 전후사진</h2>
+              <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1.5">시술 전후사진</h2>
               <p className="text-xs sm:text-sm text-zinc-600 mt-1">보정 없는 동일 조명·동일 각도 임상 전후 기록입니다.</p>
             </div>
             <BaConsentToggle
@@ -628,42 +692,48 @@ export default function App() {
             />
           </div>
 
-          {/* 모든 분류의 사례를 한 줄로 나열, 옆으로 넘겨 보기 (PC는 좌우 화살표로도 이동). 끝에 '더 많은 전후사진 보러가기' */}
+          {/* 모든 분류의 사례를 한 줄로 나열, 화면에 보이면 천천히 계속 옆으로 흘러가고 끝나면 처음으로 이어짐 (손으로 밀거나 PC 화살표로도 이동). 끝에 '더 많은 전후사진 보러가기' */}
           <div className="relative">
-            <div ref={baScrollRef} className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 lg:mx-0 lg:px-0 lg:scroll-px-0 pb-2">
-              {ALL_BA_ITEMS.map((item) => (
-                <BaCard
-                  key={item.title}
-                  item={item}
-                  category={item.category}
-                  unlocked={isBaUnlocked}
-                  onUnlock={() => {
-                    setIsBaUnlocked(true);
-                    showToast("의료법 준수 전후사진 열람 동의가 확인되었습니다.");
-                  }}
-                  className="w-[88%] sm:w-[420px] shrink-0 snap-start"
-                />
+            {/* 같은 목록을 두 번 이어 붙여, 끝에 닿으면 처음으로 자연스럽게 이어지게 함 (두 번째 묶음은 화면 읽기 프로그램에서 숨김) */}
+            <div ref={baScrollRef} className="flex overflow-x-auto no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 pb-2">
+              {[0, 1].map((copy) => (
+                <div key={copy} data-ba-copy={copy} aria-hidden={copy === 1} className="flex shrink-0 gap-4 md:gap-6 pr-4 md:pr-6">
+                  {ALL_BA_ITEMS.map((item) => (
+                    <BaCard
+                      key={item.title}
+                      item={item}
+                      category={item.category}
+                      unlocked={isBaUnlocked}
+                      onUnlock={() => {
+                        setIsBaUnlocked(true);
+                        showToast("의료법 준수 전후사진 열람 동의가 확인되었습니다.");
+                      }}
+                      className="w-[80vw] max-w-[420px] sm:w-[420px] shrink-0"
+                    />
+                  ))}
+                  <button
+                    onClick={() => navigateTo('ba')}
+                    tabIndex={copy === 1 ? -1 : undefined}
+                    className="w-[38vw] sm:w-40 shrink-0 flex flex-col items-center justify-center gap-3 text-[#0F2B22] cursor-pointer group/more"
+                  >
+                    <span className="w-14 h-14 rounded-full bg-[#0F2B22] text-white flex items-center justify-center shadow-md transition md:group-hover/more:translate-x-1 md:group-hover/more:bg-[#173F32]">
+                      <ChevronRight className="w-6 h-6" />
+                    </span>
+                    <span className="text-sm font-bold text-center leading-snug break-keep">더 많은 전후사진<br />보러가기</span>
+                  </button>
+                </div>
               ))}
-              <button
-                onClick={() => navigateTo('ba')}
-                className="w-[42%] sm:w-40 shrink-0 snap-start flex flex-col items-center justify-center gap-3 text-[#0F2B22] cursor-pointer group/more"
-              >
-                <span className="w-14 h-14 rounded-full bg-[#0F2B22] text-white flex items-center justify-center shadow-md transition md:group-hover/more:translate-x-1 md:group-hover/more:bg-[#173F32]">
-                  <ChevronRight className="w-6 h-6" />
-                </span>
-                <span className="text-sm font-bold text-center leading-snug break-keep">더 많은 전후사진<br />보러가기</span>
-              </button>
             </div>
             {/* PC 좌우 화살표 */}
             <button
-              onClick={() => baScrollRef.current?.scrollBy({ left: -450, behavior: 'smooth' })}
+              onClick={() => baNudge.current(-450)}
               aria-label="이전 전후사진"
               className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-[#E5E5E8] shadow-md items-center justify-center text-[#0F2B22] hover:bg-[#0F2B22] hover:text-white transition cursor-pointer"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
-              onClick={() => baScrollRef.current?.scrollBy({ left: 450, behavior: 'smooth' })}
+              onClick={() => baNudge.current(450)}
               aria-label="다음 전후사진"
               className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white border border-[#E5E5E8] shadow-md items-center justify-center text-[#0F2B22] hover:bg-[#0F2B22] hover:text-white transition cursor-pointer"
             >
