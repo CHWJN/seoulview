@@ -37,7 +37,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF8] text-[#151515] font-sans selection:bg-[#9E8A63] selection:text-white">
+    <div className="min-h-screen bg-[#FDFBF8] text-[#111111] font-sans selection:bg-[#A6895E] selection:text-white">
       {/* ================= MAIN HEADER & NAVIGATION (모든 페이지 공용) ================= */}
       <SiteHeader
         onLogo={() => onNavigateHome()}
@@ -59,38 +59,38 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       />
 
       {/* ================= RIGHT FLOATING QUICK BAR ================= */}
-      <aside className="hidden lg:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E8E3DD] rounded-xl shadow-md overflow-hidden divide-y divide-[#E8E3DD] w-20 text-center">
+      <aside className="hidden lg:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col bg-white border border-[#E5E5E8] rounded-xl shadow-md overflow-hidden divide-y divide-[#E5E5E8] w-20 text-center">
         <button
           onClick={openNaverBooking}
-          className="py-3.5 px-2 bg-[#0E2920] text-white hover:bg-[#184033] transition flex flex-col items-center justify-center group cursor-pointer"
+          className="py-3.5 px-2 bg-[#0F2B22] text-white hover:bg-[#173F32] transition flex flex-col items-center justify-center group cursor-pointer"
         >
-          <Calendar className="w-5 h-5 text-[#BFA980] mb-1 group-hover:scale-110 transition" />
+          <Calendar className="w-5 h-5 text-[#C5A880] mb-1 group-hover:scale-110 transition" />
           <span className="text-[11px] font-bold">진료예약</span>
         </button>
         <button
           onClick={() => window.open(KAKAO_CHAT_URL, '_blank', 'noopener,noreferrer')}
-          className="py-3.5 px-2 hover:bg-[#FEE500]/20 transition flex flex-col items-center justify-center text-[#151515] cursor-pointer"
+          className="py-3.5 px-2 hover:bg-[#FEE500]/20 transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
           <MessageCircle className="w-5 h-5 text-[#3C1E1E] fill-[#FEE500] mb-1" />
           <span className="text-[11px] font-medium text-zinc-700">카톡상담</span>
         </button>
         <button
           onClick={scrollToPrice}
-          className="py-3.5 px-2 hover:bg-[#F8F8F9] transition flex flex-col items-center justify-center text-[#151515] cursor-pointer"
+          className="py-3.5 px-2 hover:bg-[#F7F7F8] transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
-          <Search className="w-5 h-5 text-[#9E8A63] mb-1" />
+          <Search className="w-5 h-5 text-[#A6895E] mb-1" />
           <span className="text-[11px] font-medium text-zinc-700">수가검색</span>
         </button>
         <button
           onClick={() => onNavigateHome()}
-          className="py-3.5 px-2 hover:bg-[#F8F8F9] transition flex flex-col items-center justify-center text-[#151515] cursor-pointer"
+          className="py-3.5 px-2 hover:bg-[#F7F7F8] transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
           <Home className="w-5 h-5 text-zinc-600 mb-1" />
           <span className="text-[11px] font-medium text-zinc-700">홈으로</span>
         </button>
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="py-2.5 bg-[#F8F8F9] text-zinc-500 hover:text-[#151515] text-[10px] font-mono tracking-widest flex flex-col items-center cursor-pointer"
+          className="py-2.5 bg-[#F7F7F8] text-zinc-500 hover:text-[#111111] text-[10px] font-en-cond tracking-widest flex flex-col items-center cursor-pointer"
         >
           <ChevronUp className="w-4 h-4" />
           TOP
@@ -98,32 +98,32 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       </aside>
 
       {/* ================= SUBPAGE HERO BANNER ================= */}
-      <section className="bg-gradient-to-r from-[#0E2920] via-[#12362a] to-[#1a231f] text-white py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#9E8A63_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <section className="bg-gradient-to-r from-[#0F2B22] via-[#12362a] to-[#1a231f] text-white py-16 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#A6895E_1px,transparent_1px)] [background-size:24px_24px]"></div>
         <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 border border-[#9E8A63]/50 bg-[#9E8A63]/15 px-3.5 py-1 rounded-full">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#BFA980]" />
-              <span className="font-mono text-xs tracking-widest text-[#BFA980] uppercase">
+            <div className="inline-flex items-center gap-2 border border-[#A6895E]/50 bg-[#A6895E]/15 px-3.5 py-1 rounded-full">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
+              <span className="font-en-cond text-xs tracking-widest text-[#C5A880] uppercase">
                 100% TRANSPARENT PRICING
               </span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
               서울뷰의원 당진점<br />
-              <span className="text-[#BFA980]">진행 중인 이벤트</span>
+              <span className="text-[#C5A880]">진행 중인 이벤트</span>
             </h1>
             <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light">
               정직한 의료 원칙으로 모든 시술 항목의 1회 및 패키지 수가를 100% 공개합니다. 상담실장의 불필요한 과잉 권유 없이, 대표원장이 직접 피부 상태를 진단하고 가장 적합한 시술을 제안해 드립니다.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 정품·정량 인증서 발급
+                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 정품·정량 인증서 발급
               </span>
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 1인 프라이빗 제모·관리실
+                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 1인 프라이빗 제모·관리실
               </span>
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 의료법 규정 부가세(VAT) 별도 고지
+                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 의료법 규정 부가세(VAT) 별도 고지
               </span>
             </div>
           </div>
@@ -131,14 +131,14 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       </section>
 
       {/* ================= EVENT LIST (가격표 엑셀 "이벤트 가격표" 시트) ================= */}
-      <section id="event-showcase" className="py-12 md:py-16 bg-[#F7F7F8] border-b border-[#E8E3DD]">
+      <section id="event-showcase" className="py-12 md:py-16 bg-[#F7F7F8] border-b border-[#E5E5E8]">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
             <div>
-              <span className="font-mono text-xs tracking-widest text-[#9E8A63] font-bold uppercase">
+              <span className="font-en-cond text-xs tracking-widest text-[#A6895E] font-bold uppercase">
                 SPECIAL EVENT
               </span>
-              <h2 className="text-2xl font-bold text-[#151515] mt-0.5">서울뷰의원 당진점 이벤트 {EVENTS.length}종</h2>
+              <h2 className="text-2xl font-bold text-[#111111] mt-0.5">서울뷰의원 당진점 이벤트 {EVENTS.length}종</h2>
             </div>
             <p className="text-xs text-zinc-500">※ 이벤트가는 부가세(VAT) 별도입니다.</p>
           </div>
@@ -150,9 +150,9 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       {/* ================= MAIN PRICE SECTION (8대 카테고리 & 검색) ================= */}
       <main id="price-container" className="py-12 md:py-16 max-w-7xl mx-auto px-4 lg:px-8">
         {/* Dedicated Price Page Entrance Card */}
-        <div className="mb-10 p-6 sm:p-8 bg-gradient-to-r from-[#0E2920] to-[#184235] text-white rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-md border border-[#9E8A63]/50">
+        <div className="mb-10 p-6 sm:p-8 bg-gradient-to-r from-[#0F2B22] to-[#173F32] text-white rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-md border border-[#A6895E]/50">
           <div className="space-y-1.5 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 bg-[#9E8A63]/30 text-[#C5A880] text-xs font-bold px-3 py-1 rounded-full">
+            <div className="inline-flex items-center gap-2 bg-[#A6895E]/30 text-[#C5A880] text-xs font-bold px-3 py-1 rounded-full">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>의료법 제45조 준수 비급여 공식 수가표</span>
             </div>
@@ -175,9 +175,9 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
         </div>
 
         {/* Bottom Notice Callout */}
-        <div className="mt-8 bg-[#F4EFEB]/70 border border-[#9E8A63]/30 rounded-xl p-5 text-xs text-zinc-600 space-y-2">
-          <p className="font-bold text-[#151515] flex items-center gap-2">
-            <Info className="w-4 h-4 text-[#9E8A63]" />
+        <div className="mt-8 bg-[#F4EFEB]/70 border border-[#A6895E]/30 rounded-xl p-5 text-xs text-zinc-600 space-y-2">
+          <p className="font-bold text-[#111111] flex items-center gap-2">
+            <Info className="w-4 h-4 text-[#A6895E]" />
             비급여 진료비용 고지 및 의료법 안내사항
           </p>
           <ul className="list-disc pl-5 space-y-1 text-zinc-500 leading-relaxed">
@@ -190,7 +190,7 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       </main>
 
       {/* ================= FOOTER ================= */}
-      <footer className="bg-[#0E2920] text-zinc-400 py-14 border-t border-white/10 text-xs pb-24 lg:pb-14">
+      <footer className="bg-[#0F2B22] text-zinc-400 py-14 border-t border-white/10 text-xs pb-24 lg:pb-14">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between gap-8 pb-8 border-b border-white/10">
             <div>
@@ -209,21 +209,21 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
             <div className="flex flex-wrap gap-4 items-start text-zinc-300">
               <button
                 onClick={() => onNavigateHome()}
-                className="hover:text-[#BFA980] cursor-pointer"
+                className="hover:text-[#C5A880] cursor-pointer"
               >
                 홈페이지 메인
               </button>
               <span>|</span>
               <button
                 onClick={scrollToPrice}
-                className="hover:text-[#BFA980] underline underline-offset-4 cursor-pointer"
+                className="hover:text-[#C5A880] underline underline-offset-4 cursor-pointer"
               >
                 상세 비급여 수가표
               </button>
               <span>|</span>
               <button
                 onClick={() => onNavigateHome('sec-location')}
-                className="hover:text-[#BFA980] cursor-pointer"
+                className="hover:text-[#C5A880] cursor-pointer"
               >
                 오시는 길 & 주차
               </button>
@@ -237,33 +237,33 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
       </footer>
 
       {/* ================= MOBILE FIXED BOTTOM BAR ================= */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E8E3DD] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E5E8] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
         <a
           href={NAVER_BOOKING_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="py-3 bg-[#0E2920] text-white flex flex-col items-center justify-center cursor-pointer"
+          className="py-3 bg-[#0F2B22] text-white flex flex-col items-center justify-center cursor-pointer"
         >
-          <CalendarCheck className="w-4 h-4 text-[#BFA980] mb-0.5" />
+          <CalendarCheck className="w-4 h-4 text-[#C5A880] mb-0.5" />
           <span>실시간예약</span>
         </a>
         <a
           href="tel:041-352-3994"
-          className="py-3 text-[#151515] flex flex-col items-center justify-center cursor-pointer"
+          className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
         >
-          <PhoneCall className="w-4 h-4 text-[#9E8A63] mb-0.5" />
+          <PhoneCall className="w-4 h-4 text-[#A6895E] mb-0.5" />
           <span>전화걸기</span>
         </a>
         <button
           onClick={scrollToPrice}
-          className="py-3 text-[#151515] flex flex-col items-center justify-center cursor-pointer"
+          className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
         >
-          <Search className="w-4 h-4 text-[#0E2920] mb-0.5" />
+          <Search className="w-4 h-4 text-[#0F2B22] mb-0.5" />
           <span>수가검색</span>
         </button>
         <button
           onClick={() => onNavigateHome()}
-          className="py-3 text-[#151515] flex flex-col items-center justify-center cursor-pointer"
+          className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
         >
           <Home className="w-4 h-4 text-zinc-600 mb-0.5" />
           <span>홈으로</span>

@@ -75,7 +75,12 @@ export default function SiteHeader({ onLogo, onSection, onEvent, onPrices, onCol
             <button onClick={() => onSection('sec-about')} className={TOP_CLASS}>
               서울뷰의원 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
             </button>
-            <div className={`${DROPDOWN_CLASS} w-48`}>{subMenu('sec-about', 'about', ABOUT_ITEMS, 'py-2.5')}</div>
+            <div className={`${DROPDOWN_CLASS} w-48`}>
+              {subMenu('sec-about', 'about', ABOUT_ITEMS, 'py-2.5')}
+              <button onClick={() => onSection('sec-doctor')} className={`${ITEM_CLASS} py-2.5`}>
+                대표원장 소개
+              </button>
+            </div>
           </div>
 
           {/* 2. 이벤트 */}

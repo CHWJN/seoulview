@@ -71,32 +71,32 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
       />
 
       {/* ================= SUBPAGE HERO BANNER ================= */}
-      <section className="bg-gradient-to-r from-[#0E2920] via-[#12362a] to-[#1a231f] text-white py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#9E8A63_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <section className="bg-gradient-to-r from-[#0F2B22] via-[#12362a] to-[#1a231f] text-white py-16 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#A6895E_1px,transparent_1px)] [background-size:24px_24px]"></div>
         <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 border border-[#9E8A63]/50 bg-[#9E8A63]/15 px-3.5 py-1 rounded-full">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#BFA980]" />
-              <span className="font-mono text-xs tracking-widest text-[#BFA980] uppercase">
+            <div className="inline-flex items-center gap-2 border border-[#A6895E]/50 bg-[#A6895E]/15 px-3.5 py-1 rounded-full">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
+              <span className="font-en-cond text-xs tracking-widest text-[#C5A880] uppercase">
                 100% TRANSPARENT PRICING
               </span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
               서울뷰의원 당진점<br />
-              <span className="text-[#BFA980]">상세 비급여 수가표</span>
+              <span className="text-[#C5A880]">상세 비급여 수가표</span>
             </h1>
             <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light">
               정직한 의료 원칙으로 모든 시술 항목의 1회 및 패키지 수가를 100% 공개합니다. 상담실장의 불필요한 과잉 권유 없이, 대표원장이 직접 피부 상태를 진단하고 가장 적합한 시술을 제안해 드립니다.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 정품·정량 인증서 발급
+                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 정품·정량 인증서 발급
               </span>
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 1인 프라이빗 제모·관리실
+                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 1인 프라이빗 제모·관리실
               </span>
               <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 의료법 규정 부가세(VAT) 별도 고지
+                <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 의료법 규정 부가세(VAT) 별도 고지
               </span>
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
           </div>
           <div className="shrink-0 flex items-center gap-2 text-xs">
             <span className="text-zinc-500">항목수:</span>
-            <strong className="bg-[#0F2B22] text-[#C5A880] px-2.5 py-0.5 rounded font-mono font-bold">
+            <strong className="bg-[#0F2B22] text-[#C5A880] px-2.5 py-0.5 rounded font-en-cond font-bold">
               {visibleRowCount}개
             </strong>
           </div>

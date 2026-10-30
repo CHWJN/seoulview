@@ -13,7 +13,8 @@ import {
   Calendar,
   CheckCircle2,
   MessageCircle,
-  Instagram,
+  BookOpen,
+  Images,
   MapPin,
   ExternalLink
 } from 'lucide-react';
@@ -242,14 +243,24 @@ export default function App() {
     }
   ];
 
+  // 대표원장 약력 (원장님이 주신 원문 그대로)
+  const DOCTOR_CAREER = [
+    '공주 한일고 졸업',
+    '충남대학교 의과대학 졸업',
+    '전) 유스앤영 서울뷰의원 총괄원장',
+    '대한피부레이저모발학회 정회원',
+    '대한비만학회 정회원',
+    '대한 항노화학회 정회원'
+  ];
+
   // 홈에 보여 줄 최신 칼럼 3편 (날짜 "2026. 10. 29" 형식이라 글자 순 정렬 = 날짜 순)
   const latestColumns = [...COLUMNS_DATA].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
 
   // Before & After Data
   const BA_DATA: Record<string, BaItem[]> = {
     melasma: [
-      { title: "색소 레이저 복합 토닝 10회", period: "시술 후 12주 경과", desc: "양 볼에 넓게 퍼진 혼합형 난치성 기미와 잡티를 열 손상 없이 안전하게 분해하여 전체 피부 톤을 밝힌 사례입니다.", beforeMetric: "시술 전: 진피성 기미 및 불균일한 톤", afterMetric: "시술 후: 멜라닌 지수 62% 감소" },
-      { title: "흑자(검버섯) 원데이 제거", period: "시술 후 3주 경과", desc: "일반 레이저 토닝으로 지워지지 않던 광대 부위 흑자를 레이저 스팟 조사로 1회 시술 만에 깨끗하게 제거했습니다.", beforeMetric: "시술 전: 짙은 갈색 흑자 병변", afterMetric: "시술 후: 흉터 없이 정상 피부톤 회복" }
+      { title: "색소 레이저 복합 토닝 10회", period: "시술 후 12주 경과", desc: "양 볼에 넓게 퍼진 혼합형 난치성 기미와 잡티를 열 손상 없이 안전하게 분해하여 전체 피부 톤을 밝힌 사례입니다.", beforeMetric: "시술 전: 진피성 기미 및 불균일한 톤", afterMetric: "시술 후: 전체 피부 톤 개선" },
+      { title: "흑자(검버섯) 원데이 제거", period: "시술 후 3주 경과", desc: "일반 레이저 토닝으로 지워지지 않던 광대 부위 흑자를 레이저 스팟 조사로 제거했습니다.", beforeMetric: "시술 전: 짙은 갈색 흑자 병변", afterMetric: "시술 후: 흉터 없이 정상 피부톤 회복" }
     ],
     filler: [
       { title: "벨로테로 팔자주름 + 앞볼 커스텀 필러 2cc", period: "시술 직후 및 2주 경과", desc: "과하게 부풀어 오르는 느낌 없이 코 옆 꺼진 삼각존(귀족 부위)을 자연스럽게 채워 인상을 부드럽게 개선했습니다.", beforeMetric: "시술 전: 깊은 팔자 고랑", afterMetric: "시술 후: 이물감 없는 자연스러운 윤곽" },
@@ -260,7 +271,7 @@ export default function App() {
       { title: "홍조 레이저 + LDM 5회", period: "시술 후 6주 경과", desc: "만성적인 양 볼 안면홍조와 여드름 붉은 자국을 개선하고 얇아진 피부 장벽을 튼튼하게 복원했습니다.", beforeMetric: "시술 전: 여드름 홍반 및 모세혈관 확장", afterMetric: "시술 후: 붉은기 진정 및 장벽 강화" }
     ],
     hair: [
-      { title: "남성 수염 전체 레이저 제모 5회", period: "5회 시술 완료 후 4주 경과", desc: "매일 아침 면도 독(모낭염)과 푸른 수염 자국으로 스트레스받던 남성 환자분의 인중·턱·목 수염을 90% 이상 반영구 제거했습니다.", beforeMetric: "시술 전: 굵고 빽빽한 수염 및 모낭염", afterMetric: "시술 후: 푸른 자국 소실 및 매끈한 턱선" },
+      { title: "남성 수염 전체 레이저 제모 5회", period: "5회 시술 완료 후 4주 경과", desc: "매일 아침 면도 독(모낭염)과 푸른 수염 자국으로 스트레스받던 남성 환자분의 인중·턱·목 수염을 정리했습니다.", beforeMetric: "시술 전: 굵고 빽빽한 수염 및 모낭염", afterMetric: "시술 후: 푸른 자국 소실 및 매끈한 턱선" },
       { title: "여성 종아리/겨드랑이 레이저 제모 5회", period: "5회 시술 완료 후", desc: "모공 각화증과 체모를 동시에 깔끔하게 정리했습니다.", beforeMetric: "시술 전: 잦은 면도로 인한 색소침착", afterMetric: "시술 후: 체모 제거 및 피부결 개선" }
     ],
     tattoo: [
@@ -369,7 +380,7 @@ export default function App() {
           onClick={() => scrollToSection('sec-column')}
           className="py-3.5 px-2 hover:bg-[#F7F7F8] transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
-          <span className="font-en-cond font-bold text-xs text-[#03C75A] mb-0.5">BLOG</span>
+          <BookOpen className="w-5 h-5 text-[#A6895E] mb-1" />
           <span className="text-[11px] font-medium text-zinc-700">원장칼럼</span>
         </button>
         <button
@@ -383,7 +394,7 @@ export default function App() {
           onClick={() => scrollToSection('sec-ba')}
           className="py-3.5 px-2 hover:bg-[#F7F7F8] transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
-          <Instagram className="w-5 h-5 text-pink-600 mb-1" />
+          <Images className="w-5 h-5 text-[#A6895E] mb-1" />
           <span className="text-[11px] font-medium text-zinc-700">전후사진</span>
         </button>
         <button
@@ -708,9 +719,6 @@ export default function App() {
           <div className="space-y-12 animate-in fade-in">
             {/* Top Philosophy Intro Banner */}
             <div className="bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl p-6 sm:p-12 shadow-xs">
-              <span className="inline-block bg-[#0F2B22] text-[#C5A880] text-xs font-bold px-3 py-1 rounded mb-4">
-                SEOUL VIEW DANGJIN
-              </span>
               {/* 모바일은 글자를 줄이고 뜻이 끊기지 않는 곳에서 줄바꿈 (break-keep: 단어 중간에서 안 끊김) */}
               <h3 className="text-xl sm:text-3xl lg:text-[32px] font-bold text-[#0F2B22] leading-normal sm:leading-snug tracking-tight break-keep">
                 “수준 높은 시술을 위해<br className="sm:hidden" /> 굳이 멀리 떠나실 필요 없도록,<br />
@@ -724,9 +732,6 @@ export default function App() {
             {/* 4 Core Promises Section (서울뷰의원의 약속 - 브랜드 시그니처 딥그린 & 골드 톤) */}
             <div className="bg-[#FAF8F5] border border-[#C5A880]/40 rounded-2xl py-8 px-6 sm:p-12 shadow-xs">
               <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-                <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase block mb-1">
-                  SEOUL VIEW PRINCIPLES
-                </span>
                 <h3 className="text-2xl sm:text-4xl font-bold text-[#0F2B22] tracking-tight">
                   서울뷰의원의 약속
                 </h3>
@@ -894,14 +899,46 @@ export default function App() {
 
 
 
-      {/* ================= SECTION 2: DR. COLUMN ================= */}
+      {/* ================= SECTION 2: DOCTOR (대표원장 소개, 약력은 원장님이 주신 원문 그대로) ================= */}
+      <section id="sec-doctor" className="py-20 md:py-28 border-t border-[#E5E5E8]">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
+          <div className="mb-10">
+            <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
+              02 / DOCTOR
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">대표원장 소개</h2>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+            <div className="lg:col-span-5 bg-[#0F2B22] text-white rounded-2xl p-8 sm:p-10 flex flex-col justify-center">
+              <p className="text-xs sm:text-sm text-[#C5A880] font-bold">서울뷰의원당진 진료과목 피부과</p>
+              <h3 className="text-3xl sm:text-4xl font-bold mt-2 tracking-tight">
+                박상덕 <span className="text-lg sm:text-xl font-semibold text-[#C5A880]">대표원장</span>
+              </h3>
+            </div>
+            <div className="lg:col-span-7 bg-[#FAF8F5] border border-[#C5A880]/30 rounded-2xl p-6 sm:p-10">
+              <h4 className="text-sm font-bold text-[#A6895E] mb-2">약력</h4>
+              <ul className="divide-y divide-[#C5A880]/20">
+                {DOCTOR_CAREER.map((line) => (
+                  <li key={line} className="py-3 flex items-start gap-3 text-sm sm:text-base text-zinc-800">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#C5A880] shrink-0" />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= SECTION 3: DR. COLUMN ================= */}
       <section id="sec-column" className="py-20 md:py-28 bg-[#F7F7F8] border-t border-[#E5E5E8]">
         {/* lg:pr-28 — 오른쪽 고정 퀵메뉴에 전체보기 버튼·카드가 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
         <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-                02 / DOCTOR'S COLUMN
+                03 / DOCTOR'S COLUMN
               </span>
               <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">대표원장 진료 칼럼</h2>
               <p className="text-xs sm:text-sm text-zinc-600 mt-1">시술을 결정하시기 전 꼭 한 번 읽어보시면 도움 되는 대표원장의 솔직한 의학 칼럼입니다.</p>
@@ -947,12 +984,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* ================= SECTION 3: LOCATION & HOURS ================= */}
+      {/* ================= SECTION 4: LOCATION & HOURS ================= */}
       {/* lg:pr-28 — 오른쪽에 온 진료시간 안내가 고정 퀵메뉴에 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
       <section id="sec-location" className="py-20 md:py-28 max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
         <div className="mb-10">
           <span className="font-en-cond text-xs tracking-[0.25em] text-[#A6895E] font-bold uppercase">
-            03 / LOCATION & HOURS
+            04 / LOCATION & HOURS
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1">오시는 길 및 진료안내</h2>
         </div>
@@ -1001,10 +1038,10 @@ export default function App() {
             </div>
           </div>
           {/* Timetable & Info */}
-          <div className="lg:col-span-5 bg-[#0F2B22] text-white rounded-2xl p-8 flex flex-col justify-between">
+          <div className="lg:col-span-5 bg-[#0F2B22] text-white rounded-2xl p-8 flex flex-col justify-center">
             <div className="space-y-6">
               <div>
-                <span className="text-xs font-en-cond tracking-widest text-[#C5A880]">CUSTOMER CENTER</span>
+                <span className="text-xs font-bold text-[#C5A880]">대표번호</span>
                 <a href="tel:041-352-3994" className="block font-en-cond text-3xl sm:text-4xl font-bold text-white mt-1 hover:text-[#C5A880] transition">041-352-3994</a>
                 <p className="text-xs text-zinc-300 mt-1">충청남도 당진시 시청2로 49-30, 7층</p>
               </div>

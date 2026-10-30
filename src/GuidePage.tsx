@@ -49,19 +49,19 @@ export default function GuidePage({ guideId, onNavigateHome, onNavigateEvent, on
       />
 
       {/* ================= SUBPAGE HERO BANNER ================= */}
-      <section className="bg-gradient-to-r from-[#0E2920] via-[#12362a] to-[#1a231f] text-white py-14 md:py-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#9E8A63_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <section className="bg-gradient-to-r from-[#0F2B22] via-[#12362a] to-[#1a231f] text-white py-14 md:py-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#A6895E_1px,transparent_1px)] [background-size:24px_24px]"></div>
         <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 border border-[#9E8A63]/50 bg-[#9E8A63]/15 px-3.5 py-1 rounded-full">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#BFA980]" />
-              <span className="font-mono text-xs tracking-widest text-[#BFA980] uppercase">
+            <div className="inline-flex items-center gap-2 border border-[#A6895E]/50 bg-[#A6895E]/15 px-3.5 py-1 rounded-full">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
+              <span className="font-en-cond text-xs tracking-widest text-[#C5A880] uppercase">
                 PROCEDURE GUIDE & PRECAUTIONS
               </span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
               서울뷰의원 당진점<br />
-              <span className="text-[#BFA980]">시술안내 및 주의사항</span>
+              <span className="text-[#C5A880]">시술안내 및 주의사항</span>
             </h1>
             <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light">
               안전하고 만족스러운 결과를 위해 시술 전·후 꼭 확인하셔야 할 안내사항입니다.

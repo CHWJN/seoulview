@@ -323,7 +323,7 @@ export default function ColumnPage({
 
               <button
                 onClick={openNaverBooking}
-                className="bg-[#0F2B22] text-white hover:bg-[#184638] text-xs font-bold px-4 py-2.5 rounded-lg transition shrink-0 cursor-pointer w-full sm:w-auto text-center"
+                className="bg-[#0F2B22] text-white hover:bg-[#173F32] text-xs font-bold px-4 py-2.5 rounded-lg transition shrink-0 cursor-pointer w-full sm:w-auto text-center"
               >
                 원장 1:1 상담 요청
               </button>
@@ -344,7 +344,7 @@ export default function ColumnPage({
             </div>
 
             {/* Bottom Consultation CTA Banner */}
-            <div className="bg-gradient-to-r from-[#0F2B22] to-[#173e32] text-white rounded-2xl p-6 sm:p-8 shadow-md mt-10">
+            <div className="bg-gradient-to-r from-[#0F2B22] to-[#173F32] text-white rounded-2xl p-6 sm:p-8 shadow-md mt-10">
               <div className="max-w-2xl">
                 <span className="text-xs font-en-cond tracking-widest text-[#C5A880] uppercase font-bold">
                   SEOUL VIEW MEDICAL CONSULTING
@@ -420,23 +420,23 @@ export default function ColumnPage({
             ========================================================================= */
         <>
           {/* ================= SUBPAGE HERO BANNER ================= */}
-          <section className="bg-gradient-to-r from-[#0E2920] via-[#12362a] to-[#1a231f] text-white py-16 md:py-24 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#9E8A63_1px,transparent_1px)] [background-size:24px_24px]"></div>
+          <section className="bg-gradient-to-r from-[#0F2B22] via-[#12362a] to-[#1a231f] text-white py-16 md:py-24 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#A6895E_1px,transparent_1px)] [background-size:24px_24px]"></div>
             <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
               <div className="max-w-3xl space-y-4">
-                <div className="inline-flex items-center gap-2 border border-[#9E8A63]/50 bg-[#9E8A63]/15 px-3.5 py-1 rounded-full">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#BFA980]" />
-                  <span className="font-mono text-xs tracking-widest text-[#BFA980] uppercase">
+                <div className="inline-flex items-center gap-2 border border-[#A6895E]/50 bg-[#A6895E]/15 px-3.5 py-1 rounded-full">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
+                  <span className="font-en-cond text-xs tracking-widest text-[#C5A880] uppercase">
                     DOCTOR'S CLINICAL COLUMN & INSIGHTS
                   </span>
                 </div>
                 <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
                   서울뷰의원 당진점<br />
-                  <span className="text-[#BFA980]">대표원장 의학 칼럼</span>
+                  <span className="text-[#C5A880]">대표원장 의학 칼럼</span>
                 </h1>
                 <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
                   <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 대표원장 100% 직접 집필
+                    <Check className="w-3.5 h-3.5 text-[#C5A880]" /> 대표원장 100% 직접 집필
                   </span>
                 </div>
               </div>
