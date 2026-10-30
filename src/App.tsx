@@ -262,6 +262,57 @@ export default function App() {
   // 홈에 보여 줄 최신 칼럼 3편 (날짜 "2026. 10. 29" 형식이라 글자 순 정렬 = 날짜 순)
   const latestColumns = [...COLUMNS_DATA].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
 
+  // 모바일 칼럼 카드 자동 넘기기: 화면에 보이면 3.5초마다 다음 카드로 1.2초 동안 천천히 이동,
+  // 마지막 '더 많은 칼럼' 카드에서 멈춤. 손으로 만지면 자동 이동을 멈춘다.
+  const columnScrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = columnScrollRef.current;
+    if (!el || currentPage !== 'home') return;
+    if (window.matchMedia('(min-width: 768px), (prefers-reduced-motion: reduce)').matches) return;
+    let timer: number | undefined;
+    let raf = 0;
+    let stopped = false;
+    let visible = false;
+
+    const slideTo = (target: number) => {
+      const start = el.scrollLeft;
+      const t0 = performance.now();
+      el.style.scrollSnapType = 'none'; // 스냅이 애니메이션을 끊지 않도록 잠시 끔
+      const step = (now: number) => {
+        const p = Math.min(1, (now - t0) / 1200);
+        const ease = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        el.scrollLeft = start + (target - start) * ease;
+        if (p < 1 && !stopped) raf = requestAnimationFrame(step);
+        else el.style.scrollSnapType = '';
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    const next = () => {
+      if (stopped || !visible) return;
+      const cards = Array.from(el.children) as HTMLElement[];
+      const pad = parseFloat(getComputedStyle(el).paddingLeft);
+      const nextCard = cards.find((c) => c.offsetLeft - pad > el.scrollLeft + 4);
+      const max = el.scrollWidth - el.clientWidth;
+      if (!nextCard || el.scrollLeft >= max - 2) return; // 끝까지 왔으면 멈춤
+      slideTo(Math.min(nextCard.offsetLeft - pad, max));
+      timer = window.setTimeout(next, 3500);
+    };
+
+    const io = new IntersectionObserver(([entry]) => {
+      const wasVisible = visible;
+      visible = entry.isIntersecting;
+      if (visible && !wasVisible) { window.clearTimeout(timer); timer = window.setTimeout(next, 2500); }
+      if (!visible) window.clearTimeout(timer);
+    }, { threshold: 0.6 });
+    io.observe(el);
+
+    const stop = () => { stopped = true; window.clearTimeout(timer); cancelAnimationFrame(raf); el.style.scrollSnapType = ''; };
+    el.addEventListener('pointerdown', stop, { passive: true });
+    el.addEventListener('touchstart', stop, { passive: true });
+    return () => { io.disconnect(); stop(); el.removeEventListener('pointerdown', stop); el.removeEventListener('touchstart', stop); };
+  }, [currentPage]);
+
   // Before & After Data
   const BA_DATA: Record<string, BaItem[]> = {
     melasma: [
@@ -964,26 +1015,17 @@ export default function App() {
       <section id="sec-column" className="py-20 md:py-28 bg-[#F7F7F8] border-t border-[#E5E5E8]">
         {/* lg:pr-28 — 오른쪽 고정 퀵메뉴에 전체보기 버튼·카드가 가려지지 않도록 (넓은 2xl 화면은 불필요) */}
         <div className="max-w-7xl mx-auto px-4 lg:px-8 lg:pr-28 2xl:pr-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-            <div>
-              <h2 className="text-2xl sm:text-4xl font-bold text-[#111111]">대표원장 진료 칼럼</h2>
-            </div>
-            <button
-              onClick={() => navigateTo('column')}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0F2B22] hover:text-[#A6895E] transition border border-[#0F2B22]/20 hover:border-[#A6895E] bg-white px-4 py-2.5 rounded-lg shadow-2xs self-start md:self-auto cursor-pointer"
-            >
-              <span>원장칼럼 전문 페이지 전체보기</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#A6895E]" />
-            </button>
+          <div className="mb-12">
+            <h2 className="text-2xl sm:text-4xl font-bold text-[#111111]">대표원장 진료 칼럼</h2>
           </div>
 
-          {/* 최신 칼럼 3편: 모바일은 옆으로 넘겨 보기, PC는 3열 */}
-          <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 md:mx-0 md:px-0">
+          {/* 최신 칼럼 3편: 모바일은 옆으로 넘겨 보기(자동으로 천천히 넘어감) + 마지막에 '더 많은 칼럼' 카드, PC는 3열(마우스를 올리면 살짝 떠오름) */}
+          <div ref={columnScrollRef} className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 scroll-px-4 md:mx-0 md:px-0 py-2 md:py-0">
             {latestColumns.map((col) => (
               <article
                 key={col.id}
                 onClick={() => navigateTo('column', col.id)}
-                className="w-[82%] shrink-0 snap-start md:w-auto bg-white rounded-xl border border-[#E5E5E8] p-5 md:p-7 hover:border-[#C5A880] transition cursor-pointer flex flex-col justify-between group shadow-xs"
+                className="w-[82%] shrink-0 snap-start md:w-auto bg-white rounded-xl border border-[#E5E5E8] p-5 md:p-7 hover:border-[#C5A880] md:hover:-translate-y-2 md:hover:shadow-lg transition duration-300 ease-out cursor-pointer flex flex-col justify-between group shadow-xs"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2 text-[11px] text-zinc-400">
@@ -1005,6 +1047,16 @@ export default function App() {
                 </div>
               </article>
             ))}
+            {/* 모바일 전용: 마지막에 나오는 '더 많은 칼럼 보러가기' 카드 */}
+            <button
+              onClick={() => navigateTo('column')}
+              className="md:hidden w-[42%] shrink-0 snap-start flex flex-col items-center justify-center gap-3 rounded-xl text-[#0F2B22] cursor-pointer"
+            >
+              <span className="w-14 h-14 rounded-full bg-[#0F2B22] text-white flex items-center justify-center shadow-md">
+                <ChevronRight className="w-6 h-6" />
+              </span>
+              <span className="text-sm font-bold text-center leading-snug break-keep">더 많은 칼럼<br />보러가기</span>
+            </button>
           </div>
         </div>
       </section>
