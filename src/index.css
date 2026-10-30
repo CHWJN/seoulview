@@ -14,7 +14,7 @@
 
   --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-display: 'Oswald', 'Pretendard', sans-serif;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', serif;
 }
 
 body {
@@ -29,8 +29,9 @@ body {
   letter-spacing: 0.04em;
 }
 
-.font-en-serif {
-  font-family: 'Cormorant Garamond', serif;
+/* 메인 영상 위 제목용 가는 명조체 */
+.font-serif-kr {
+  font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif;
 }
 
 /* Custom Scrollbar */

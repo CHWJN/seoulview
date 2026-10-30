@@ -89,6 +89,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 - 큰 태블릿: 모바일 하단바·퀵메뉴 기준을 `lg`(1024px)로 바꿔 아이패드 세로에서도 하단바가 나온다.
 - PC 메인 배너 오른쪽 화살표를 퀵메뉴 왼쪽으로 옮김.
 - 홍보 문구 사용자 확인(2026-10): 사실 O → "보정 없는 동일 조명·동일 각도", "1인 프라이빗 메디컬 관리실", "상담실장 과잉 권유 없이 대표원장 직접 진단", "마크뷰 피부진단기". 사실 아님 X(삭제) → "호텔 라운지형 대기 공간", "남·여 분리 1인 제모실", "대학병원급 멸균 소독", "정품·정량 인증서 발급", "수가 100% 공개". 원내 시설 소개는 1인 관리실 1개만 남음.
+- 메인 영상 위 제목 글꼴: 굵은 고딕+그림자가 촌스럽다는 의견으로 가는 명조체(Noto Serif KR 300, `.font-serif-kr`)로 변경. 병원 이름은 금색 선+자간 넓힘, 버튼은 흰 테두리 둥근 버튼.
 - 메인 배너 영상 위 문구(사용자 지정): "당신의 자연스러운 아름다움을 봅니다." / "서울뷰의원 당진" + "진료 예약하기" 버튼(네이버 예약).
 - 홈에 대표원장 소개 섹션(`sec-doctor`, 약력은 원문 그대로 `DOCTOR_CAREER`) 추가. 상단 메뉴 '서울뷰의원'에 '대표원장 소개' 항목 추가. 홈 섹션 번호: 01 소개, 02 대표원장, 03 칼럼, 04 오시는 길.
 - 디자인 통일: 하위 페이지 색(#0E2920·#9E8A63·#BFA980 등)을 홈 색으로 맞추고 타자기 글꼴(font-mono)을 Oswald로 통일. 홈의 영어 장식 문구(SEOUL VIEW DANGJIN, SEOUL VIEW PRINCIPLES, CUSTOMER CENTER→대표번호) 정리. PC 퀵메뉴 아이콘을 금색으로 통일.
@@ -106,4 +107,4 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 
 - `public/assets/aistudio/`의 엑셀웨이브 장비 사진, "서울뷰의원의 약속" 시안 이미지, 로고 원본은 화면에 쓰이지 않는 참고 자료다 (로고 `____________c4c3a0ad.png`만 사용).
 - `README.md`, `metadata.json`은 AI Studio 기본 파일이다.
-- 2026-10 코드 정리: 4개 파일에 복사돼 있던 상단 메뉴를 `SiteHeader`로 합치고, 안 쓰는 패키지(`@google/genai`, `express`, `dotenv`, `motion` 등)와 안 쓰는 글꼴(Cormorant Garamond)을 뺐다. Pretendard는 필요한 글자만 받는 dynamic-subset으로 바꿨다. 정리 전후 화면을 픽셀 단위로 비교해 같음을 확인했다.
+- 2026-10 코드 정리: 4개 파일에 복사돼 있던 상단 메뉴를 `SiteHeader`로 합치고, 안 쓰는 패키지(`@google/genai`, `express`, `dotenv`, `motion` 등)와 안 쓰는 글꼴(Cormorant Garamond)을 뺐다. (이후 메인 제목용으로 Noto Serif KR 추가) Pretendard는 필요한 글자만 받는 dynamic-subset으로 바꿨다. 정리 전후 화면을 픽셀 단위로 비교해 같음을 확인했다.

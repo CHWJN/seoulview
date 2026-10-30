@@ -437,16 +437,21 @@ export default function App() {
         {/* TAB 1: 영상 위 메인 문구 (사용자가 정한 문구 그대로). 엑셀웨이브 배너(z-10)가 나타나면 그 아래로 가려진다 */}
         <div inert={heroTab !== 'video'} className="absolute inset-0 z-[5] bg-black/30 sm:bg-transparent bg-gradient-to-r from-black/50 via-black/15 to-transparent sm:from-black/55 sm:via-black/20">
           <div className="h-full max-w-7xl mx-auto px-6 md:px-24 lg:px-28 flex flex-col justify-center">
-            <h1 className="text-[28px] leading-snug sm:text-5xl sm:leading-tight font-bold text-white tracking-tight break-keep drop-shadow-md">
-              당신의 자연스러운<br className="sm:hidden" /> 아름다움을 봅니다.
+            {/* 가는 명조체 제목 + 얇은 금색 선과 병원 이름 + 테두리 버튼 (그림자·굵은 글씨 없이 단정하게) */}
+            <h1 className="font-serif-kr font-light text-[30px] leading-[1.45] sm:text-[52px] sm:leading-[1.3] text-white tracking-[-0.02em] break-keep">
+              당신의 자연스러운<br />
+              아름다움을 봅니다.
             </h1>
-            <p className="mt-3 sm:mt-4 text-lg sm:text-2xl font-semibold text-[#C5A880] drop-shadow">서울뷰의원 당진</p>
+            <p className="mt-6 sm:mt-8 flex items-center gap-3 text-sm sm:text-base font-medium tracking-[0.2em] text-white/90">
+              <span className="w-8 sm:w-10 h-px bg-[#C5A880]" />
+              서울뷰의원 당진
+            </p>
             <button
               onClick={openNaverBooking}
-              className="mt-7 sm:mt-9 self-start inline-flex items-center gap-2 bg-[#C5A880] hover:bg-[#A6895E] text-[#111111] font-bold px-6 py-3 sm:px-7 sm:py-3.5 rounded-lg text-sm transition shadow-lg cursor-pointer"
+              className="mt-8 sm:mt-10 self-start inline-flex items-center gap-2 border border-white/70 text-white hover:bg-white hover:text-[#0F2B22] px-6 py-3 sm:px-7 rounded-full text-sm tracking-wide transition cursor-pointer"
             >
-              <CalendarCheck className="w-4 h-4" />
               <span>진료 예약하기</span>
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
