@@ -676,15 +676,9 @@ export default function ColumnPage({
                   서울뷰의원 당진점<br />
                   <span className="text-[#BFA980]">대표원장 의학 칼럼</span>
                 </h1>
-                <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light">
-                  진료실에서 미처 다 설명해 드리지 못한 피부의 과학적 원리와 진솔한 임상 이야기. 과장된 광고 대신 의학적 근거에 입각하여 시술 전 반드시 확인해야 할 핵심 기준을 대표원장이 직접 연구하고 집필합니다.
-                </p>
                 <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-zinc-300">
                   <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
                     <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 대표원장 100% 직접 집필
-                  </span>
-                  <span className="bg-white/10 px-3 py-1.5 rounded flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-[#BFA980]" /> 근거 중심 피부 치료 프로토콜
                   </span>
                 </div>
               </div>
