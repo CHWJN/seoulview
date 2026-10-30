@@ -45,7 +45,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 |---|---|
 | `src/App.tsx` | 메인 페이지 전체 + 페이지 라우팅 (`/`, `/event`, `/prices`, `/column`, `/column/:slug`, `/guide`, `/guide/:id`). 이벤트·수가표·칼럼·시술안내 페이지는 `lazy`로 들어갈 때 따로 불러온다 |
 | `src/SiteHeader.tsx` | 모든 페이지 공용 상단 메뉴(PC 드롭다운). 메뉴 항목을 고칠 때는 이 파일만 고치면 된다 |
-| `src/EventPage.tsx` | 이벤트 페이지 |
+| `src/EventPage.tsx` | 이벤트 페이지. 위쪽에 '전체 보기' + 이벤트별 버튼(이름은 `EVENTS`의 `short`), 누르면 그 이벤트만 표시. 모바일은 3개씩 |
 | `src/PricePage.tsx` | 상세 비급여 수가표 페이지. 상단 '상담실장~' 문구와 '전체 ○개 분류 · ○개 비급여 수가 안내' 문구는 사용자 요청으로 삭제, 그 자리에 시술명 검색창 |
 | `src/ColumnPage.tsx` | 대표원장 의학 칼럼 목록·본문 |
 | `src/GuidePage.tsx` | 시술안내 및 주의사항 페이지. 탭을 바꾸면 주소가 `/guide/lifting`처럼 바뀐다. 모바일 탭은 `short` 이름으로 4개씩 두 줄. 시술 검색칸과 '해당 시술 상담 예약하기' 버튼은 사용자 요청으로 삭제 |

@@ -10,7 +10,9 @@ export default function EventBoard({ events = EVENTS }: EventBoardProps) {
   return (
     // lg:pr-24 — 오른쪽 고정 퀵메뉴에 가격이 가려지지 않도록 (화면이 넓은 2xl부터는 여백 불필요)
     <div className="grid gap-6 lg:pr-24 2xl:pr-0 lg:grid-cols-2">
-      {events.map((ev, evIdx) => {
+      {events.map((ev) => {
+        // 일부 이벤트만 보여 줄 때도 번호는 전체 목록 기준으로 유지
+        const evIdx = EVENTS.indexOf(ev);
         return (
           <div
             key={ev.name}

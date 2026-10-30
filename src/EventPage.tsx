@@ -27,6 +27,8 @@ interface EventPageProps {
 export default function EventPage({ onNavigateHome, onNavigateToPrices, onNavigateToColumn }: EventPageProps) {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  // 이벤트별 버튼: 'all'이면 전체, 아니면 해당 이벤트 이름
+  const [eventFilter, setEventFilter] = useState<string>('all');
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, []);
@@ -131,7 +133,25 @@ export default function EventPage({ onNavigateHome, onNavigateToPrices, onNaviga
             <p className="text-xs text-zinc-500">※ 이벤트가는 부가세(VAT) 별도입니다.</p>
           </div>
 
-          <EventBoard />
+          {/* 이벤트별 버튼 (시술안내 페이지처럼 위에 모아 두고, 누르면 해당 이벤트만 표시) */}
+          <div className="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap sm:gap-2 mb-8 lg:pr-24 2xl:pr-0">
+            {[{ key: 'all', label: '전체 보기' }, ...EVENTS.map((ev) => ({ key: ev.name, label: ev.short ?? ev.name }))].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setEventFilter(tab.key)}
+                aria-current={eventFilter === tab.key}
+                className={`px-1 sm:px-4 py-2.5 rounded-lg text-xs whitespace-nowrap transition cursor-pointer ${
+                  eventFilter === tab.key
+                    ? 'font-bold bg-[#0F2B22] text-white border border-[#0F2B22]'
+                    : 'font-medium bg-white border border-[#E5E5E8] text-zinc-700 hover:bg-zinc-100'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <EventBoard key={eventFilter} events={eventFilter === 'all' ? EVENTS : EVENTS.filter((ev) => ev.name === eventFilter)} />
         </div>
       </section>
 

@@ -12,6 +12,7 @@ export interface EventItem {
 
 export interface EventGroup {
   name: string;
+  short?: string; // 이벤트 페이지 위쪽 버튼에 쓰는 짧은 이름
   note?: string; // 이벤트 공통 안내
   items: EventItem[];
 }
@@ -41,6 +42,7 @@ export const discountRate = (item: EventItem) =>
 export const EVENTS: EventGroup[] = [
   {
     "name": "엑셀웨이브 런칭 이벤트",
+    "short": "엑셀웨이브",
     "items": [
       {
         "name": "페이스 엑셀웨이브 6만J",
@@ -95,6 +97,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "뉴비주 런칭 이벤트",
+    "short": "뉴비주",
     "items": [
       {
         "name": "뉴비주 이중턱 파괴주사 1vial",
@@ -124,6 +127,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "리투오 특별 이벤트",
+    "short": "리투오",
     "items": [
       {
         "name": "리투오(1EA) + 물광주사 2.5cc",
@@ -147,6 +151,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "셀르디엠 런칭 이벤트",
+    "short": "셀르디엠",
     "items": [
       {
         "name": "셀르디엠(1EA) + 물광주사 2.5cc",
@@ -170,6 +175,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "올인원 원데이 패키지",
+    "short": "원데이 패키지",
     "items": [
       {
         "name": "원데이 스킨부스터 패키지 (영양 수분 재생)",
@@ -193,6 +199,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "서울뷰 3회 패키지 이벤트",
+    "short": "3회 패키지",
     "items": [
       {
         "name": "눈밑 주름 개선 패키지",
@@ -216,6 +223,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "볼링크 이벤트 (볼뉴머 + 슈링크)",
+    "short": "볼링크",
     "items": [
       {
         "name": "볼링크",
@@ -237,6 +245,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "1년 무제한 제모 이벤트",
+    "short": "무제한 제모",
     "items": [
       {
         "name": "남자 얼굴 전체 (미간, 코, 목 포함)",
@@ -262,6 +271,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "여성 브라질리언 제모 이벤트",
+    "short": "브라질리언 제모",
     "items": [
       {
         "name": "여성 브라질리언 제모 (항문 포함)",
@@ -278,6 +288,7 @@ export const EVENTS: EventGroup[] = [
   },
   {
     "name": "위고비/마운자로 처방 환자 특별 이벤트",
+    "short": "위고비 환자",
     "items": [
       {
         "name": "이중턱 인모드 FX",
