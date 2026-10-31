@@ -27,6 +27,7 @@ export interface PriceGroup {
   name: string;
   notes: string[];
   rows: PriceRow[];
+  column?: 'right'; // PC 두 단 배치에서 오른쪽 단에 둘 시술 (없으면 왼쪽). 필러·레이저 제모 분류에서 사용
 }
 
 export interface PriceCategory {
@@ -537,7 +538,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
       {
         "name": "주름 보톡스",
         "notes": [
-          "주름: 이마·미간·콧등·눈가·눈밑·자갈턱·윗입술·입꼬리·콧볼 중 택"
+          "이마·미간·콧등·눈가·눈밑·자갈턱·윗입술·입꼬리·콧볼 중 1부위"
         ],
         "rows": [
           {
@@ -774,7 +775,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
         "notes": [],
         "rows": [
           {
-            "option": "",
+            "option": "1cc",
             "price": 250000,
             "type": "정가"
           }
@@ -785,7 +786,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
         "notes": [],
         "rows": [
           {
-            "option": "",
+            "option": "1cc",
             "price": 350000,
             "type": "정가"
           }
@@ -800,7 +801,8 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
             "price": 300000,
             "type": "정가"
           }
-        ]
+        ],
+        "column": "right"
       },
       {
         "name": "필러 녹이기(히알리제)",
@@ -818,7 +820,8 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
             "price": 150000,
             "type": "비급여가"
           }
-        ]
+        ],
+        "column": "right"
       }
     ]
   },
@@ -874,206 +877,6 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
   {
     "name": "레이저 제모",
     "groups": [
-      {
-        "name": "[남녀공통] 미간 제모",
-        "notes": [
-          "아포지 플러스"
-        ],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 80000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남녀공통] 헤어라인/이마/미간 제모",
-        "notes": [
-          "아포지 플러스"
-        ],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 150000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남녀공통] 뒷목 제모",
-        "notes": [
-          "아포지 플러스"
-        ],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 150000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남녀공통] 손가락+손등 제모",
-        "notes": [
-          "아포지 플러스"
-        ],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 150000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남녀공통] 발가락+발등 제모",
-        "notes": [
-          "아포지 플러스"
-        ],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 150000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 얼굴 전체(미간·코·목 포함)",
-        "notes": [],
-        "rows": [
-          {
-            "option": "1회",
-            "price": 70000,
-            "type": "비급여가"
-          },
-          {
-            "option": "5회",
-            "price": 300000,
-            "type": "비급여가"
-          },
-          {
-            "option": "10회",
-            "price": 550000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 턱+인중",
-        "notes": [],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 200000,
-            "type": "비급여가"
-          },
-          {
-            "option": "10회",
-            "price": 360000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 크라이오 진정관리 추가",
-        "notes": [],
-        "rows": [
-          {
-            "option": "1회",
-            "price": 15000,
-            "type": "비급여가"
-          },
-          {
-            "option": "5회",
-            "price": 60000,
-            "type": "비급여가"
-          },
-          {
-            "option": "10회",
-            "price": 100000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 겨드랑이",
-        "notes": [],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 160000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 가슴",
-        "notes": [],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 450000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 배 전체",
-        "notes": [],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 450000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 등",
-        "notes": [],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 550000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 팔 전체",
-        "notes": [],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 500000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 다리 전체",
-        "notes": [],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 800000,
-            "type": "비급여가"
-          }
-        ]
-      },
-      {
-        "name": "[남성] 브라질리언(항문 포함)",
-        "notes": [],
-        "rows": [
-          {
-            "option": "5회",
-            "price": 500000,
-            "type": "비급여가"
-          }
-        ]
-      },
       {
         "name": "[여성] 겨드랑이+인중(턱 포함)",
         "notes": [],
@@ -1199,6 +1002,221 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
             "type": "비급여가"
           }
         ]
+      },
+      {
+        "name": "[남성] 얼굴 전체(미간·코·목 포함)",
+        "notes": [],
+        "rows": [
+          {
+            "option": "1회",
+            "price": 70000,
+            "type": "비급여가"
+          },
+          {
+            "option": "5회",
+            "price": 300000,
+            "type": "비급여가"
+          },
+          {
+            "option": "10회",
+            "price": 550000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 턱+인중",
+        "notes": [],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 200000,
+            "type": "비급여가"
+          },
+          {
+            "option": "10회",
+            "price": 360000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 크라이오 진정관리 추가",
+        "notes": [],
+        "rows": [
+          {
+            "option": "1회",
+            "price": 15000,
+            "type": "비급여가"
+          },
+          {
+            "option": "5회",
+            "price": 60000,
+            "type": "비급여가"
+          },
+          {
+            "option": "10회",
+            "price": 100000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 겨드랑이",
+        "notes": [],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 160000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 가슴",
+        "notes": [],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 450000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 배 전체",
+        "notes": [],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 450000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 등",
+        "notes": [],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 550000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 팔 전체",
+        "notes": [],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 500000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 다리 전체",
+        "notes": [],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 800000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남성] 브라질리언(항문 포함)",
+        "notes": [],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 500000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남녀공통] 미간 제모",
+        "notes": [
+          "아포지 플러스"
+        ],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 80000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남녀공통] 헤어라인/이마/미간 제모",
+        "notes": [
+          "아포지 플러스"
+        ],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 150000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남녀공통] 뒷목 제모",
+        "notes": [
+          "아포지 플러스"
+        ],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 150000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남녀공통] 손가락+손등 제모",
+        "notes": [
+          "아포지 플러스"
+        ],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 150000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
+      },
+      {
+        "name": "[남녀공통] 발가락+발등 제모",
+        "notes": [
+          "아포지 플러스"
+        ],
+        "rows": [
+          {
+            "option": "5회",
+            "price": 150000,
+            "type": "비급여가"
+          }
+        ],
+        "column": "right"
       }
     ]
   },
