@@ -11,18 +11,19 @@ interface BaCardProps {
 // 시술 전후사진 카드 1장 (홈 화면과 전후사진 페이지 공용)
 export default function BaCard({ item, category, unlocked, onUnlock, className = '' }: BaCardProps) {
   return (
-    <div className={`bg-white border border-[#E5E5E8] shadow-xs rounded-2xl p-4 sm:p-6 flex flex-col justify-between ${className}`}>
+    <div className={`@container bg-white border border-[#E5E5E8] shadow-xs rounded-2xl p-4 sm:p-6 flex flex-col justify-between ${className}`}>
       <div>
         {category && <p className="text-[11px] sm:text-xs font-bold text-[#A6895E] mb-1.5">{category}</p>}
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <h3 className="text-base sm:text-xl font-bold text-[#111111] break-keep">{item.title}</h3>
-          <span className="shrink-0 whitespace-nowrap mt-0.5 text-[11px] bg-[#C5A880]/15 text-[#85734F] px-2.5 py-0.5 rounded">
-            {item.period}
-          </span>
-        </div>
+        {/* 제목은 항상 한 줄: 카드 너비에 맞춰 글자 크기를 줄이고, 그래도 길면 말줄임 */}
+        <h3
+          className="font-bold text-[#111111] whitespace-nowrap overflow-hidden text-ellipsis mb-4"
+          style={{ fontSize: 'min(20px, 5cqw)' }}
+        >
+          {item.title}
+        </h3>
 
         {/* 사진 칸: 세로가 조금 긴 4:5 비율로 크게 (실제 사진이 오면 이 칸을 사진으로 채운다) */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 relative">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 relative">
           {/* BEFORE */}
           <div className="relative aspect-[4/5] bg-gradient-to-b from-zinc-100 to-zinc-200 border border-[#E5E5E8] rounded-xl overflow-hidden flex flex-col items-center justify-center p-4 text-center">
             <span className="absolute top-3 left-3 text-[10px] sm:text-[11px] font-en-cond tracking-widest bg-white/90 text-zinc-700 px-2 py-0.5 rounded">
@@ -58,7 +59,6 @@ export default function BaCard({ item, category, unlocked, onUnlock, className =
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">{item.desc}</p>
       </div>
     </div>
   );

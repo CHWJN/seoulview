@@ -54,7 +54,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 | `src/seo.ts` | 검색엔진 정보: `SITE_URL`(도메인 바뀌면 여기만 고침), 페이지별 제목·설명(`getPageMeta`, 의료광고 규정상 사실만), 주소 목록(`getAllRoutes`), 병원·칼럼 구조화 데이터(JSON-LD). 페이지를 옮길 때 `applyPageMeta`가 제목·설명·canonical을 바꿈(각 페이지에서 document.title을 따로 정하지 않음) |
 | `src/entry-server.tsx`, `scripts/prerender.mjs` | 프리렌더: `npm run build`가 일반 빌드 → 서버용 빌드(dist-ssr) → 모든 주소(26개)를 미리 HTML로 만들어 `dist/event.html`, `dist/column/<slug>.html` 등에 저장 + `sitemap.xml`·`robots.txt` 생성. 브라우저는 `main.tsx`에서 이 HTML을 이어받음(hydrateRoot). `vercel.json`은 `cleanUrls`(/event → event.html) + 없는 주소는 빈 화면 `app.html`로. 새 페이지·칼럼을 추가하면 `getAllRoutes`에 자동/직접 포함되는지 확인 |
 | `src/PrivacyPage.tsx` | 개인정보 처리방침 페이지(`/privacy`). 홈 푸터 '개인정보 처리방침'으로 연결. 내용은 `src/data/privacyData.ts` |
-| `src/BaCard.tsx` | 전후사진 카드·열람 동의 토글·의료법 고지 문구 (홈과 전후사진 페이지 공용) |
+| `src/BaCard.tsx` | 전후사진 카드·열람 동의 토글·의료법 고지 문구 (홈과 전후사진 페이지 공용). 카드는 분류명 + 제목(항상 한 줄, 카드 너비에 맞춰 `min(20px, 5cqw)`, 길면 말줄임) + BEFORE/AFTER 사진 칸만. 제목의 시술 횟수(○회)·오른쪽 '시술 후 ○주 경과' 표시·사진 아래 설명은 사용자 요청으로 삭제(2026-10-31) |
 | `src/EventBoard.tsx` | 이벤트 페이지의 이벤트 카드 목록. 디자인은 사용자가 고른 시안 B(2026-10-31): 딥그린 그라데이션 헤더(금색 EVENT 번호·흰 제목·금색 기간 배지·금색 밑줄) + 회차별 크림색 줄 + 빨간 할인율 배지 + 금색 '이 이벤트로 예약 · 상담 신청' 버튼. 이름이 같은 연속 항목(1회·3회 등)은 한 칸으로 묶어 시술명 한 번 + 회차별 가격 줄(회차 15px)로 표시(`groupItems`). 할인율은 `discountRate`가 정상가·이벤트가로 자동 계산(정수 반올림, 2026-10-31 전 항목 검산 완료) |
 | `src/MobileNav.tsx` | 모든 페이지 공용 모바일 메뉴(햄버거, 항목 앞 번호 없음)와 모바일 하단바 (이벤트 페이지 하단바만 구성이 다르다) |
 | `src/data/pricingData.ts` | 이벤트(10종·39항목)와 상세 비급여 수가(15개 분류·164개 가격). 원본은 사용자가 준 가격표 엑셀 |
