@@ -83,7 +83,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 1. 당진뷰(서울뷰의원 당진점) 소개 전체 정리 — 나중에 별도 사이트로 뺄 수도 있음 (사용자가 이미지 제작 중)
 2. 실제 전후사진을 받으면 `baData.ts`·`BaCard.tsx` 사진 칸에 올리기
 3. 네이버 블로그 글 약 38편을 원장칼럼(`columnsData.ts`)에 모두 올리기 (원문 그대로, 칼럼 추가 규칙 참고)
-4. 위 일이 끝나면 정식 호스팅(도메인 구입·Cloudflare Pages 이전 검토, `seo.ts`의 `SITE_URL` 변경, 구글·네이버 등록)
+4. 위 일이 끝나면: Vercel → Cloudflare Pages 이전 → 안정적으로 작동하는지 확인 → 정식 호스팅(도메인 연결, `seo.ts`의 `SITE_URL` 변경, 구글·네이버 등록). Cloudflare용 `public/_redirects`(없는 주소 → `/app.html`)는 이미 있음. 2026-11-01 15:30(KST) 알림 예약됨
 
 - [ ] **네이버 지도 전환 (사용자 보류 중):** 사용자가 네이버 클라우드(NCP) Maps에서 Dynamic Map Client ID를 받아오면, 구글 지도를 네이버 지도로 교체한다. 웹 서비스 URL로 `https://seoulview.vercel.app` 등록이 필요하다.
 - [ ] **시술 전후사진 (사용자 보류 중):** 사례 사진·문구가 AI Studio 예시다(`src/data/baData.ts`). 근거 없는 수치(62% 감소, 90% 이상, 1회 만에)는 2026-10 삭제했다.
