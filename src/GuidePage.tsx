@@ -29,10 +29,6 @@ export default function GuidePage({ guideId, onNavigateHome, onNavigateEvent, on
     if (guideId && !GUIDE_DATA.some((g) => g.id === guideId)) navigate('/guide', { replace: true });
   }, [guideId]);
 
-  useEffect(() => {
-    document.title = `${guide.label} 시술안내 및 주의사항 | 서울뷰의원 당진점`;
-  }, [guide.id]);
-
   // 탭을 바꾸면 주소도 /guide/<id>로 바뀐다 (특정 시술 안내를 링크로 보낼 수 있게)
   const selectTab = (id: string) => navigate(`/guide/${id}`, { replace: true });
 

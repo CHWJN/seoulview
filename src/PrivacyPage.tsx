@@ -16,7 +16,6 @@ export default function PrivacyPage({ onNavigateHome, onNavigateEvent, onNavigat
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-    document.title = '개인정보 처리방침 | 서울뷰의원 당진점';
   }, []);
 
   // 한 줄을 모양에 맞게 표시: 빈 줄=간격, ▶=소제목, –=들여쓴 항목, 1)·①=번호 항목, 그 외=문단

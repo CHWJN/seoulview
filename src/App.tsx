@@ -2,7 +2,9 @@ import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MobileDrawer, MobileBottomBar } from './MobileNav.tsx';
 import SiteHeader from './SiteHeader.tsx';
-import { NAVER_MAP_URL, GOOGLE_MAP_EMBED_URL, KAKAO_CHAT_URL, openNaverBooking, LOGO_SRC } from './clinicLinks.ts';
+import LocationInfo from './LocationInfo.tsx';
+import { applyPageMeta } from './seo.ts';
+import { KAKAO_CHAT_URL, openNaverBooking, LOGO_SRC } from './clinicLinks.ts';
 import { COLUMNS_DATA } from './data/columnsData.ts';
 import { ALL_BA_ITEMS } from './data/baData.ts';
 import BaCard, { BaConsentToggle, BA_LEGAL_NOTICE } from './BaCard.tsx';
@@ -17,8 +19,7 @@ import {
   MessageCircle,
   BookOpen,
   Images,
-  MapPin,
-  ExternalLink
+  MapPin
 } from 'lucide-react';
 
 // 이벤트·수가표·칼럼·시술안내 페이지는 들어갈 때 따로 불러온다 (홈 첫 화면을 가볍게)
@@ -28,13 +29,14 @@ const ColumnPage = lazy(() => import('./ColumnPage.tsx'));
 const GuidePage = lazy(() => import('./GuidePage.tsx'));
 const BeforeAfterPage = lazy(() => import('./BeforeAfterPage.tsx'));
 const PrivacyPage = lazy(() => import('./PrivacyPage.tsx'));
+const LocationPage = lazy(() => import('./LocationPage.tsx'));
 
 export default function App() {
   // Brand Logo Path from user attachment
 
   // ===== 페이지 라우팅 (react-router: 정식 경로 방식) =====
   // /  /event  /prices  /column  /column/:slug
-  type PageName = 'home' | 'event' | 'prices' | 'column' | 'guide' | 'ba' | 'privacy';
+  type PageName = 'home' | 'event' | 'prices' | 'column' | 'guide' | 'ba' | 'privacy' | 'location';
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname.replace(/\/+$/, '') || '/';
@@ -47,6 +49,8 @@ export default function App() {
     ? 'ba'
     : pathname === '/privacy'
     ? 'privacy'
+    : pathname === '/location'
+    ? 'location'
     : pathname === '/event'
     ? 'event'
     : pathname === '/prices'
@@ -65,6 +69,8 @@ export default function App() {
 
   const navigateTo = (page: PageName, targetId?: string) => {
     setMobileMenuOpen(false);
+    // '오시는 길' 링크는 모두 별도 페이지(/location)로 (홈의 오시는 길 섹션은 그대로 둠)
+    if (page === 'home' && targetId === 'sec-location') page = 'location';
     if (page === 'column') {
       if (targetId) {
         // id 또는 slug 모두 받아서 항상 slug 주소로 이동 (검색 친화적 URL)
@@ -76,6 +82,9 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (page === 'event') {
       navigate('/event');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (page === 'location') {
+      navigate('/location');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (page === 'privacy') {
       navigate('/privacy');
@@ -121,20 +130,14 @@ export default function App() {
 
   // 알 수 없는 경로는 홈으로
   useEffect(() => {
-    const known = pathname === '/' || pathname === '/event' || pathname === '/prices' || pathname.startsWith('/column') || pathname === '/guide' || pathname.startsWith('/guide/') || pathname === '/before-after' || pathname.startsWith('/before-after/') || pathname === '/privacy';
+    const known = pathname === '/' || pathname === '/event' || pathname === '/prices' || pathname.startsWith('/column') || pathname === '/guide' || pathname.startsWith('/guide/') || pathname === '/before-after' || pathname.startsWith('/before-after/') || pathname === '/privacy' || pathname === '/location';
     if (!known) navigate('/', { replace: true });
   }, [pathname]);
 
-  // 페이지별 브라우저 탭 제목 (칼럼 페이지는 ColumnPage가 직접 설정)
+  // 페이지별 탭 제목·검색엔진 설명·대표 주소·구조화 데이터 (src/seo.ts)
   useEffect(() => {
-    if (currentPage === 'home') {
-      document.title = '서울뷰의원 당진점 | SEOUL VIEW CLINIC DANGJIN';
-    } else if (currentPage === 'event') {
-      document.title = '이벤트 | 서울뷰의원 당진점';
-    } else if (currentPage === 'prices') {
-      document.title = '비급여 수가표 | 서울뷰의원 당진점';
-    }
-  }, [currentPage]);
+    applyPageMeta(pathname);
+  }, [pathname]);
 
   // State
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
@@ -437,6 +440,14 @@ export default function App() {
             onNavigateColumn={() => navigateTo('column')}
           />
         )}
+        {currentPage === 'location' && (
+          <LocationPage
+            onNavigateHome={(sec) => navigateTo('home', sec)}
+            onNavigateEvent={() => navigateTo('event')}
+            onNavigatePrices={() => navigateTo('prices')}
+            onNavigateColumn={() => navigateTo('column')}
+          />
+        )}
         {currentPage === 'privacy' && (
           <PrivacyPage
             onNavigateHome={(sec) => navigateTo('home', sec)}
@@ -538,7 +549,7 @@ export default function App() {
           <span className="text-[11px] font-medium text-zinc-700">전후사진</span>
         </button>
         <button
-          onClick={() => scrollToSection('sec-location')}
+          onClick={() => navigateTo('location')}
           className="py-3.5 px-2 hover:bg-[#F7F7F8] transition flex flex-col items-center justify-center text-[#111111] cursor-pointer"
         >
           <MapPin className="w-5 h-5 text-[#0F2B22] mb-1" />
@@ -1107,78 +1118,7 @@ export default function App() {
           <h2 className="text-2xl sm:text-4xl font-bold text-[#111111]">오시는 길 및 진료안내</h2>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-8 items-stretch">
-          {/* Interactive Map Graphic */}
-          <div className="lg:col-span-7 bg-[#F7F7F8] border border-[#E5E5E8] rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-                <div>
-                  <h3 className="text-lg font-bold text-[#111111]">서울뷰의원 당진점 위치 및 주차 안내</h3>
-                  <p className="text-xs text-zinc-500">충청남도 당진시 시청2로 49-30, 7층</p>
-                </div>
-                <span className="bg-[#0F2B22] text-white text-xs px-3 py-1 rounded font-medium">
-                  진료시간 무료주차
-                </span>
-              </div>
-
-              {/* 구글 지도 (네이버 지도 API 키를 받으면 네이버 지도로 교체 예정) */}
-              <div className="w-full h-64 sm:h-72 rounded-xl border border-[#E5E5E8] overflow-hidden bg-[#E9ECEA]">
-                <iframe
-                  title="서울뷰의원 당진점 위치 지도"
-                  src={GOOGLE_MAP_EMBED_URL}
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
-                />
-              </div>
-              <a
-                href={NAVER_MAP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 w-full inline-flex items-center justify-center gap-1.5 bg-[#03C75A] hover:bg-[#02b350] text-white text-sm font-bold px-5 py-2.5 rounded-lg shadow-sm transition"
-              >
-                네이버 지도에서 위치·길찾기 보기
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-
-            <div className="mt-6 text-xs">
-              <div className="bg-white p-4 rounded-lg border border-[#E5E5E8]">
-                <p className="font-bold text-[#111111] mb-1">자가용 및 주차 안내</p>
-                <p className="text-zinc-600">건물 지하 1~2층 주차장 또는 건물 바로 옆 옥외 주차장을 이용하실 수 있으며, 진료시간 동안 무료로 주차하실 수 있습니다.</p>
-              </div>
-            </div>
-          </div>
-          {/* Timetable & Info */}
-          <div className="lg:col-span-5 bg-[#0F2B22] text-white rounded-2xl p-8 flex flex-col justify-center">
-            <div className="space-y-6">
-              <div>
-                <span className="text-xs font-bold text-[#C5A880]">대표번호</span>
-                <a href="tel:041-352-3994" className="block font-en-cond text-3xl sm:text-4xl font-bold text-white mt-1 hover:text-[#C5A880] transition">041-352-3994</a>
-                <p className="text-xs text-zinc-300 mt-1">충청남도 당진시 시청2로 49-30, 7층</p>
-              </div>
-
-              <div className="border-t border-white/15 pt-5 space-y-2.5 text-xs sm:text-sm">
-                <h3 className="font-bold text-[#C5A880] mb-3">진료시간 안내</h3>
-                <div className="flex justify-between">
-                  <span className="text-zinc-300">평 일</span>
-                  <span className="font-semibold">AM 10:00 ~ PM 08:00</span>
-                </div>
-                <div className="flex justify-between text-zinc-400">
-                  <span>평일 점심시간</span>
-                  <span>PM 01:00 ~ PM 02:00</span>
-                </div>
-                <div className="flex justify-between text-[#C5A880] font-bold">
-                  <span>주 말</span>
-                  <span>AM 10:00 ~ PM 08:00</span>
-                </div>
-                <p className="text-[11px] text-zinc-400 pt-1 text-right">주말은 점심시간 없이 진료합니다.</p>
-                <p className="text-xs text-[#C5A880] font-semibold pt-2">※ 추석·설날 연휴를 제외하고 연중무휴로 진료합니다.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <LocationInfo />
       </section>
 
       {/* ================= FOOTER ================= */}

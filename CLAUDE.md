@@ -43,13 +43,16 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 
 | 파일 | 내용 |
 |---|---|
-| `src/App.tsx` | 메인 페이지 전체 + 페이지 라우팅 (`/`, `/event`, `/prices`, `/column`, `/column/:slug`, `/guide`, `/guide/:id`, `/before-after`, `/before-after/:분류`, `/privacy`). 하위 페이지는 `lazy`로 들어갈 때 따로 불러온다 |
+| `src/App.tsx` | 메인 페이지 전체 + 페이지 라우팅 (`/`, `/event`, `/prices`, `/column`, `/column/:slug`, `/guide`, `/guide/:id`, `/before-after`, `/before-after/:분류`, `/location`, `/privacy`). 하위 페이지는 `lazy`로 들어갈 때 따로 불러온다 |
 | `src/SiteHeader.tsx` | 모든 페이지 공용 상단 메뉴(PC 드롭다운). 메뉴 항목을 고칠 때는 이 파일만 고치면 된다 |
 | `src/EventPage.tsx` | 이벤트 페이지. 상단 배너 설명은 사용자 문구 "가장 나다운 아름다움, 지금 서울뷰의 특별한 혜택과 함께하세요." ('상담실장~' 문구·배지 2개는 삭제). 위쪽에 '전체 보기' + 이벤트별 버튼(이름은 `EVENTS`의 `short`), 누르면 그 이벤트만 표시. 모바일은 3개씩 |
 | `src/PricePage.tsx` | 상세 비급여 수가표 페이지. 상단 배너 설명은 사용자 문구 "서울뷰의원은 정직한 진료를 위해 모든 비급여 항목의 비용을 투명하게 공개합니다." ('상담실장~' 문구·배지 2개 삭제). '전체 ○개 분류 · ○개 비급여 수가 안내' 문구 자리에 시술명 검색창. 분류 버튼 아래 '분류명·단위·항목수' 안내 칸은 사용자 요청으로 삭제(부가세 안내는 페이지 아래 고지사항에 있음). 수가 목록은 사용자가 고른 시안 B(메뉴판형: 시술명(번호는 사용자 요청으로 삭제), 구성 설명 15px, 회차와 가격을 금색 점선으로 연결) + 시안 A식 금색 '예약 신청 →' 링크. PC·모바일 같은 목록 하나(예전 표·카드 2벌 대신). PC(1024px~)는 두 단 배치. 시술에 `column: 'right'`가 있는 분류(필러: 왼쪽 국산 아띠에르·오른쪽 주름흉터필러·필러녹이기 / 레이저 제모: 왼쪽 여성·오른쪽 남성)는 단을 직접 나눔. `column: 'bottom'`(레이저 제모 [남녀공통] 5개)은 두 단 아래 금색 구분선+'남녀 공통' 제목 뒤에 두 단으로 이어서 배치 |
 | `src/ColumnPage.tsx` | 대표원장 의학 칼럼 목록·본문. 목록 상단 배너 설명은 사용자 문구 "진료실에서 미처 다 전하지 못한 이야기, 시술에 대한 고민과 진심을 이곳에 담았습니다." + 그 아래 '대표원장 100% 직접 집필' 배지 |
 | `src/GuidePage.tsx` | 시술안내 및 주의사항 페이지. 탭을 바꾸면 주소가 `/guide/lifting`처럼 바뀐다. 모바일 탭은 `short` 이름으로 4개씩 두 줄. 시술 검색칸과 '해당 시술 상담 예약하기' 버튼은 사용자 요청으로 삭제 |
 | `src/BeforeAfterPage.tsx` | 시술 전후사진 페이지. '전체 보기' + 분류 탭 5개(주소 `/before-after/filler` 등), 열람 동의 토글, 사례 카드 2열 |
+| `src/LocationPage.tsx` | 오시는 길 및 진료안내 페이지(`/location`, 2026-10-31). 내용은 `src/LocationInfo.tsx`(홈 '오시는 길 및 진료안내' 섹션과 공용, 홈 섹션도 그대로 있음). 상단 메뉴·모바일 메뉴·모바일 하단바·PC 퀵메뉴의 '오시는 길'은 모두 이 페이지로 이동 (`navigateTo('home','sec-location')`도 여기로 바뀜) |
+| `src/seo.ts` | 검색엔진 정보: `SITE_URL`(도메인 바뀌면 여기만 고침), 페이지별 제목·설명(`getPageMeta`, 의료광고 규정상 사실만), 주소 목록(`getAllRoutes`), 병원·칼럼 구조화 데이터(JSON-LD). 페이지를 옮길 때 `applyPageMeta`가 제목·설명·canonical을 바꿈(각 페이지에서 document.title을 따로 정하지 않음) |
+| `src/entry-server.tsx`, `scripts/prerender.mjs` | 프리렌더: `npm run build`가 일반 빌드 → 서버용 빌드(dist-ssr) → 모든 주소(26개)를 미리 HTML로 만들어 `dist/event.html`, `dist/column/<slug>.html` 등에 저장 + `sitemap.xml`·`robots.txt` 생성. 브라우저는 `main.tsx`에서 이 HTML을 이어받음(hydrateRoot). `vercel.json`은 `cleanUrls`(/event → event.html) + 없는 주소는 빈 화면 `app.html`로. 새 페이지·칼럼을 추가하면 `getAllRoutes`에 자동/직접 포함되는지 확인 |
 | `src/PrivacyPage.tsx` | 개인정보 처리방침 페이지(`/privacy`). 홈 푸터 '개인정보 처리방침'으로 연결. 내용은 `src/data/privacyData.ts` |
 | `src/BaCard.tsx` | 전후사진 카드·열람 동의 토글·의료법 고지 문구 (홈과 전후사진 페이지 공용) |
 | `src/EventBoard.tsx` | 이벤트 페이지의 이벤트 카드 목록. 디자인은 사용자가 고른 시안 B(2026-10-31): 딥그린 그라데이션 헤더(금색 EVENT 번호·흰 제목·금색 기간 배지·금색 밑줄) + 회차별 크림색 줄 + 빨간 할인율 배지 + 금색 '이 이벤트로 예약 · 상담 신청' 버튼. 이름이 같은 연속 항목(1회·3회 등)은 한 칸으로 묶어 시술명 한 번 + 회차별 가격 줄(회차 15px)로 표시(`groupItems`). 할인율은 `discountRate`가 정상가·이벤트가로 자동 계산(정수 반올림, 2026-10-31 전 항목 검산 완료) |
@@ -80,7 +83,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 - [ ] **시술 전후사진 (사용자 보류 중):** 사례 사진·문구가 AI Studio 예시다(`src/data/baData.ts`). 근거 없는 수치(62% 감소, 90% 이상, 1회 만에)는 2026-10 삭제했다.
 - [ ] **예시 문구 남아 있음:** 시술안내 및 주의사항(`guideData.ts`)에 AI Studio 예시 문구가 남아 있다.
 - [ ] **개인정보 처리방침 내용 확인:** 사용자가 준 원문(청주점 처리방침, `src/data/privacyData.ts`)을 그대로 넣었다(맨 앞 병원 이름만 당진으로). 제3조·제6조의 "<예) …>" 예시 문구와 제4조의 (주)아임웹·OOO PG/택배/고객센터 등 수탁자는 원본 템플릿 내용이라 당진점 실제와 다를 수 있음 — 사용자 확인 필요.
-- [ ] **칼럼 검색엔진 정보:** `ColumnPage.tsx`의 구조화 데이터(JSON-LD)에 실제와 다른 주소 `seoulview-dangjin.com`이 들어 있다. 실제 도메인이 정해지면 고친다.
+- [ ] **SEO 다음 단계 (2026-10-31 기초 작업 완료):** ① 구글 서치콘솔·네이버 서치어드바이저에 사이트 등록 + `sitemap.xml` 제출(사용자 계정 필요, 소유 확인용 메타태그를 받으면 `index.html`에 넣음) ② 도메인을 사면 `src/seo.ts`의 `SITE_URL`과 `index.html`의 og 주소를 바꿈 ③ 수가표는 첫 분류 탭만 HTML에 들어감(나머지는 클릭 시 표시).
 
 ### 완료 (2026-10)
 

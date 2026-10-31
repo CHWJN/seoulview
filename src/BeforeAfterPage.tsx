@@ -31,10 +31,6 @@ export default function BeforeAfterPage({ categoryId, onNavigateHome, onNavigate
     if (categoryId && !category) navigate('/before-after', { replace: true });
   }, [categoryId]);
 
-  useEffect(() => {
-    document.title = `${category ? category.label + ' ' : ''}시술 전후사진 | 서울뷰의원 당진점`;
-  }, [categoryId]);
-
   // 탭을 바꾸면 주소도 /before-after/<분류>로 바뀐다
   const selectTab = (id: string | null) => navigate(id ? `/before-after/${id}` : '/before-after', { replace: true });
 

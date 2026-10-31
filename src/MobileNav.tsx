@@ -41,7 +41,7 @@ export function MobileDrawer({
     { label: '시술 전후사진', onClick: go(() => { navigate('/before-after'); window.scrollTo({ top: 0, behavior: 'smooth' }); }) },
     { label: '시술안내 및 주의사항', onClick: go(() => { navigate('/guide'); window.scrollTo({ top: 0, behavior: 'smooth' }); }) },
     { label: '원장 칼럼', onClick: go(onNavigateColumn) },
-    { label: '오시는 길 & 진료시간', onClick: go(() => onNavigateHome('sec-location')) }
+    { label: '오시는 길 & 진료시간', onClick: go(() => { navigate('/location'); window.scrollTo({ top: 0, behavior: 'smooth' }); }) }
   ];
 
   return (
@@ -84,7 +84,8 @@ export function MobileDrawer({
 }
 
 // 모바일 하단 고정 메뉴바 (홈 화면과 같은 구성)
-export function MobileBottomBar({ onNavigateHome, onNavigateEvent }: Pick<MobileNavProps, 'onNavigateHome' | 'onNavigateEvent'>) {
+export function MobileBottomBar({ onNavigateEvent }: Pick<MobileNavProps, 'onNavigateHome' | 'onNavigateEvent'>) {
+  const navigate = useNavigate();
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E5E5E8] grid grid-cols-4 text-[11px] font-semibold shadow-lg">
       <a
@@ -113,7 +114,7 @@ export function MobileBottomBar({ onNavigateHome, onNavigateEvent }: Pick<Mobile
         <span>이벤트</span>
       </button>
       <button
-        onClick={() => onNavigateHome('sec-location')}
+        onClick={() => { navigate('/location'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
         className="py-3 text-[#111111] flex flex-col items-center justify-center cursor-pointer"
       >
         <MapPin className="w-4 h-4 text-[#0F2B22] mb-0.5" />

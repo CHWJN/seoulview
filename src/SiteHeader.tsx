@@ -143,7 +143,7 @@ export default function SiteHeader({ onLogo, onSection, onEvent, onPrices, onCol
 
           {/* 7. 오시는 길 */}
           <div className="py-6 px-3.5">
-            <button onClick={() => onSection('sec-location')} className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition cursor-pointer">
+            <button onClick={() => { navigate('/location'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[15px] font-semibold text-[#111111] hover:text-[#A6895E] transition cursor-pointer">
               오시는 길
             </button>
           </div>
