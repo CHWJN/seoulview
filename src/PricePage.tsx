@@ -129,9 +129,10 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
               검색하신 시술 정보가 등록되어 있지 않습니다. 다른 검색어로 검색하시거나 원내로 문의해 주세요.
             </p>
           ) : (
-            <div className="border-t-2 border-[#0F2B22]">
+            // PC(1024px~)는 두 단으로 나란히, 그보다 좁으면 한 단
+            <div className="border-t-2 border-[#0F2B22] lg:grid lg:grid-cols-2 lg:gap-x-14">
               {visibleGroups.map((group, gi) => (
-                <article key={`${group.cat}-${group.name}`} className="py-6 sm:py-7 border-b border-[#E3D9C8] last:border-b-0">
+                <article key={`${group.cat}-${group.name}`} className="py-6 sm:py-7 border-b border-[#E3D9C8] last:border-b-0 lg:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
                   {searchQuery && (
                     <span className="block text-xs font-bold text-[#A6895E] mb-1">{group.cat}</span>
                   )}
@@ -142,11 +143,11 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
                     <span>{group.name}</span>
                   </h3>
                   {group.notes.map((note) => (
-                    <p key={note} className="text-sm sm:text-[15px] text-[#5A544C] leading-relaxed mt-2 max-w-3xl break-keep">
+                    <p key={note} className="text-sm sm:text-[15px] text-[#5A544C] leading-relaxed mt-2 max-w-3xl lg:max-w-none break-keep">
                       {note}
                     </p>
                   ))}
-                  <ul className="mt-3 sm:mt-4 space-y-2.5 max-w-xl">
+                  <ul className="mt-3 sm:mt-4 space-y-2.5 max-w-xl lg:max-w-none">
                     {group.rows.map((row, idx) => (
                       <li key={idx} className="flex items-baseline gap-3 text-[15px] sm:text-base">
                         <span className="text-zinc-700 shrink-0 max-w-[55%] break-keep">{optionLabel(row.option, row.type)}</span>
@@ -162,7 +163,7 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
                       </li>
                     ))}
                   </ul>
-                  <div className="max-w-xl flex justify-end mt-3">
+                  <div className="max-w-xl lg:max-w-none flex justify-end mt-3">
                     <button
                       onClick={openNaverBooking}
                       className="text-[13px] font-bold text-[#A6895E] hover:text-[#0F2B22] transition cursor-pointer"
