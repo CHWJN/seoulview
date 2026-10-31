@@ -122,115 +122,58 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
           ))}
         </div>
 
-        {/* Price List (모바일: 카드형) */}
-        <div className="md:hidden space-y-3 mb-10">
+        {/* 수가 목록 — 메뉴판형(사용자가 고른 시안 B) + 예약 링크는 시안 A처럼 금색 '예약 신청 →' (PC·모바일 공용) */}
+        <div className="bg-[#FAF8F5] border border-[#E5E5E8] rounded-2xl px-5 sm:px-10 py-2 sm:py-4 mb-10 shadow-xs">
           {visibleGroups.length === 0 ? (
-            <p className="bg-white border border-[#E5E5E8] rounded-xl py-12 px-4 text-center text-zinc-400 text-xs">
+            <p className="py-14 text-center text-zinc-400 text-sm">
               검색하신 시술 정보가 등록되어 있지 않습니다. 다른 검색어로 검색하시거나 원내로 문의해 주세요.
             </p>
           ) : (
-            visibleGroups.map((group) => (
-              <div key={`${group.cat}-${group.name}`} className="bg-white border border-[#E5E5E8] rounded-xl p-4 shadow-xs">
-                {searchQuery && (
-                  <span className="block text-[10px] font-bold text-[#A6895E] mb-0.5">{group.cat}</span>
-                )}
-                <h4 className="font-semibold text-[#0F2B22] text-sm">{group.name}</h4>
-                {group.notes.map((note) => (
-                  <p key={note} className="text-[11px] text-zinc-500 mt-1 leading-relaxed">{note}</p>
-                ))}
-                <ul className="mt-3 divide-y divide-[#F0F0F2] border-t border-[#F0F0F2]">
-                  {group.rows.map((row, idx) => (
-                    <li key={idx} className="py-2.5 flex items-center justify-between gap-3 text-xs">
-                      <span className="text-zinc-700">{optionLabel(row.option, row.type)}</span>
-                      <span className="shrink-0 whitespace-nowrap">
-                        {row.type === '특별가' && (
-                          <span className="bg-[#C5A880]/20 text-[#85734F] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#C5A880]/40 mr-1.5">
-                            특별가
-                          </span>
-                        )}
-                        <span className="font-bold text-[#111111] text-sm">{formatWon(row.price)}</span>
-                      </span>
-                    </li>
+            <div className="border-t-2 border-[#0F2B22]">
+              {visibleGroups.map((group, gi) => (
+                <article key={`${group.cat}-${group.name}`} className="py-6 sm:py-7 border-b border-[#E3D9C8] last:border-b-0">
+                  {searchQuery && (
+                    <span className="block text-xs font-bold text-[#A6895E] mb-1">{group.cat}</span>
+                  )}
+                  <h3 className="flex items-baseline gap-2.5 text-[17px] sm:text-[19px] font-bold text-[#0F2B22] leading-snug break-keep">
+                    <span className="font-en-serif text-sm sm:text-[15px] font-semibold text-[#A6895E] tracking-widest shrink-0">
+                      {String(gi + 1).padStart(2, '0')}
+                    </span>
+                    <span>{group.name}</span>
+                  </h3>
+                  {group.notes.map((note) => (
+                    <p key={note} className="text-sm sm:text-[15px] text-[#5A544C] leading-relaxed mt-2 max-w-3xl break-keep">
+                      {note}
+                    </p>
                   ))}
-                </ul>
-                <button
-                  onClick={openNaverBooking}
-                  className="mt-3 w-full border border-[#0F2B22] text-[#0F2B22] text-xs font-semibold py-2 rounded cursor-pointer"
-                >
-                  예약신청
-                </button>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Price Table (md 이상) */}
-        <div className="hidden md:block bg-white border border-[#E5E5E8] rounded-xl overflow-hidden shadow-xs mb-10">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[640px]">
-              <thead>
-                <tr className="bg-[#0F2B22] text-white text-xs uppercase tracking-wider">
-                  <th className="py-4 px-5 font-semibold">시술명</th>
-                  <th className="py-4 px-5 font-semibold whitespace-nowrap">옵션 (횟수 / 용량 / 부위)</th>
-                  <th className="py-4 px-5 font-semibold text-right whitespace-nowrap">가격</th>
-                  <th className="py-4 px-5 font-semibold text-center w-28 whitespace-nowrap">예약 신청</th>
-                </tr>
-              </thead>
-              <tbody className="text-xs sm:text-sm">
-                {visibleGroups.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="py-14 text-center text-zinc-400 text-xs">
-                      검색하신 시술 정보가 등록되어 있지 않습니다. 다른 검색어로 검색하시거나 원내로 문의해 주세요.
-                    </td>
-                  </tr>
-                ) : (
-                  visibleGroups.map((group) =>
-                    group.rows.map((row, idx) => (
-                      <tr
-                        key={`${group.cat}-${group.name}-${idx}`}
-                        className={`hover:bg-[#FAF8F5] transition ${idx === 0 ? 'border-t border-[#E5E5E8]' : ''}`}
-                      >
-                        {idx === 0 && (
-                          <td rowSpan={group.rows.length} className="py-4 px-5 align-top bg-white">
-                            {searchQuery && (
-                              <span className="block text-[10px] font-bold text-[#A6895E] mb-0.5">{group.cat}</span>
-                            )}
-                            <span className="font-semibold text-[#0F2B22] block">{group.name}</span>
-                            {group.notes.map((note) => (
-                              <span key={note} className="block text-[11px] text-zinc-500 mt-1 leading-relaxed">
-                                {note}
-                              </span>
-                            ))}
-                          </td>
-                        )}
-                        <td className="py-3 px-5 text-zinc-700 border-t border-[#F0F0F2]">
-                          {optionLabel(row.option, row.type)}
-                        </td>
-                        <td className="py-3 px-5 text-right whitespace-nowrap border-t border-[#F0F0F2]">
+                  <ul className="mt-3 sm:mt-4 space-y-2.5 max-w-xl">
+                    {group.rows.map((row, idx) => (
+                      <li key={idx} className="flex items-baseline gap-3 text-[15px] sm:text-base">
+                        <span className="text-zinc-700 shrink-0 max-w-[55%] break-keep">{optionLabel(row.option, row.type)}</span>
+                        <span className="flex-1 border-b-[1.5px] border-dotted border-[#C5A880] translate-y-[-4px] min-w-4" aria-hidden="true" />
+                        <span className="shrink-0 whitespace-nowrap">
                           {row.type === '특별가' && (
-                            <span className="bg-[#C5A880]/20 text-[#85734F] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#C5A880]/40 mr-1.5">
+                            <span className="bg-[#C5A880]/20 text-[#85734F] text-[11px] font-bold px-1.5 py-0.5 rounded border border-[#C5A880]/40 mr-1.5 align-middle">
                               특별가
                             </span>
                           )}
-                          <span className="font-bold text-[#111111]">{formatWon(row.price)}</span>
-                        </td>
-                        {idx === 0 && (
-                          <td rowSpan={group.rows.length} className="py-4 px-5 text-center align-top whitespace-nowrap bg-white">
-                            <button
-                              onClick={openNaverBooking}
-                              className="border border-[#0F2B22] text-[#0F2B22] hover:bg-[#0F2B22] hover:text-white text-xs font-semibold px-3.5 py-1.5 rounded transition cursor-pointer whitespace-nowrap"
-                            >
-                              예약신청
-                            </button>
-                          </td>
-                        )}
-                      </tr>
-                    ))
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
+                          <span className="font-bold text-lg sm:text-[19px] text-[#0F2B22]">{formatWon(row.price)}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="max-w-xl flex justify-end mt-3">
+                    <button
+                      onClick={openNaverBooking}
+                      className="text-[13px] font-bold text-[#A6895E] hover:text-[#0F2B22] transition cursor-pointer"
+                    >
+                      예약 신청 →
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Legal Notices Box */}
