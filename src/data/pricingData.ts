@@ -27,7 +27,7 @@ export interface PriceGroup {
   name: string;
   notes: string[];
   rows: PriceRow[];
-  column?: 'right'; // PC 두 단 배치에서 오른쪽 단에 둘 시술 (없으면 왼쪽). 필러·레이저 제모 분류에서 사용
+  column?: 'right' | 'bottom'; // PC 두 단 배치: 'right'=오른쪽 단, 'bottom'=두 단 아래 구분선 뒤 공통 영역 (없으면 왼쪽). 필러·레이저 제모 분류에서 사용
 }
 
 export interface PriceCategory {
@@ -1160,7 +1160,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
             "type": "비급여가"
           }
         ],
-        "column": "right"
+        "column": "bottom"
       },
       {
         "name": "[남녀공통] 헤어라인/이마/미간 제모",
@@ -1174,7 +1174,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
             "type": "비급여가"
           }
         ],
-        "column": "right"
+        "column": "bottom"
       },
       {
         "name": "[남녀공통] 뒷목 제모",
@@ -1188,7 +1188,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
             "type": "비급여가"
           }
         ],
-        "column": "right"
+        "column": "bottom"
       },
       {
         "name": "[남녀공통] 손가락+손등 제모",
@@ -1202,7 +1202,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
             "type": "비급여가"
           }
         ],
-        "column": "right"
+        "column": "bottom"
       },
       {
         "name": "[남녀공통] 발가락+발등 제모",
@@ -1216,7 +1216,7 @@ export const PRICE_CATEGORIES: PriceCategory[] = [
             "type": "비급여가"
           }
         ],
-        "column": "right"
+        "column": "bottom"
       }
     ]
   },

@@ -43,8 +43,48 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
     return all.filter((g) => g.cat === activeCategory);
   }, [activeCategory, searchQuery]);
 
+  // 시술 하나 (메뉴판형)
+  const renderGroup = (group: (typeof visibleGroups)[number]) => (
+    <article key={`${group.cat}-${group.name}`} className="py-6 sm:py-7 border-b border-[#E3D9C8]">
+      {searchQuery && (
+        <span className="block text-xs font-bold text-[#A6895E] mb-1">{group.cat}</span>
+      )}
+      <h3 className="text-[17px] sm:text-[19px] font-bold text-[#0F2B22] leading-snug break-keep">{group.name}</h3>
+      {group.notes.map((note) => (
+        <p key={note} className="text-sm sm:text-[15px] text-[#5A544C] leading-relaxed mt-2 max-w-3xl lg:max-w-none break-keep">
+          {note}
+        </p>
+      ))}
+      <ul className="mt-3 sm:mt-4 space-y-2.5 max-w-xl lg:max-w-none">
+        {group.rows.map((row, idx) => (
+          <li key={idx} className="flex items-baseline gap-3 text-[15px] sm:text-base">
+            <span className="text-zinc-700 shrink-0 max-w-[55%] break-keep">{optionLabel(row.option, row.type)}</span>
+            <span className="flex-1 border-b-[1.5px] border-dotted border-[#C5A880] translate-y-[-4px] min-w-4" aria-hidden="true" />
+            <span className="shrink-0 whitespace-nowrap">
+              {row.type === '특별가' && (
+                <span className="bg-[#C5A880]/20 text-[#85734F] text-[11px] font-bold px-1.5 py-0.5 rounded border border-[#C5A880]/40 mr-1.5 align-middle">
+                  특별가
+                </span>
+              )}
+              <span className="font-bold text-lg sm:text-[19px] text-[#0F2B22]">{formatWon(row.price)}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <div className="max-w-xl lg:max-w-none flex justify-end mt-3">
+        <button
+          onClick={openNaverBooking}
+          className="text-[13px] font-bold text-[#A6895E] hover:text-[#0F2B22] transition cursor-pointer"
+        >
+          예약 신청 →
+        </button>
+      </div>
+    </article>
+  );
+
   // 오른쪽 단을 직접 지정한 분류인지 (검색 결과일 때는 일반 두 단)
-  const hasColumns = !searchQuery.trim() && visibleGroups.some((g) => g.column === 'right');
+  const hasColumns = !searchQuery.trim() && visibleGroups.some((g) => g.column);
+  const bottomGroups = hasColumns ? visibleGroups.filter((g) => g.column === 'bottom') : [];
 
 
   const optionLabel = (option: string, type: string) => {
@@ -136,50 +176,25 @@ export default function PricePage({ onNavigateHome, onNavigateEvent, onNavigateC
             // 필러·레이저 제모처럼 시술에 column: 'right'가 있는 분류는 왼쪽/오른쪽 단을 직접 나눠 배치
             <div className="border-t-2 border-[#0F2B22] lg:grid lg:grid-cols-2 lg:gap-x-14">
               {(hasColumns
-                ? [visibleGroups.filter((g) => g.column !== 'right'), visibleGroups.filter((g) => g.column === 'right')]
+                ? [visibleGroups.filter((g) => !g.column), visibleGroups.filter((g) => g.column === 'right')]
                 : [visibleGroups]
               ).map((col, ci) => (
                 <div key={ci} className={hasColumns ? '' : 'contents'}>
-                  {col.map((group) => (
-                    <article key={`${group.cat}-${group.name}`} className="py-6 sm:py-7 border-b border-[#E3D9C8]">
-                      {searchQuery && (
-                        <span className="block text-xs font-bold text-[#A6895E] mb-1">{group.cat}</span>
-                      )}
-                      <h3 className="text-[17px] sm:text-[19px] font-bold text-[#0F2B22] leading-snug break-keep">{group.name}</h3>
-                      {group.notes.map((note) => (
-                        <p key={note} className="text-sm sm:text-[15px] text-[#5A544C] leading-relaxed mt-2 max-w-3xl lg:max-w-none break-keep">
-                          {note}
-                        </p>
-                      ))}
-                      <ul className="mt-3 sm:mt-4 space-y-2.5 max-w-xl lg:max-w-none">
-                        {group.rows.map((row, idx) => (
-                          <li key={idx} className="flex items-baseline gap-3 text-[15px] sm:text-base">
-                            <span className="text-zinc-700 shrink-0 max-w-[55%] break-keep">{optionLabel(row.option, row.type)}</span>
-                            <span className="flex-1 border-b-[1.5px] border-dotted border-[#C5A880] translate-y-[-4px] min-w-4" aria-hidden="true" />
-                            <span className="shrink-0 whitespace-nowrap">
-                              {row.type === '특별가' && (
-                                <span className="bg-[#C5A880]/20 text-[#85734F] text-[11px] font-bold px-1.5 py-0.5 rounded border border-[#C5A880]/40 mr-1.5 align-middle">
-                                  특별가
-                                </span>
-                              )}
-                              <span className="font-bold text-lg sm:text-[19px] text-[#0F2B22]">{formatWon(row.price)}</span>
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="max-w-xl lg:max-w-none flex justify-end mt-3">
-                        <button
-                          onClick={openNaverBooking}
-                          className="text-[13px] font-bold text-[#A6895E] hover:text-[#0F2B22] transition cursor-pointer"
-                        >
-                          예약 신청 →
-                        </button>
-                      </div>
-                    </article>
-                  ))}
+                  {col.map(renderGroup)}
                 </div>
               ))}
             </div>
+          )}
+          {/* 두 단 아래 공통 영역 (예: 레이저 제모의 남녀공통) — 금색 구분선과 제목 뒤에 두 단으로 이어서 배치 */}
+          {bottomGroups.length > 0 && (
+            <>
+              <div className="flex items-center gap-4 pt-10 pb-1">
+                <span className="h-px flex-1 bg-[#C5A880]" />
+                <span className="text-sm sm:text-base font-bold text-[#A6895E] tracking-wide whitespace-nowrap">남녀 공통</span>
+                <span className="h-px flex-1 bg-[#C5A880]" />
+              </div>
+              <div className="lg:grid lg:grid-cols-2 lg:gap-x-14">{bottomGroups.map(renderGroup)}</div>
+            </>
           )}
         </div>
 
