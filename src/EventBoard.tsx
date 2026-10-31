@@ -1,5 +1,14 @@
 import { openNaverBooking } from './clinicLinks.ts';
-import { EVENTS, EventGroup, formatWon, discountRate } from './data/pricingData.ts';
+import { EVENTS, EventGroup, EventItem, formatWon, discountRate } from './data/pricingData.ts';
+
+// 이름이 같은 연속 항목(예: 1회·3회)을 한 묶음으로
+const groupItems = (items: EventItem[]) =>
+  items.reduce<EventItem[][]>((acc, item) => {
+    const last = acc[acc.length - 1];
+    if (last && last[0].name === item.name) last.push(item);
+    else acc.push([item]);
+    return acc;
+  }, []);
 
 interface EventBoardProps {
   events?: EventGroup[];
@@ -26,32 +35,38 @@ export default function EventBoard({ events = EVENTS }: EventBoardProps) {
               {ev.note && <p className="text-xs text-[#A6895E] font-semibold mt-1">{ev.note}</p>}
             </div>
 
+            {/* 같은 시술(이름이 같은 연속 항목)은 한 칸으로 묶고, 그 안에 회차별 가격을 줄로 나열 */}
             <ul className="divide-y divide-[#E5E5E8] flex-1">
-              {ev.items.map((item, idx) => {
-                const rate = discountRate(item);
-                return (
-                  <li key={idx} className="px-5 sm:px-6 py-3.5 flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-[#111111] leading-snug">{item.name}</p>
-                      <p className="text-xs text-zinc-500 mt-0.5">{item.option}</p>
-                      {item.note && (
-                        <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed">{item.note}</p>
-                      )}
-                    </div>
-                    <div className="shrink-0 text-right">
-                      {item.orig && (
-                        <div className="flex items-center justify-end gap-1.5">
-                          <span className="text-[11px] text-zinc-400 line-through">{formatWon(item.orig)}</span>
-                          {rate !== null && (
-                            <span className="text-[11px] font-bold text-[#C0392B]">{rate}%</span>
-                          )}
+              {groupItems(ev.items).map((group, gIdx) => (
+                <li key={gIdx} className="px-5 sm:px-6 py-4">
+                  <p className="text-sm font-semibold text-[#111111] leading-snug">{group[0].name}</p>
+                  {group.length === 1 && group[0].note && (
+                    <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed">{group[0].note}</p>
+                  )}
+                  <div className="mt-2 space-y-1.5">
+                    {group.map((item, idx) => {
+                      const rate = discountRate(item);
+                      return (
+                        <div key={idx}>
+                        <div className="flex items-center justify-between gap-4">
+                          <span className="text-[15px] font-semibold text-[#5A544C] min-w-0">{item.option}</span>
+                          <div className="shrink-0 flex items-center gap-2">
+                            {item.orig && (
+                              <span className="text-[11px] text-zinc-400 line-through">{formatWon(item.orig)}</span>
+                            )}
+                            {rate !== null && <span className="text-[11px] font-bold text-[#C0392B]">{rate}%</span>}
+                            <span className="font-en-cond text-lg font-bold text-[#0F2B22]">{formatWon(item.price)}</span>
+                          </div>
                         </div>
-                      )}
-                      <span className="font-en-cond text-lg font-bold text-[#0F2B22]">{formatWon(item.price)}</span>
-                    </div>
-                  </li>
-                );
-              })}
+                        {group.length > 1 && item.note && (
+                          <p className="text-[11px] text-zinc-400 leading-relaxed">{item.note}</p>
+                        )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </li>
+              ))}
             </ul>
 
             <div className="p-5 sm:p-6 pt-4 space-y-2">
