@@ -53,7 +53,7 @@ export default function BeforeAfterPage({ categoryId, onNavigateHome, onNavigate
           <div className="max-w-3xl space-y-4">
             <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
               서울뷰의원 당진점<br />
-              <span className="text-[#C5A880]">시술 전후사진</span>
+              <span className="text-[#C5A880]">시술 전 · 후 사진</span>
             </h1>
             <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-light break-keep">
               서울뷰의원 당진은 결과로 증명합니다. 보정 없는 동일 조명·동일 각도 임상 전후 기록입니다.

@@ -58,8 +58,8 @@ export function getPageMeta(pathname: string): PageMeta {
   if (p === '/before-after' || p.startsWith('/before-after/')) {
     const cat = BA_CATEGORIES.find((c) => p === `/before-after/${c.id}`);
     return {
-      title: `${cat ? cat.label + ' ' : ''}시술 전후사진 | ${SITE_NAME}`,
-      description: cut(`${SITE_NAME} 시술 전후사진: ${cat ? cat.label : BA_CATEGORIES.map((c) => c.label).join(', ')}.`)
+      title: `${cat ? cat.label + ' ' : ''}시술 전 · 후 사진 | ${SITE_NAME}`,
+      description: cut(`${SITE_NAME} 시술 전 · 후 사진: ${cat ? cat.label : BA_CATEGORIES.map((c) => c.label).join(', ')}.`)
     };
   }
   if (p === '/guide' || p.startsWith('/guide/')) {

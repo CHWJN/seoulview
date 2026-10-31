@@ -100,7 +100,7 @@ export default function SiteHeader({ onLogo, onSection, onEvent, onPrices, onCol
           {/* 4. 시술 전후사진 */}
           <div className="relative nav-item py-6 px-3.5 cursor-pointer">
             <button onClick={() => goBa()} className={TOP_CLASS}>
-              시술 전후사진 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+              시술 전 · 후 사진 <ChevronDown className="w-3.5 h-3.5 opacity-60" />
             </button>
             <div className={`${DROPDOWN_CLASS} w-60`}>
               {BA_CATEGORIES.map((c) => (

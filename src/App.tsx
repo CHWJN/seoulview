@@ -744,7 +744,7 @@ export default function App() {
               <span className="text-base sm:text-xl text-[#A6895E] font-bold">
                 서울뷰의원 당진은 결과로 증명합니다.
               </span>
-              <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1.5">시술 전후사진</h2>
+              <h2 className="text-2xl sm:text-4xl font-bold text-[#111111] mt-1.5">시술 전 · 후 사진</h2>
               <p className="text-xs sm:text-sm text-zinc-600 mt-1">보정 없는 동일 조명·동일 각도 임상 전후 기록입니다.</p>
             </div>
             <BaConsentToggle

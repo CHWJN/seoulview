@@ -49,7 +49,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 | `src/PricePage.tsx` | 상세 비급여 수가표 페이지. 상단 배너 설명은 사용자 문구 "서울뷰의원은 정직한 진료를 위해 모든 비급여 항목의 비용을 투명하게 공개합니다." ('상담실장~' 문구·배지 2개 삭제). '전체 ○개 분류 · ○개 비급여 수가 안내' 문구 자리에 시술명 검색창. 분류 버튼 아래 '분류명·단위·항목수' 안내 칸은 사용자 요청으로 삭제(부가세 안내는 페이지 아래 고지사항에 있음). 수가 목록은 사용자가 고른 시안 B(메뉴판형: 시술명(번호는 사용자 요청으로 삭제), 구성 설명 15px, 회차와 가격을 금색 점선으로 연결) + 시안 A식 금색 '예약 신청 →' 링크. PC·모바일 같은 목록 하나(예전 표·카드 2벌 대신). PC(1024px~)는 두 단 배치. 시술에 `column: 'right'`가 있는 분류(필러: 왼쪽 국산 아띠에르·오른쪽 주름흉터필러·필러녹이기 / 레이저 제모: 왼쪽 여성·오른쪽 남성)는 단을 직접 나눔. `column: 'bottom'`(레이저 제모 [남녀공통] 5개)은 두 단 아래 금색 구분선+'남녀 공통' 제목 뒤에 두 단으로 이어서 배치 |
 | `src/ColumnPage.tsx` | 대표원장 의학 칼럼 목록·본문. 목록 상단 배너 설명은 사용자 문구 "진료실에서 미처 다 전하지 못한 이야기, 시술에 대한 고민과 진심을 이곳에 담았습니다." + 그 아래 '대표원장 100% 직접 집필' 배지 |
 | `src/GuidePage.tsx` | 시술안내 및 주의사항 페이지. 탭을 바꾸면 주소가 `/guide/lifting`처럼 바뀐다. 모바일 탭은 `short` 이름으로 4개씩 두 줄. 시술 검색칸과 '해당 시술 상담 예약하기' 버튼은 사용자 요청으로 삭제 |
-| `src/BeforeAfterPage.tsx` | 시술 전후사진 페이지. '전체 보기' + 분류 탭 5개(주소 `/before-after/filler` 등), 열람 동의 토글, 사례 카드 2열 |
+| `src/BeforeAfterPage.tsx` | 시술 전후사진 페이지. 화면 제목·상단 메뉴·모바일 메뉴 이름은 사용자 요청으로 '시술 전 · 후 사진'(2026-10-31, PC 퀵메뉴 아이콘 이름 '전후사진'은 그대로). '전체 보기' + 분류 탭 5개(주소 `/before-after/filler` 등), 열람 동의 토글, 사례 카드 2열 |
 | `src/LocationPage.tsx` | 오시는 길 및 진료안내 페이지(`/location`, 2026-10-31). 내용은 `src/LocationInfo.tsx`(홈 '오시는 길 및 진료안내' 섹션과 공용, 홈 섹션도 그대로 있음). 상단 메뉴·모바일 메뉴·모바일 하단바·PC 퀵메뉴의 '오시는 길'은 모두 이 페이지로 이동 (`navigateTo('home','sec-location')`도 여기로 바뀜) |
 | `src/seo.ts` | 검색엔진 정보: `SITE_URL`(도메인 바뀌면 여기만 고침), 페이지별 제목·설명(`getPageMeta`, 의료광고 규정상 사실만), 주소 목록(`getAllRoutes`), 병원·칼럼 구조화 데이터(JSON-LD). 페이지를 옮길 때 `applyPageMeta`가 제목·설명·canonical을 바꿈(각 페이지에서 document.title을 따로 정하지 않음) |
 | `src/entry-server.tsx`, `scripts/prerender.mjs` | 프리렌더: `npm run build`가 일반 빌드 → 서버용 빌드(dist-ssr) → 모든 주소(26개)를 미리 HTML로 만들어 `dist/event.html`, `dist/column/<slug>.html` 등에 저장 + `sitemap.xml`·`robots.txt` 생성. 브라우저는 `main.tsx`에서 이 HTML을 이어받음(hydrateRoot). `vercel.json`은 `cleanUrls`(/event → event.html) + 없는 주소는 빈 화면 `app.html`로. 새 페이지·칼럼을 추가하면 `getAllRoutes`에 자동/직접 포함되는지 확인 |
@@ -78,6 +78,12 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
   - 본문 블록 규칙: "라벨 : 설명" 형태 → `item`, 마침표 없는 짧은 줄 나열 → `list`, 따옴표로 된 질문 → `quote`, "A ➡️ B" → `match`.
 
 ## 아직 남은 일 / 확인 필요
+
+**사용자 할 일 계획 (2026-10-31에 말한 '내일 할 일', 사용자가 자료를 주면 진행):**
+1. 당진뷰(서울뷰의원 당진점) 소개 전체 정리 — 나중에 별도 사이트로 뺄 수도 있음 (사용자가 이미지 제작 중)
+2. 실제 전후사진을 받으면 `baData.ts`·`BaCard.tsx` 사진 칸에 올리기
+3. 네이버 블로그 글 약 38편을 원장칼럼(`columnsData.ts`)에 모두 올리기 (원문 그대로, 칼럼 추가 규칙 참고)
+4. 위 일이 끝나면 정식 호스팅(도메인 구입·Cloudflare Pages 이전 검토, `seo.ts`의 `SITE_URL` 변경, 구글·네이버 등록)
 
 - [ ] **네이버 지도 전환 (사용자 보류 중):** 사용자가 네이버 클라우드(NCP) Maps에서 Dynamic Map Client ID를 받아오면, 구글 지도를 네이버 지도로 교체한다. 웹 서비스 URL로 `https://seoulview.vercel.app` 등록이 필요하다.
 - [ ] **시술 전후사진 (사용자 보류 중):** 사례 사진·문구가 AI Studio 예시다(`src/data/baData.ts`). 근거 없는 수치(62% 감소, 90% 이상, 1회 만에)는 2026-10 삭제했다.
