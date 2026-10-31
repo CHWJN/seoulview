@@ -44,8 +44,16 @@ body {
 }
 .hero-fade-1 { animation: heroFadeUp 1.6s ease-out 0.3s both; }
 .hero-fade-2 { animation: heroFadeUp 1.6s ease-out 1.1s both; }
+/* 엑셀웨이브 배너 문구: 배너가 나타난 뒤 제목 → 설명 → 버튼 순서로 */
+.ew-fade-1 { animation: heroFadeUp 1.4s ease-out 0.7s both; }
+.ew-fade-2 { animation: heroFadeUp 1.4s ease-out 1.6s both; }
+.ew-fade-3 { animation: heroFadeUp 1.4s ease-out 2.4s both; }
+.ew-rosegold {
+  background: linear-gradient(90deg, #B4846B, #C99C84 45%, #A6735C);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
 @media (prefers-reduced-motion: reduce) {
-  .hero-fade-1, .hero-fade-2 { animation: none; }
+  .hero-fade-1, .hero-fade-2, .ew-fade-1, .ew-fade-2, .ew-fade-3 { animation: none; }
 }
 
 /* Custom Scrollbar */

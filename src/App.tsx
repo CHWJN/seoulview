@@ -150,8 +150,11 @@ export default function App() {
   const [heroTab, setHeroTab] = useState<'video' | 'excelwave'>('video');
   // 영상 화면으로 돌아온 횟수 (문구 등장 효과를 매번 다시 보여 주기 위해)
   const [heroRound, setHeroRound] = useState<number>(0);
+  // 엑셀웨이브 배너가 나타날 때마다 문구 페이드 인을 처음부터 다시 재생하기 위한 번호
+  const [ewRound, setEwRound] = useState<number>(0);
   useEffect(() => {
     if (heroTab === 'video') setHeroRound((n) => n + 1);
+    else setEwRound((n) => n + 1);
   }, [heroTab]);
 
   // 메인 배너: 10초마다 영상 ↔ 엑셀웨이브 자동 전환 (화살표·막대를 누르면 그때부터 다시 10초)
@@ -164,8 +167,8 @@ export default function App() {
   // Media Assets attached by user
   const MAIN_VIDEO_SRC = "/assets/main_video.mp4";
   const MAIN_VIDEO_POSTER_SRC = "/assets/main_video_poster.webp"; // 영상 첫 장면 (로딩 중 표시)
-  const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner.webp";
-  const EXCELWAVE_BANNER_MOBILE_SRC = "/assets/excelwave_banner_mobile.webp";
+  const EXCELWAVE_BANNER_SRC = "/assets/excelwave_banner_v2.webp";
+  const EXCELWAVE_BANNER_MOBILE_SRC = "/assets/excelwave_banner_mobile_v2.webp";
 
   // 메인 영상: 화면 밖으로 나가면 일시정지, 다시 보이면 재생
   const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -597,53 +600,73 @@ export default function App() {
         <div
           inert={heroTab !== 'excelwave'}
           aria-hidden={heroTab !== 'excelwave'}
-          className={`absolute inset-0 z-10 bg-[#F3DFD0] transition-opacity duration-[1500ms] ease-in-out will-change-[opacity] motion-reduce:transition-none ${
+          className={`absolute inset-0 z-10 bg-[#F1DECF] transition-opacity duration-[1500ms] ease-in-out will-change-[opacity] motion-reduce:transition-none ${
             heroTab === 'excelwave' ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          {/* PC·태블릿: 가로 배너 */}
-          <div className="hidden md:flex h-full items-center justify-center">
-            <div className="@container relative w-full aspect-[2000/730]">
-              <img
-                src={EXCELWAVE_BANNER_SRC}
-                alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규 도입"
-                className="w-full h-full object-contain [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
-              />
-              {/* 배너 이미지의 설명 글씨가 깨져 있어 이미지에서 지우고, 원래 문구를 글자로 얹음 (배너 너비에 맞춰 크기 조절) */}
-              <p
-                className="absolute left-[17.2%] top-[54%] w-[37%] text-[#4A3F38] break-keep leading-[1.55]"
-                style={{ fontSize: '1.07cqw' }}
-              >
-                강력한 쿨링으로 피부 표면은 안전하게 보호하고, 2.45GHz 마이크로웨이브로 깊은 층을 따뜻하게 자극합니다. 처진 탄력과 무너진 윤곽, 거친 피부결을 한 번에 매끄럽게 정돈해 주는 비수술 리프팅 솔루션입니다.
-              </p>
-              {/* 데스크톱: 배너 문구 아래에 버튼 배치 */}
-              <div className="hidden md:flex absolute left-[17.5%] top-[71%] flex-wrap gap-3">
-                <button
-                  onClick={openNaverBooking}
-                  className="bg-[#4A2E24] hover:bg-[#2E1C16] text-white font-bold px-6 py-3 rounded-lg text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+          {/* 배너 이미지는 글씨를 지운 배경 그림. 문구는 글자로 얹어 제목 → 설명 → 버튼 순서로 서서히 나타남 (ew-fade-1/2/3).
+              배너 칸을 꽉 채우도록(cover) 이미지 비율 그대로 키우고, 글자는 이미지 너비 기준(cqw)으로 크기·위치를 맞춤 */}
+          {/* PC·태블릿: 가로 배너 (원본 2000×989) */}
+          <div className="hidden md:block absolute inset-0 overflow-hidden" style={{ containerType: 'size' }}>
+            <div
+              className="@container absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 aspect-[2000/989] w-full xl:w-[max(100cqw,calc(100cqh*2000/989))]"
+            >
+              {/* 1280px 미만(태블릿·작은 노트북)은 글씨가 잘리지 않게 배너 전체를 보여 주고 위아래는 배경색으로 자연스럽게 이어 줌 */}
+              <img src={EXCELWAVE_BANNER_SRC} alt="" className="absolute inset-0 w-full h-full [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)] xl:[mask-image:none]" />
+              <div key={`ew-pc-${ewRound}`} className="absolute left-[16.85%] top-[37.2%] text-[#462819]">
+                <h2
+                  className={`font-bold leading-[1.2] tracking-[-0.01em] whitespace-nowrap ${heroTab === 'excelwave' ? 'ew-fade-1' : ''}`}
+                  style={{ fontSize: '2.585cqw' }}
                 >
-                  <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
-                  <span>엑셀웨이브 런칭 특가 상담</span>
-                </button>
-                <button
-                  onClick={() => navigateTo('event')}
-                  className="bg-white/70 hover:bg-white text-[#4A2E24] border border-[#4A2E24]/25 px-5 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
+                  2.45GHz 극초단파 리프팅<br />
+                  <span className="ew-rosegold">엑셀웨이브(Excelwave)</span> 신규 도입
+                </h2>
+                <p
+                  className={`mt-[1.2cqw] text-[#4A3328] leading-[1.47] whitespace-nowrap ${heroTab === 'excelwave' ? 'ew-fade-2' : ''}`}
+                  style={{ fontSize: 'max(1.085cqw, 11px)' }}
                 >
-                  <Sparkles className="w-4 h-4 text-[#9C6B52]" />
-                  <span>이달의 이벤트 전용 페이지로 이동</span>
-                </button>
+                  강력한 쿨링으로 피부 표면은 안전하게 보호하고, 2.45GHz 마이크로웨이브로 깊은층을<br />
+                  따뜻하게 데워줍니다. 처진 탄력과 무너진 윤곽, 거친 피부결을 한 번에 매끄럽게 정돈해주는<br />
+                  비수술 리프팅 솔루션입니다.
+                </p>
+                <div className={`mt-[2cqw] flex flex-wrap gap-2 lg:gap-3 ${heroTab === 'excelwave' ? 'ew-fade-3' : ''}`}>
+                  <button
+                    onClick={openNaverBooking}
+                    className="bg-[#4A2E24] hover:bg-[#2E1C16] text-white font-bold px-4 py-2.5 text-xs lg:px-6 lg:py-3 rounded-lg lg:text-sm transition-all shadow-md hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+                  >
+                    <CalendarCheck className="w-4 h-4 text-[#E8C9B5]" />
+                    <span>엑셀웨이브 런칭 특가 상담</span>
+                  </button>
+                  <button
+                    onClick={() => navigateTo('event')}
+                    className="bg-white/70 hover:bg-white text-[#4A2E24] border border-[#4A2E24]/25 px-4 py-2.5 text-xs lg:px-5 lg:py-3 rounded-lg lg:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
+                  >
+                    <Sparkles className="w-4 h-4 text-[#9C6B52]" />
+                    <span>이달의 이벤트 전용 페이지로 이동</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* 모바일: 세로 배너, 버튼은 장비 왼쪽 빈 공간에 */}
-          <div className="md:hidden relative h-full">
-            <img
-              src={EXCELWAVE_BANNER_MOBILE_SRC}
-              alt="2.45GHz 극초단파 리프팅 엑셀웨이브(Excelwave) 신규도입"
-              className="w-full h-full object-cover object-center"
-            />
-            <div className="absolute left-4 bottom-[13%] w-[52%] flex flex-col gap-2">
+          {/* 모바일: 세로 배너 (원본 765×1024, 제목만), 버튼은 장비 왼쪽 빈 공간에 */}
+          <div className="md:hidden absolute inset-0 overflow-hidden" style={{ containerType: 'size' }}>
+            <div
+              className="@container absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 aspect-[765/1024]"
+              style={{ width: 'max(100cqw, calc(100cqh * 765 / 1024))' }}
+            >
+              <img src={EXCELWAVE_BANNER_MOBILE_SRC} alt="" className="absolute inset-0 w-full h-full" />
+              <h2
+                key={`ew-m-${ewRound}`}
+                className={`absolute inset-x-0 top-[18.6%] text-center font-bold leading-[1.3] tracking-[-0.01em] text-[#462819] whitespace-nowrap ${heroTab === 'excelwave' ? 'ew-fade-1' : ''}`}
+                style={{ fontSize: '6.57cqw' }}
+              >
+                2.45GHz 극초단파 리프팅<br />
+                <span className="ew-rosegold">엑셀웨이브(Excelwave)</span><br />
+                신규도입
+              </h2>
+            </div>
+            <div key={`ew-mb-${ewRound}`} className={`absolute left-4 bottom-[13%] w-[52%] flex flex-col gap-2 ${heroTab === 'excelwave' ? 'ew-fade-2' : ''}`}>
               <button
                 onClick={openNaverBooking}
                 className="bg-[#4A2E24] text-white font-bold px-3 py-2.5 rounded-lg text-xs shadow-md cursor-pointer flex items-center justify-center gap-1.5"

@@ -60,7 +60,7 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 | `src/data/columnsData.ts` | 칼럼 5편. 최신 글이 맨 앞. 본문은 문단 블록(p / quote / item / list / match) |
 | `src/clinicLinks.ts` | 네이버 예약·지도, 카카오톡 채팅, 구글 지도 링크, 로고 경로. 모든 예약 버튼은 `openNaverBooking()`으로 네이버 예약을 연다 |
 | `public/og-image.jpg` | 카톡 등 링크 미리보기 썸네일(1200×630, 메인 영상 첫 화면). `index.html`의 `og:image`. 바꾼 뒤에는 카카오 공유 디버거(developers.kakao.com/tool/debugger/sharing)에서 캐시 초기화 필요 |
-| `public/assets/` | 메인 영상(`main_video.mp4`)과 첫 장면 이미지(`main_video_poster.webp`, 영상 로딩 중 검은 화면 대신 표시·`index.html`에서 미리 받음), 엑셀웨이브 배너(PC 가로형 / 모바일 세로형), 대표원장 사진(`doctor_park.webp`), 소개 문장 옆 원장 누끼 사진(`about_doctor_cutout.webp`, 흰 배경을 투명하게 따내고 셔츠 위 별 모양 표시는 지움) |
+| `public/assets/` | 메인 영상(`main_video.mp4`)과 첫 장면 이미지(`main_video_poster.webp`, 영상 로딩 중 검은 화면 대신 표시·`index.html`에서 미리 받음), 엑셀웨이브 배너(`excelwave_banner_v2.webp` PC 2000×989 / `excelwave_banner_mobile_v2.webp` 모바일 765×1024, 둘 다 이미지 속 글씨를 지운 배경 그림), 대표원장 사진(`doctor_park.webp`), 소개 문장 옆 원장 누끼 사진(`about_doctor_cutout.webp`, 흰 배경을 투명하게 따내고 셔츠 위 별 모양 표시는 지움) |
 | `.claude/skills/ui-ux-pro-max/` | 디자인 참고 스킬 (외부 MIT 자료, 출처는 `SOURCE.md`) |
 
 로컬 실행: `npm install` 후 `npm run dev` (Windows PowerShell은 `npm.cmd install`, `npm.cmd run dev`).
@@ -79,11 +79,12 @@ React 19 + Vite + Tailwind v4 + react-router. Google AI Studio에서 내보낸 �
 - [ ] **네이버 지도 전환 (사용자 보류 중):** 사용자가 네이버 클라우드(NCP) Maps에서 Dynamic Map Client ID를 받아오면, 구글 지도를 네이버 지도로 교체한다. 웹 서비스 URL로 `https://seoulview.vercel.app` 등록이 필요하다.
 - [ ] **시술 전후사진 (사용자 보류 중):** 사례 사진·문구가 AI Studio 예시다(`src/data/baData.ts`). 근거 없는 수치(62% 감소, 90% 이상, 1회 만에)는 2026-10 삭제했다.
 - [ ] **예시 문구 남아 있음:** 시술안내 및 주의사항(`guideData.ts`)에 AI Studio 예시 문구가 남아 있다.
-- [ ] **PC 엑셀웨이브 배너 화질:** 사용자가 준 배너(1024×374px)를 2000px로 키워 써서 조금 흐릿하다. 이미지 속 설명 글씨가 깨져 있어("강력현 플팅" 등) 이미지에서 지우고 원래 문구를 HTML 글자로 얹었다(`App.tsx`, `cqw` 단위로 배너 크기에 맞춤). "엑셀웨이브(Excelwave)" 글씨는 이미지 처리로 모바일과 같은 로즈골드로 칠함. 고해상도 원본(설명 글씨 없는 버전이면 더 좋음)을 받으면 교체한다.
 - [ ] **개인정보 처리방침 내용 확인:** 사용자가 준 원문(청주점 처리방침, `src/data/privacyData.ts`)을 그대로 넣었다(맨 앞 병원 이름만 당진으로). 제3조·제6조의 "<예) …>" 예시 문구와 제4조의 (주)아임웹·OOO PG/택배/고객센터 등 수탁자는 원본 템플릿 내용이라 당진점 실제와 다를 수 있음 — 사용자 확인 필요.
 - [ ] **칼럼 검색엔진 정보:** `ColumnPage.tsx`의 구조화 데이터(JSON-LD)에 실제와 다른 주소 `seoulview-dangjin.com`이 들어 있다. 실제 도메인이 정해지면 고친다.
 
 ### 완료 (2026-10)
+
+- 엑셀웨이브 메인 배너 교체(2026-10-31): PC는 사용자가 준 새 배너(2000×989)로 교체. PC·모바일 모두 이미지 속 글씨를 지우고 같은 문구를 글자로 얹어, 배너가 나올 때마다 제목 → 설명 → 버튼 순서로 서서히 나타남(`index.css`의 `.ew-fade-1/2/3`, `App.tsx`의 `ewRound`). 설명 문구는 새 배너 이미지 원문 그대로("…깊은층을 따뜻하게 데워줍니다…"). 모바일 배너에는 원래 설명이 없어 제목 → 버튼 순서. 1280px 이상은 배너가 칸을 꽉 채우고(cover), 그보다 좁으면 글씨가 잘리지 않게 배너 전체를 보여 줌. 장비 사진 속 로고 글씨("CHEcLWAVE" 등)는 AI 이미지라 깨져 있음.
 
 - PC 예약 버튼 전부 네이버 예약으로 연결 (`openNaverBooking()`), 가짜 예약 창 삭제. PC 퀵메뉴 카톡상담도 카카오톡 1:1 채팅으로 연결.
 - 마운자로 7.5mg·10mg 579,000원은 맞다고 사용자 확인.
